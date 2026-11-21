@@ -82,7 +82,11 @@
 .k-fig .k-a-scale { animation-name: k-scale; transform-box: view-box; }
 .k-fig .k-a-turn { animation-name: k-turn; transform-box: view-box; animation-timing-function: steps(var(--steps), jump-none); }
 .k-fig .k-a-draw { animation-name: k-draw; stroke-dasharray: 1; animation-timing-function: ease-in-out; }
+.k-fig .k-a-rise { animation-name: k-rise; }
+.k-fig .k-a-land { animation-name: k-land; transform-box: fill-box; transform-origin: center; }
 @keyframes k-in { from { opacity: 0; } }
+@keyframes k-rise { from { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, 0px)); } }
+@keyframes k-land { from { opacity: 0; transform: scale(var(--s0, 1)); } }
 @keyframes k-fade { from { opacity: var(--o0, 1); } }
 @keyframes k-flash { 0% { opacity: 0; } 12%, 88% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes k-move { from { transform: translate(var(--dx, 0px), var(--dy, 0px)); } }

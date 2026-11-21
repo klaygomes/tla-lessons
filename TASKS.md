@@ -52,7 +52,7 @@ flowchart TD
   - [ ] fresh-reader subagent (ask first)
   - [ ] TLA+ module run through SANY and TLC (needs Java)
 - [ ] 3 review stop (user asked to see the figures and lab before reviewing the text, 2026-11-21; building stages 4 and 5 now)
-- [ ] 4 figures (8 built: desk, race, steps, behavior, orderings, state-graph, growth, claim; all 16 files pass self_check and verify-geometry, rerun by lead 2026-11-21; waiting on the builder's report)
+- [x] 4 figures (8 built: desk, race, steps, behavior, orderings, state-graph, growth, claim; all 16 files pass self_check and verify-geometry, rerun by lead; not yet viewed rendered) (2026-11-21)
 - [x] 5 page: build.py 0, fit.mjs 0, checker asserts and jsdom smoke test rerun by lead; not yet walked in a browser (2026-11-21)
 - [ ] 6 learner judge
 - [ ] 7 verification

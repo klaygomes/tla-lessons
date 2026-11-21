@@ -1,0 +1,50 @@
+{
+  "desk": {
+    "title": "The payout desk",
+    "caption": "The payout desk. Two copies of the same worker read from one loans table and call one bank. Nothing in the picture stops both of them from calling the bank for the same loan.",
+    "animated": false,
+    "phone": true
+  },
+  "race": {
+    "title": "Both workers saw approved",
+    "caption": "Time runs down the page. Both workers read \"approved\" before either sends money, so both send it: the bakery receives €100,000 for a €50,000 loan.",
+    "animated": true,
+    "phone": true
+  },
+  "steps": {
+    "title": "Five lines, four steps",
+    "caption": "Each step is one moment another worker can see. Between two steps, the other worker can act: that is where the bug lives.",
+    "animated": false,
+    "phone": true
+  },
+  "behavior": {
+    "title": "Same start, two endings",
+    "caption": "Two behaviors of the same code. They share the start and the first step, part at step 2, and end with 2 transfers and with 1.",
+    "animated": true,
+    "phone": true
+  },
+  "orderings": {
+    "title": "Twenty orderings, eighteen pay twice",
+    "caption": "Every ordering of the two workers, one row per behavior. 18 of the 20 pay twice; only \"A finishes, then B skips\" and its mirror are safe. On a phone the tree shows the half that starts with A; the other half is its mirror image.",
+    "animated": true,
+    "phone": true
+  },
+  "state-graph": {
+    "title": "Seventeen states, breadth first",
+    "caption": "The model checker visits these 17 states row by row. The first bad state it meets is at depth 4, and walking its parents back to the start gives the shortest counterexample: Check(A), Send(A), Check(B), Send(B).",
+    "animated": true,
+    "phone": true
+  },
+  "growth": {
+    "title": "Paths explode, states grow",
+    "caption": "Behaviors are the paths; states are the places they pass through. With 3 workers there are 1,428 paths but only 75 states, which is why a model checker counts states.",
+    "animated": false,
+    "phone": true
+  },
+  "claim": {
+    "title": "One step instead of two",
+    "caption": "Left: a check and the change it protects are two steps, and another worker can act in between. Right: the conditional UPDATE checks and changes in one step. Exactly one worker gets \"1 row\".",
+    "animated": false,
+    "phone": true
+  }
+}

@@ -58,11 +58,28 @@ pre.code .c-function { color: var(--code-function); font-weight: var(--weight-me
 pre.code .c-call { color: var(--code-call); }
 pre.code .c-builtin { color: var(--code-builtin); }
 pre.code .c-comment { color: var(--code-comment); font-style: italic; }
+.tla-block { position: relative; }
+.tla-switch { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); font-family: var(--font-ui); font-size: var(--text-small); color: var(--ink-soft); margin-bottom: var(--space-1); cursor: pointer; }
+.tla-switch input { accent-color: var(--input); }
+pre.code .tla-sym { display: inline-block; width: calc(var(--w) * 1ch); text-align: center; color: var(--code-keyword); }
+pre.code .tla-sym[data-align="end"] { text-align: end; }
+pre.code .tla-sym[data-align="start"] { text-align: start; }
+pre.code .tla-prime { color: var(--accent); font-weight: var(--weight-medium); }
+pre.code .tla-a { display: none; }
+pre.code .c-rule { color: var(--code-comment); }
+.tla-block:has(.tla-switch input:checked) .tla-sym { width: auto; }
+.tla-block:has(.tla-switch input:checked) .tla-g { display: none; }
+.tla-block:has(.tla-switch input:checked) .tla-a { display: inline; }
+pre.code .tla-rule .tla-g { display: inline-flex; width: 100%; }
+pre.code .tla-module { display: flex; align-items: center; gap: var(--space-2); width: 100%; }
+pre.code .tla-module::before, pre.code .tla-module::after { content: ""; flex: 1; border-top: var(--line-hair) solid var(--code-comment); }
+pre.code .tla-end { display: block; width: 100%; height: var(--space-1); border-top: var(--line-hair) solid var(--code-comment); border-bottom: var(--line-hair) solid var(--code-comment); }
+.tla-block:has(.tla-switch input:checked) .tla-rule .tla-g { display: none; }
 
 .pending { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }
 </style>
 <div class="wrap">
-<nav class="crumbs" aria-label="Course"><a href="../index.html">The Mail Room</a><span aria-hidden="true">/</span><span>Lesson 1</span><span aria-hidden="true">/</span><span>Lesson text (draft)</span></nav>
+<nav class="crumbs" aria-label="Course"><a href="../index.html">The Payout Desk</a><span aria-hidden="true">/</span><span>Lesson 1</span><span aria-hidden="true">/</span><span>Lesson text (draft)</span></nav>
 <header><h1>One Loan, Paid Twice</h1><p class="links">Lesson text (draft) · <a href="1-sheet.html">Teacher&#x27;s sheet</a></p></header>
 <section id="the-loan-that-was-paid-twice">
 <h2>The loan that was paid twice</h2>
@@ -172,44 +189,45 @@ twice = [b <span class="c-keyword">for</span> b <span class="c-keyword">in</span
 <section id="writing-it-down-in-tla">
 <h2>Writing it down in TLA+</h2>
 <p>Here is the payout desk as a TLA+ specification. It says exactly what our Python said, in the language TLA+ uses: plain mathematics.</p>
-<pre class="code" data-lang="tla"><code>----------------------- <span class="c-keyword">MODULE</span> Payout -----------------------
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="tla-rule"><span class="tla-g"><span class="tla-module"><span class="c-keyword">MODULE</span> Payout</span></span><span class="tla-a">---- MODULE Payout ----</span></span>
 <span class="c-keyword">EXTENDS</span> Naturals
 
-Workers == {&quot;A&quot;, &quot;B&quot;}
+<span class="c-function">Workers</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> {<span class="c-string">&quot;A&quot;</span>, <span class="c-string">&quot;B&quot;</span>}
 <span class="c-keyword">VARIABLES</span> status, pc, transfers
-vars == &lt;&lt;status, pc, transfers&gt;&gt;
+<span class="c-function">vars</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>status, pc, transfers<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
 
-Init == /\ status = &quot;approved&quot;
-        /\ pc = [w \<span class="c-keyword">in</span> Workers |-&gt; &quot;idle&quot;]
-        /\ transfers = <span class="c-number">0</span>
+<span class="c-function">Init</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status = <span class="c-string">&quot;approved&quot;</span>
+        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc = [w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> <span class="c-string">&quot;idle&quot;</span>]
+        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> transfers = <span class="c-number">0</span>
 
-<span class="c-function">Check</span>(w) == /\ pc[w] = &quot;idle&quot;
-            /\ status = &quot;approved&quot;
-            /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;checked&quot;]
-            /\ <span class="c-keyword">UNCHANGED</span> &lt;&lt;status, transfers&gt;&gt;
+<span class="c-function">Check</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;idle&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status = <span class="c-string">&quot;approved&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;checked&quot;</span>]
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>status, transfers<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
 
-<span class="c-function">Skip</span>(w) == /\ pc[w] = &quot;idle&quot;
-           /\ status = &quot;paid&quot;
-           /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;done&quot;]
-           /\ <span class="c-keyword">UNCHANGED</span> &lt;&lt;status, transfers&gt;&gt;
+<span class="c-function">Skip</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;idle&quot;</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status = <span class="c-string">&quot;paid&quot;</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;done&quot;</span>]
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>status, transfers<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
 
-<span class="c-function">Send</span>(w) == /\ pc[w] = &quot;checked&quot;
-           /\ transfers&#x27; = transfers + <span class="c-number">1</span>
-           /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;sent&quot;]
-           /\ <span class="c-keyword">UNCHANGED</span> status
+<span class="c-function">Send</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;checked&quot;</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> transfers<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = transfers + <span class="c-number">1</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;sent&quot;</span>]
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> status
 
-<span class="c-function">Mark</span>(w) == /\ pc[w] = &quot;sent&quot;
-           /\ status&#x27; = &quot;paid&quot;
-           /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;done&quot;]
-           /\ <span class="c-keyword">UNCHANGED</span> transfers
+<span class="c-function">Mark</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;sent&quot;</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = <span class="c-string">&quot;paid&quot;</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;done&quot;</span>]
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> transfers
 
-Next == \E w \<span class="c-keyword">in</span> Workers :
-          <span class="c-function">Check</span>(w) \/ <span class="c-function">Skip</span>(w) \/ <span class="c-function">Send</span>(w) \/ <span class="c-function">Mark</span>(w)
+<span class="c-function">Next</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∃</span><span class="tla-a">\E</span></span> w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers :
+          Check(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Skip(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Send(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Mark(w)
 
-Spec == Init /\ [][Next]_vars
+<span class="c-function">Spec</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Init <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">□</span><span class="tla-a">[]</span></span>[Next]<span class="tla-sub"><span class="tla-g"><sub>vars</sub></span><span class="tla-a">_vars</span></span>
 
-NoDoublePayout == transfers &lt;= <span class="c-number">1</span>
-==================================================================</code></pre>
+<span class="c-function">NoDoublePayout</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> transfers <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≤</span><span class="tla-a">&lt;=</span></span> <span class="c-number">1</span>
+<span class="tla-rule"><span class="tla-g"><span class="tla-end"></span></span><span class="tla-a">====</span></span></code></pre></div>
+<p>TLA+ is typed in plain ASCII (<code>/\</code> for “and”, <code>\E</code> for “there exists”) and usually read typeset, with the symbols a mathematician would write. The block above shows the typeset form; flip “Show ASCII” to see exactly what you type into the tools. The rule at the top, labelled MODULE Payout, and the double rule at the bottom are not decoration: they are where a module begins and ends, typed as a row of at least four dashes around <code>MODULE Payout</code> and a row of at least four equals signs.</p>
 <p>It looks dense the first time, so let’s read it the way you would read it aloud.</p>
 <p><code>Workers == {"A", "B"}</code> defines a name. The double equals sign means “is defined as”, and the braces make a set: the workers are A and B.</p>
 <p><code>VARIABLES status, pc, transfers</code> declares the three variables of the state. <code>vars</code> is just a name for all three of them together; the angle brackets <code>&lt;&lt; &gt;&gt;</code> make a tuple.</p>
@@ -299,11 +317,11 @@ await db.setStatus(loanId, &quot;paid&quot;);</code></pre>
 <span class="c-keyword">SET</span> status = &#x27;claimed&#x27;
 <span class="c-keyword">WHERE</span> id = $<span class="c-number">1</span> <span class="c-keyword">AND</span> status = &#x27;approved&#x27;</code></pre>
 <p>If the loan is approved, it becomes claimed, and the database reports one row changed. If another worker got there first, the condition fails, nothing changes, and the database reports zero rows. Two workers can run this at the same moment and exactly one of them will see “one row”. In the spec, Check and the write that claims the loan merge into one action:</p>
-<pre class="code" data-lang="tla"><code><span class="c-function">Claim</span>(w) == /\ pc[w] = &quot;idle&quot;
-            /\ status = &quot;approved&quot;
-            /\ status&#x27; = &quot;claimed&quot;
-            /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;claimed&quot;]
-            /\ <span class="c-keyword">UNCHANGED</span> transfers</code></pre>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Claim</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;idle&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status = <span class="c-string">&quot;approved&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = <span class="c-string">&quot;claimed&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;claimed&quot;</span>]
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> transfers</code></pre></div>
 <p>Read it as before: worker <code>w</code> was idle and the loan was approved, and afterwards the loan is claimed and <code>w</code> has claimed it. <strong>The check and the change are lines of the same “and”, so they happen in the same step, and no other worker can act between them.</strong></p>
 <p class="pending">[diagram:claim: built on the lesson page]</p>
 <p>You now have everything you need. Go and fix the desk.</p>

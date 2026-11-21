@@ -21,6 +21,8 @@ On Monday the bakery on the harbour called. Their loan was €50,000, and €100
 
 You open the logs. Worker A transferred €50,000 for loan 4471. Worker B, a few milliseconds later, transferred €50,000 for loan 4471. Both of them checked the status first. Both of them saw “approved”.
 
+[[diagram:race]]
+
 The tests are green. You run the payout test suite ten thousand times in a loop, and it never pays twice. You stare at the five lines and they look correct, because each line on its own *is* correct.
 
 So where is the bug? It isn’t in any line. It lives *between* the lines, in the moments where one worker has done part of its job and the other worker gets to move. Your tests can’t see those moments, and neither can your eyes, because there are more of them than you think.
@@ -146,6 +148,8 @@ print(len(every), "behaviors,", len(twice), "pay twice")
 20 behaviors, 18 pay twice
 ```
 
+[[diagram:orderings]]
+
 Eighteen out of twenty. Did you guess that high? Most people guess one or two, because the bug *feels* like a rare accident. It isn’t. Only two behaviors are safe, and you have already met one of them: A does everything, then B skips. The other is its mirror image. Every interleaving where the workers overlap at all pays twice.
 
 So why did ten thousand test runs never catch it? Because tests don’t pick orderings at random. They pick the same ordering every time: the safe one where each worker finishes before the next one starts. In production the two workers really do overlap, but only when they happen to grab the same loan within a few milliseconds, which is rare enough to hide for a month and common enough to hit a bakery eventually. The bug was never rare in the space of orderings. It was rare in the orderings you happened to try.
@@ -178,7 +182,7 @@ Finally, the piece that does the work: a **model checker** is a program that vis
 Here is the payout desk as a TLA+ specification. It says exactly what our Python said, in the language TLA+ uses: plain mathematics.
 
 ```tla
------------------------ MODULE Payout -----------------------
+---- MODULE Payout ----
 EXTENDS Naturals
 
 Workers == {"A", "B"}
@@ -215,8 +219,10 @@ Next == \E w \in Workers :
 Spec == Init /\ [][Next]_vars
 
 NoDoublePayout == transfers <= 1
-==================================================================
+====
 ```
+
+TLA+ is typed in plain ASCII (`/\` for “and”, `\E` for “there exists”) and usually read typeset, with the symbols a mathematician would write. The block above shows the typeset form; flip “Show ASCII” to see exactly what you type into the tools. The rule at the top, labelled MODULE Payout, and the double rule at the bottom are not decoration: they are where a module begins and ends, typed as a row of at least four dashes around `MODULE Payout` and a row of at least four equals signs.
 
 It looks dense the first time, so let’s read it the way you would read it aloud.
 
@@ -300,6 +306,8 @@ for state in check(init, no_double_payout):
 The same four-step counterexample that TLC prints. When the invariant holds everywhere, `check` returns the number of distinct states it visited instead.
 
 Notice the difference from `behaviors`. That function followed every *path*, and there were 20 of them. This one visits every *state*, and there are only 17 reachable states, because many paths pass through the same state. With two workers the difference is small. With three workers the naive desk has 1,428 behaviors but only 75 states. Counting states instead of paths is what makes model checking practical: the work grows with the number of distinct situations the system can be in, not with the number of ways to get there.
+
+[[diagram:growth]]
 
 The cost is easy to state. If the system has \(S\) reachable states and each state has at most \(b\) possible next steps, breadth-first search does \(O(S \cdot b)\) work and keeps \(O(S)\) states in memory. TLC is this loop, made very fast, with states stored compactly on disk when memory runs out.
 

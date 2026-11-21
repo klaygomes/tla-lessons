@@ -76,7 +76,7 @@ def page(folder: Path, md: Path, body: str) -> str:
 .pending {{ color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }}
 </style>
 <div class="wrap">
-<nav class="crumbs" aria-label="Course"><a href="../index.html">The Mail Room</a><span aria-hidden="true">/</span><span>Lesson {html.escape(number)}</span><span aria-hidden="true">/</span><span>{html.escape(DOCS[md.name])}</span></nav>
+<nav class="crumbs" aria-label="Course"><a href="../index.html">The Payout Desk</a><span aria-hidden="true">/</span><span>Lesson {html.escape(number)}</span><span aria-hidden="true">/</span><span>{html.escape(DOCS[md.name])}</span></nav>
 <header><h1>{html.escape(lesson_title(folder))}</h1><p class="links">{html.escape(DOCS[md.name])} · <a href="{other}">{html.escape(other_label)}</a></p></header>
 {body}
 </div>

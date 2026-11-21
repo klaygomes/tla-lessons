@@ -51,7 +51,7 @@ flowchart TD
   - [ ] read-aloud with agent-voice (ask first: CPU)
   - [ ] fresh-reader subagent (ask first)
   - [ ] TLA+ module run through SANY and TLC (needs Java)
-- [ ] 3 review stop
+- [ ] 3 review stop (user asked to see the figures and lab before reviewing the text, 2026-11-21; building stages 4 and 5 now)
 - [ ] 4 figures
 - [ ] 5 page
 - [ ] 6 learner judge
@@ -89,6 +89,8 @@ flowchart TD
 - [ ] 1 prose and sheet
 
 ## Open items
+
+- TLA+ blocks render typeset (∧ ∨ ≜ ∃ ∈ □ ⟨⟩ ′, module rules) with a CSS-only "Show ASCII" switch: `_kit/highlight.py` `tla()`, styles at the end of `_kit/page.css` (user, 2026-11-21: "add a render for this syntax"). Not yet checked in a browser.
 
 - Confirm in real TLC: 17 distinct states, NoDoublePayout violated, 4-step counterexample; the `-deadlock` flag and `.cfg` syntax as written.
 - Waiting on the user: review of lesson 1's prose and sheet; go-ahead for the read-aloud and fresh-reader gates.

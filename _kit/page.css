@@ -49,3 +49,20 @@ pre.code .c-function { color: var(--code-function); font-weight: var(--weight-me
 pre.code .c-call { color: var(--code-call); }
 pre.code .c-builtin { color: var(--code-builtin); }
 pre.code .c-comment { color: var(--code-comment); font-style: italic; }
+.tla-block { position: relative; }
+.tla-switch { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); font-family: var(--font-ui); font-size: var(--text-small); color: var(--ink-soft); margin-bottom: var(--space-1); cursor: pointer; }
+.tla-switch input { accent-color: var(--input); }
+pre.code .tla-sym { display: inline-block; width: calc(var(--w) * 1ch); text-align: center; color: var(--code-keyword); }
+pre.code .tla-sym[data-align="end"] { text-align: end; }
+pre.code .tla-sym[data-align="start"] { text-align: start; }
+pre.code .tla-prime { color: var(--accent); font-weight: var(--weight-medium); }
+pre.code .tla-a { display: none; }
+pre.code .c-rule { color: var(--code-comment); }
+.tla-block:has(.tla-switch input:checked) .tla-sym { width: auto; }
+.tla-block:has(.tla-switch input:checked) .tla-g { display: none; }
+.tla-block:has(.tla-switch input:checked) .tla-a { display: inline; }
+pre.code .tla-rule .tla-g { display: inline-flex; width: 100%; }
+pre.code .tla-module { display: flex; align-items: center; gap: var(--space-2); width: 100%; }
+pre.code .tla-module::before, pre.code .tla-module::after { content: ""; flex: 1; border-top: var(--line-hair) solid var(--code-comment); }
+pre.code .tla-end { display: block; width: 100%; height: var(--space-1); border-top: var(--line-hair) solid var(--code-comment); border-bottom: var(--line-hair) solid var(--code-comment); }
+.tla-block:has(.tla-switch input:checked) .tla-rule .tla-g { display: none; }

@@ -57,6 +57,7 @@ export default k => {
   if (COUNTER.join(' ') !== 'Check(A) Send(A) Check(B) Send(B)') throw new Error(`state-graph: shortest counterexample is ${COUNTER.join(' ')}`);
   if (LEAVES.length !== 20 || LEAVES.filter(l => !noDoublePayout(l.s)).length !== 18) throw new Error('orderings: expected 20 behaviors, 18 paying twice');
 
+  const actionCode = a => ({ Check: 'C', Send: 'S', Mark: 'M', Skip: 'K' })[a.split('(')[0]] + a[a.length - 2];
   const short = a => ({ Check: 'c', Send: 's', Mark: 'm', Skip: 'k' })[a.split('(')[0]] + a[a.length - 2];
   const euro = n => `€${n.toLocaleString('en-US')}`;
   const count = n => n.toLocaleString('en-US');
@@ -279,8 +280,7 @@ export default k => {
     const card = (x, y, w, h, [name, [status, [a, b], t]], tone) => {
       const cls = tone === 'bad' ? 'k-box-accent' : tone === 'ok' ? 'k-box-ok' : 'k-box';
       const tCls = tone === 'bad' ? 'k-num-accent' : tone === 'ok' ? 'k-num-ok' : 'k-num';
-      const lines = ph ? [[status, 'k-num'], [`A ${a} · B ${b}`, 'k-num'], [`transfers ${t}`, tCls]]
-        : [[status, 'k-num'], [`A ${a}`, 'k-num'], [`B ${b}`, 'k-num'], [`transfers ${t}`, tCls]];
+      const lines = [[status, 'k-num'], [`A ${a}`, 'k-num'], [`B ${b}`, 'k-num'], [`transfers ${t}`, tCls]];
       return g({},
         rect(x, y, w, h, { cls: 'k-mask-box', rx: 6 }), rect(x, y, w, h, { cls, rx: 6 }),
         tone === 'bad' ? hatchStripe(s, x, y + 8, h - 16, 6) : '',
@@ -289,28 +289,28 @@ export default k => {
         tone === 'ok' ? tick(x + w - 18, y + 18) : '');
     };
     if (ph) {
-      const w = 156, h = 92, col = [16, 188], rows = [288, 404, 520];
+      const w = 156, h = 108, col = [16, 188], rows = [320, 452, 584];
       return [
         text(16, 24, 'one behavior per column, steps run down', { anchor: 'start', cls: 'k-tick' }),
         step(1, 'step 0: the start state, approved, both idle, 0 transfers',
           g({ anim: rise(0) }, card(102, 36, w, h, BAD[0]))),
         step(2, 'step 1: Check(A), A has checked',
-          g({ anim: rise(1) }, arrow(s, [[180, 128], [180, 150]]), card(102, 152, w, h, BAD[1]))),
+          g({ anim: rise(1) }, arrow(s, [[180, 144], [180, 166]]), card(102, 168, w, h, BAD[1]))),
         [2, 3, 4].map(i => step(i + 1, `step ${i}: the race takes ${BAD[i][0]}, transfers ${BAD[i][1][2]}; the test's order takes ${SAFE[i][0]}, transfers ${SAFE[i][1][2]}`,
           g({ anim: rise(i + (i === 4 ? 0.4 : 0)) },
-            i === 2 ? path(`M162 244V264H${col[0] + w / 2}V${rows[0] - 2}`, { cls: 'k-arrow', 'marker-end': `url(#${s}-arrow)` })
+            i === 2 ? path(`M162 276V296H${col[0] + w / 2}V${rows[0] - 2}`, { cls: 'k-arrow', 'marker-end': `url(#${s}-arrow)` })
               : arrow(s, [[col[0] + w / 2, rows[i - 3] + h], [col[0] + w / 2, rows[i - 2] - 2]]),
             card(col[0], rows[i - 2], w, h, BAD[i], i === 4 ? 'bad' : '')),
           g({ anim: rise(i + (i === 4 ? 0.4 : 0), { extra: 0.25 }) },
-            i === 2 ? path(`M198 244V264H${col[1] + w / 2}V${rows[0] - 2}`, { cls: 'k-arrow', 'marker-end': `url(#${s}-arrow)` })
+            i === 2 ? path(`M198 276V296H${col[1] + w / 2}V${rows[0] - 2}`, { cls: 'k-arrow', 'marker-end': `url(#${s}-arrow)` })
               : arrow(s, [[col[1] + w / 2, rows[i - 3] + h], [col[1] + w / 2, rows[i - 2] - 2]]),
             card(col[1], rows[i - 2], w, h, SAFE[i], i === 4 ? 'ok' : '')))),
         text(266, 200, 'they part', { anchor: 'start', cls: 'k-note' }),
         text(266, 220, 'at step 2', { anchor: 'start', cls: 'k-note' }),
-        text(col[0] + w / 2, 636, 'the race', { cls: 'k-name' }),
-        text(col[0] + w / 2, 656, 'pays twice', { cls: 'k-num-accent' }),
-        text(col[1] + w / 2, 636, "the test's order", { cls: 'k-name' }),
-        text(col[1] + w / 2, 656, 'pays once', { cls: 'k-num-ok' }),
+        text(col[0] + w / 2, 716, 'the race', { cls: 'k-name' }),
+        text(col[0] + w / 2, 736, 'pays twice', { cls: 'k-num-accent' }),
+        text(col[1] + w / 2, 716, "the test's order", { cls: 'k-name' }),
+        text(col[1] + w / 2, 736, 'pays once', { cls: 'k-num-ok' }),
       ];
     }
     const w = 112, h = 104, xs = [16, 152, 296, 432, 568], rowY = [72, 256], mid = 164;
@@ -401,21 +401,34 @@ export default k => {
   const stateGraph = L => {
     const s = L.slug, ph = L.phone;
     const P = ph ? { w: 76, h: 44, hgap: 8, left: 16, area: 328, top: 128, band: 26, sp: 8, drop: 14 }
-      : { w: 136, h: 44, hgap: 24, left: 88, area: 616, top: 84, band: 26, sp: 12, drop: 16 };
+      : { w: 132, h: 44, hgap: 10, left: 72, area: 558, top: 84, band: 26, sp: 12, drop: 16 };
     const progress = { idle: 0, checked: 1, sent: 2, done: 3 };
-    const rows = range(0, 6).map(d => [...GRAPH.states.keys()].filter(kk => GRAPH.depth.get(kk) === d)
-      .sort((a, b) => {
-        const [, pa, ta] = JSON.parse(a), [, pb, tb] = JSON.parse(b);
-        const sa = progress[pa[0]] - progress[pa[1]], sb = progress[pb[0]] - progress[pb[1]];
-        return sb - sa || tb - ta;
-      }));
+    const lean = kk => { const [, p, t] = JSON.parse(kk); return progress[p[0]] - progress[p[1]] + t / 10; };
+    const rows = range(0, 6).map(d => [...GRAPH.states.keys()].filter(kk => GRAPH.depth.get(kk) === d).sort((a, b) => lean(b) - lean(a)));
+    const xsOf = r => {
+      const width = r.length * P.w + (r.length - 1) * P.hgap, x0 = P.left + (P.area - width) / 2;
+      return new Map(r.map((kk, i) => [kk, x0 + i * (P.w + P.hgap)]));
+    };
+    const crossings = (upper, lower) => {
+      const ux = xsOf(upper), lx = xsOf(lower);
+      const es = GRAPH.edges.filter(e => ux.has(e.from) && lx.has(e.to));
+      let n = 0;
+      es.forEach((a, i) => es.slice(i + 1).forEach(b => { if ((ux.get(a.from) - ux.get(b.from)) * (lx.get(a.to) - lx.get(b.to)) < 0) n++; }));
+      return n;
+    };
+    const perms = r => (r.length <= 1 ? [r] : r.flatMap((x, i) => perms([...r.slice(0, i), ...r.slice(i + 1)]).map(p => [x, ...p])));
+    const cost = (d, r) => (d > 0 ? crossings(rows[d - 1], r) : 0) + (d < 6 ? crossings(r, rows[d + 1]) : 0);
+    for (let sweep = 0; sweep < 3; sweep++) {
+      range(1, 6).forEach(d => {
+        rows[d] = perms(rows[d]).reduce((best, r) => {
+          const c = cost(d, r), b = cost(d, best);
+          return c < b || (c === b && r.join() === rows[d].join()) ? r : best;
+        }, rows[d]);
+      });
+    }
     const pos = new Map();
     const rowTop = [];
-    rows.forEach(r => {
-      const width = r.length * P.w + (r.length - 1) * P.hgap;
-      const x0 = P.left + (P.area - width) / 2;
-      r.forEach((kk, i) => pos.set(kk, { x: x0 + i * (P.w + P.hgap), y: 0 }));
-    });
+    rows.forEach(r => xsOf(r).forEach((x, kk) => pos.set(kk, { x, y: 0 })));
     const gapOf = d => GRAPH.edges.filter(e => GRAPH.depth.get(e.from) === d);
     const routes = new Map();
     const placeGap = d => {
@@ -463,7 +476,8 @@ export default k => {
     });
     const node = kk => {
       const [status, [a, b], t] = JSON.parse(kk), { x, y: ny } = pos.get(kk), bad = t > 1;
-      const l1 = ph ? `${a[0]} · ${b[0]}` : `${a} · ${b}`;
+      const pcCode = { idle: 'i', checked: 'ck', sent: 's', done: 'd' };
+      const l1 = ph ? `${pcCode[a]} · ${pcCode[b]}` : `${a} · ${b}`;
       const l2 = ph ? `${status === 'approved' ? 'ap' : 'pd'} · ${t}` : `${status} · ${t}`;
       return g({},
         rect(x, ny, P.w, P.h, { cls: 'k-mask-box', rx: 6 }),
@@ -474,7 +488,7 @@ export default k => {
     };
     const edgeOf = e => g({},
       arrow(s, routes.get(`${e.from}>${e.to}`), { cls: 'k-arrow' }),
-      label(e.sx + (e.side < 0 ? -5 : 5), e.y1 + 15, short(e.action), 'k-num', { anchor: e.side < 0 ? 'end' : 'start' }));
+      label(e.sx + (e.side < 0 ? -5 : 5), e.y1 + 15, actionCode(e.action), 'k-num', { anchor: e.side < 0 ? 'end' : 'start' }));
     const rowGroup = d => g({},
       GRAPH.edges.filter(e => GRAPH.depth.get(e.to) === d && GRAPH.depth.get(e.from) === d - 1).map(edgeOf),
       rows[d].map(node),
@@ -495,8 +509,8 @@ export default k => {
     const badKey = trailKeys[0], bp = pos.get(badKey);
     const last = rowTop[6] + P.h;
     return [
-      (ph ? ['each state: pc of A · pc of B,', 'then status · transfers', 'i idle c checked s sent d done', 'ap approved, pd paid', 'c Check · s Send · m Mark · k Skip']
-        : ['each state: pc of A · pc of B, then status · transfers; rows are breadth-first depth', 'c Check · s Send · m Mark · k Skip'])
+      (ph ? ['each state: pc of A · pc of B,', 'then status · transfers', 'i idle, ck checked, s sent, d done', 'ap approved, pd paid', 'actions: C Check S Send M Mark K Skip']
+        : ['each state: pc of A · pc of B, then status · transfers; rows are breadth-first depth', 'actions: C Check · S Send · M Mark · K Skip, then the worker'])
         .map((t, i) => text(16, 24 + i * 20, t, { anchor: 'start', cls: 'k-tick' })),
       step(6, 'the shortest counterexample, traced back from the first bad state to the start: Check(A), Send(A), Check(B), Send(B)',
         path(d, { cls: 't1-trail', pathLength: 1, anim: draw(5, 0.3) })),
@@ -505,7 +519,9 @@ export default k => {
       step(7, 'depth 5: 2 more states with 2 transfers', g({ anim: rise(6, { extra: 0.4 }) }, rowGroup(5))),
       step(7, 'depth 6: both done, 2 transfers; 17 reachable states in all', g({ anim: rise(6, { extra: 0.65 }) }, rowGroup(6))),
       ph ? text(16, last + 30, 'first bad state at depth 4:', { anchor: 'start', cls: 'k-note-accent' })
-        : text(bp.x + P.w + 12, bp.y + 4, 'first bad state', { anchor: 'start', cls: 'k-note-accent' }),
+        : g({},
+          path(`M636 ${bp.y - 10}H${bp.x + P.w + 5}V${bp.y + 22}H${bp.x + P.w + 1}`, { cls: 't1-leader' }),
+          ['first', 'bad', 'state'].map((t, i) => text(642, bp.y - 4 + i * 20, t, { anchor: 'start', cls: 'k-note-accent' }))),
       ph ? text(16, last + 52, 'the trail is the shortest counterexample', { anchor: 'start', cls: 'k-note-accent' }) : '',
       line(16, last + (ph ? 76 : 36), 46, last + (ph ? 76 : 36), { cls: 't1-trail' }),
       text(54, last + (ph ? 80 : 40), ph ? 'shortest counterexample' : 'the shortest counterexample, 4 steps', { anchor: 'start', cls: 'k-tick' }),
@@ -636,7 +652,7 @@ export default k => {
       'The payOut function on the left, its lines grouped into the four steps on the right: the read and the approved test become Check, or Skip when the loan is already paid; the transfer becomes Send; the status write becomes Mark. Between Check and Send, and between Send and Mark, the other worker can act.',
       'Each step is one moment another worker can see. Between two steps, the other worker can act: that is where the bug lives.',
       steps),
-    fig('behavior', 412, 672, 'Same start, two endings',
+    fig('behavior', 412, 752, 'Same start, two endings',
       'Two behaviors as strips of state cards from the same start state. Both begin with Check(A); at step 2 the race takes Check(B), Send(A), Send(B) and ends with transfers 2, while the order the tests use takes Send(A), Mark(A), Skip(B) and ends with transfers 1.',
       'Two behaviors of the same code. They share the start and the first step, part at step 2, and end with 2 transfers and with 1.',
       behavior, 5),

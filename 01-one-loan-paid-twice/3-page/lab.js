@@ -192,11 +192,11 @@ else (() => {
   const STATUS_SHORT = { approved: 'appr', claimed: 'clmd', paid: 'paid' };
   const ACTION_CODE = { Check: 'c', Recheck: 'r', Claim: 'c', Send: 's', Mark: 'm', Skip: 'k' };
 
-  function graphGeometry(result, w) {
+  function graphGeometry(result, w, depthLimit) {
     const widest = Math.max(...result.layers.map(l => l.length));
     const detailed = result.workers <= 2, phone = w < 520, left = phone ? 4 : 62, usable = w - left - 6;
     const slot = usable / widest;
-    const boxW = detailed ? Math.min(112, slot - 8) : clamp(slot - 3, 5, 10), boxH = detailed ? 36 : boxW;
+    const boxW = detailed ? Math.min(112, slot - 8) : clamp(slot - 3, 5, 10), boxH = detailed ? 36 : boxW, rows = Math.min(result.layers.length, (depthLimit ?? Infinity) + 1);
     const short = detailed && boxW < 96, pitch = detailed ? boxH + 34 : boxH + 16, top = detailed ? 44 + boxH / 2 : 30;
     const at = new Map();
     result.layers.forEach((layer, d) => layer.forEach((n, i) => at.set(n, [left + usable / 2 + (i - (layer.length - 1) / 2) * slot, top + d * pitch])));
@@ -206,7 +206,7 @@ else (() => {
       const mid = py + boxH / 2 + (detailed ? 6 : 4) + stagger;
       return [[px, py + boxH / 2], [px, mid], [cx, mid], [cx, cy - boxH / 2]];
     });
-    return { detailed, short, phone, left, boxW, boxH, pitch, top, at, edges, height: top + (result.layers.length - 1) * pitch + boxH / 2 + 10 };
+    return { detailed, short, phone, left, boxW, boxH, pitch, top, at, edges, height: top + (rows - 1) * pitch + boxH / 2 + 10 };
   }
 
   function drawGraph(s, view) {
@@ -348,6 +348,26 @@ else (() => {
     root.replaceChildren(q, row, fb);
   }
 
+  const GUESSES = [['recheck', 'Check again before Send'], ['delay', 'Random delay before start'], ['workers', 'A different number of workers'], ['claim', 'Check and claim in one database write']];
+
+  function predictChange(root, { question, options, onAnswered }) {
+    const q = document.createElement('p'); q.className = 'k-q'; q.textContent = question;
+    const row = document.createElement('div'); row.className = 'row'; row.setAttribute('role', 'group'); row.setAttribute('aria-label', question);
+    const fb = document.createElement('p'); fb.className = 'k-feedback'; fb.setAttribute('aria-live', 'polite');
+    const buttons = options.map(([value, label]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = label;
+      b.addEventListener('click', () => {
+        buttons.forEach(x => { x.disabled = true; });
+        b.setAttribute('aria-pressed', 'true');
+        fb.textContent = `Noted: “${label}”. Now try the changes and let the checker tell you.`;
+        onAnswered(value);
+      });
+      return b;
+    });
+    row.append(...buttons);
+    root.replaceChildren(q, row, fb);
+  }
+
   function animator(target, draw) {
     const run = { from: 0, to: 0, value: 0, rate: 1, done: null };
     const loop = K.loop(target, dt => {
@@ -402,7 +422,7 @@ else (() => {
 
     const desk = explore ? K.stage($('desk'), s => drawDesk(s, { state: st.state, anim: st.anim }), { height: w => deskGeometry(w).height }) : null;
     const deskAnim = explore ? animator($('desk'), () => { if (st.anim) st.anim.t = deskAnim.value; desk.redraw(); }) : null;
-    const graph = K.stage($('graph'), s => drawGraph(s, { result: st.result, p: st.p, q: st.q }), { height: w => (st.result ? graphGeometry(st.result, w).height : 1) });
+    const graph = K.stage($('graph'), s => drawGraph(s, { result: st.result, p: st.p, q: st.q }), { height: w => (st.result ? graphGeometry(st.result, w, st.depthLimit).height : 1) });
     const graphAnim = animator($('graph'), () => { if (st.phase === 'path') st.q = graphAnim.value; else st.p = graphAnim.value; graph.redraw(); });
 
     const seqHosts = [];
@@ -437,7 +457,9 @@ else (() => {
     function tally() {
       const p = $('tally'), tried = st.tried.size, twice = [...st.tried.values()].filter(Boolean).length;
       const bad = document.createElement('span'); bad.className = twice ? 'k-bad-n' : ''; bad.textContent = String(twice);
-      p.replaceChildren(`Orderings you have tried: ${tried} of ${NAIVE_ORDERINGS.total} · paid twice: `, bad, tried === NAIVE_ORDERINGS.total ? ' · every ordering tried' : '');
+      const running = st.trail.length > 1 && D.steps('naive', st.state).length > 0;
+      const now = running && st.state.transfers > 1 ? ' · this one already pays twice' : '';
+      p.replaceChildren(`Orderings finished: ${tried} of ${NAIVE_ORDERINGS.total} · finished paying twice: `, bad, tried === NAIVE_ORDERINGS.total ? ' · every ordering tried' : now);
     }
 
     function lanes() {
@@ -492,7 +514,7 @@ else (() => {
     }
 
     function startGraph(result, stopDepth, rate, done) {
-      st.result = result; st.p = 0; st.q = 0; st.phase = 'layers';
+      st.result = result; st.p = 0; st.q = 0; st.phase = 'layers'; st.depthLimit = stopDepth;
       $('checker').hidden = false; $('trace').hidden = true;
       $('graph-key').textContent = graphKey(result, $('graph').getBoundingClientRect().width || 600);
       $('graph').setAttribute('aria-label', `Breadth-first exploration of ${result.count} reachable states in ${result.layers.length} layers.`);
@@ -519,7 +541,7 @@ else (() => {
     function exploreRest() {
       const result = st.result, last = result.layers.length - 1;
       $('more').hidden = true;
-      st.phase = 'layers';
+      st.phase = 'layers'; st.depthLimit = last; graph.resize();
       graphAnim.go(st.p, last, 1.5, () => {
         $('graph-note').textContent = `Every reachable state explored: ${result.count} distinct states, ${result.badCount} of them with two transfers.`;
         st.q = 1; graph.redraw();
@@ -530,10 +552,12 @@ else (() => {
 
     function feedback(cfg, result) {
       const pass = result.firstBad < 0, steps = result.trace.length - 1;
-      if (cfg.workers === 1) return 'No double payout, and no second worker. The queue needs at least two.';
+      const own = st.guess && st.guess !== 'claim' && (st.guess === 'workers' ? cfg.workers !== 2 : cfg[st.guess]) ? ' You predicted this change would stop it.' : '';
+      if (cfg.workers === 1) return `No double payout, and no second worker. The queue needs at least two.${own}`;
       if (cfg.claim && pass) return cfg.workers === 2 ? 'Holds with 2. Try 3 before you ship.' : null;
-      if (cfg.recheck) return `Still pays twice: the shortest counterexample is now ${steps} steps. A check is its own step.${cfg.delay ? ' The delay changes nothing either: the spec has no clock.' : ''}`;
-      if (cfg.delay) return `Same ${result.count} states, same counterexample. The spec has no clock.`;
+      if (cfg.recheck) return `Still pays twice: the shortest counterexample is now ${steps} steps. A check is its own step.${cfg.delay ? ' The delay changes nothing either: the spec has no clock.' : ''}${own}`;
+      if (cfg.delay) return `Same ${result.count} states, same counterexample. The spec has no clock.${own}`;
+      if (own) return `Pays twice: the shortest counterexample is ${steps} steps.${own}`;
       return `Pays twice: the shortest counterexample is ${steps} steps. Change the desk and run the checker again.`;
     }
 
@@ -544,6 +568,9 @@ else (() => {
       renderFix();
       startGraph(result, result.layers.length - 1, cfg.workers > 2 ? 3 : 2, () => {
         st.report = { cfg, result };
+        $('graph-note').textContent = result.firstBad >= 0
+          ? `Explored all ${result.count} reachable states. The first state that breaks NoDoublePayout is at depth ${result.nodes[result.firstBad].depth}; the amber line is the shortest counterexample.`
+          : `Explored all ${result.count} reachable states. None breaks NoDoublePayout.`;
         st.solved = cfg.claim && cfg.workers === 3 && result.firstBad < 0;
         $('run').disabled = false;
         showTrace(result);
@@ -555,6 +582,10 @@ else (() => {
     function win() {
       const two = D.explore('claim', 2).count, three = st.report.result.count;
       $('win-two').textContent = String(two); $('win-three').textContent = String(three);
+      const picked = GUESSES.find(([v]) => v === st.guess);
+      $('win-guess').textContent = st.guess === 'claim'
+        ? 'Your prediction was right: checking and claiming in one database write closed the gap.'
+        : `You predicted “${picked ? picked[1] : ''}”. The checker showed what it takes: checking and claiming in one database write.`;
       $('win').hidden = false;
       bakeryAnim.go(0, 1, 0.9);
       document.dispatchEvent(new CustomEvent('k:solved', { detail: 'act2' }));
@@ -576,8 +607,9 @@ else (() => {
       const tip = pointOn(route, t);
       if (!arrived) b.marker(tip[0], tip[1], c.ok, 10);
       else b.marker(ax + bw / 2, y + h + 10, c.ok, 8);
-      b.text(arrived ? `one transfer, ${euros(AMOUNT)}` : 'sending…', mix(1 + bw, ax, 0.5), y + h / 2 - 8, { color: arrived ? c.ok : c.soft, font: 'ui' });
-    }, { height: () => 84 });
+      const note = arrived ? `one transfer, ${euros(AMOUNT)}` : 'sending…', fits = b.width(note, 12, 'ui') < ax - bw - 16;
+      b.text(note, fits ? mix(1 + bw, ax, 0.5) : w / 2, fits ? y + h / 2 - 8 : y + h + 30, { color: arrived ? c.ok : c.soft, font: 'ui' });
+    }, { height: () => 104 });
     const bakeryAnim = animator($('bakery'), () => { bakeryView.t = bakeryAnim.value; bakery.redraw(); });
 
     function renderFix() {
@@ -606,7 +638,7 @@ else (() => {
     if (explore) {
       ['task', 'changes', 'spec', 'spec-note', 'win'].forEach(k => { $(k).hidden = true; });
       predict($('ask'), {
-        question: 'Predict first. How many distinct states can the two-worker desk reach, counting every ordering until both workers are done?',
+        question: 'Predict first. The desk has 20 complete behaviors. How many distinct states do they pass through, counting each state once?',
         options: ['5', '17', '20', '40'], right: '17',
         onAnswered: () => { st.predicted = true; renderExplore(); host.querySelector('.k-step').focus(); },
       });
@@ -619,7 +651,13 @@ else (() => {
       $('more').addEventListener('click', exploreRest);
       renderExplore();
     } else {
-      ['ask', 'lanes', 'now', 'strip', 'tally', 'more', 'jump'].forEach(k => { $(k).hidden = true; });
+      ['lanes', 'now', 'strip', 'tally', 'more', 'jump'].forEach(k => { $(k).hidden = true; });
+      $('run').disabled = true;
+      predictChange($('ask'), {
+        question: 'Before your first run: which change stops the double payout?',
+        options: GUESSES,
+        onAnswered: value => { st.guess = value; $('run').disabled = false; renderFix(); host.querySelector('[data-toggle]').focus(); },
+      });
       $('reset').classList.add('quiet');
       host.querySelectorAll('[data-toggle]').forEach(b => b.addEventListener('click', () => {
         const k = b.dataset.toggle;
@@ -633,7 +671,7 @@ else (() => {
       $('reset').addEventListener('click', () => {
         graphAnim.stop();
         Object.assign(st, { cfg: { recheck: false, delay: false, claim: false, workers: 2 }, report: null, result: null, solved: false });
-        $('checker').hidden = true; $('win').hidden = true; $('run').disabled = false;
+        $('checker').hidden = true; $('win').hidden = true; $('run').disabled = !st.guess;
         renderFix(); $('reset').focus();
       });
       renderFix();
@@ -647,6 +685,6 @@ else (() => {
     host.className = 'lab'; host.id = 'lab2';
     holder.replaceWith(host);
     mount(host, 'fix');
-    host.querySelector('[data-toggle]').focus();
+    host.querySelector('.k-predict button').focus();
   });
 })();

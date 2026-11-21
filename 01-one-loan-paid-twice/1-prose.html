@@ -75,6 +75,11 @@ pre.code .tla-module { display: flex; align-items: center; gap: var(--space-2); 
 pre.code .tla-module::before, pre.code .tla-module::after { content: ""; flex: 1; border-top: var(--line-hair) solid var(--code-comment); }
 pre.code .tla-end { display: block; width: 100%; height: var(--space-1); border-top: var(--line-hair) solid var(--code-comment); border-bottom: var(--line-hair) solid var(--code-comment); }
 .tla-block:has(.tla-switch input:checked) .tla-rule .tla-g { display: none; }
+.table { color: var(--ink); background: linear-gradient(to right, var(--paper) 30%, transparent) left / var(--space-8) 100% no-repeat local, linear-gradient(to left, var(--paper) 30%, transparent) right / var(--space-8) 100% no-repeat local, radial-gradient(farthest-side at 0 50%, var(--rule), transparent) left / var(--space-3) 100% no-repeat scroll, radial-gradient(farthest-side at 100% 50%, var(--rule), transparent) right / var(--space-3) 100% no-repeat scroll; }
+table.worked.k-symbols td { white-space: normal; }
+table.worked.k-symbols td code { white-space: nowrap; }
+table.worked.k-symbols td:first-child { font-family: var(--font-mono); font-size: var(--text-h3); color: var(--code-keyword); }
+@media (max-width: 520px) { table.worked.k-symbols td code { white-space: normal; } }
 
 .pending { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }
 </style>
@@ -355,7 +360,7 @@ await db.setStatus(loanId, &quot;paid&quot;);</code></pre>
 
 <section id="what-people-get-wrong">
 <h2>What people get wrong</h2>
-<p><strong>“The tests pass, so the code is correct.”</strong> The tests prove that some behaviors are fine. Our tests covered 2 of the 20 behaviors, and they were the only 2 that were safe. A test suite samples orderings; a model checker covers all of them.</p>
+<p><strong>“The tests pass, so the code is correct.”</strong> The tests prove that some behaviors are fine. Our tests ran 1 of the 20 behaviors, over and over, and it happened to be one of the only 2 that are safe. A test suite samples orderings; a model checker covers all of them.</p>
 <p><strong>“The bug is rare, so it’s a small bug.”</strong> It was rare in production, but 18 of the 20 orderings pay twice. How often a bug shows up depends on timing, which you don’t control. Whether it <em>can</em> show up depends on the design, which you do.</p>
 <p><strong>“Check again right before acting.”</strong> Every check is its own step, and the gap after it is just as wide. Only making the check and the change one atomic step closes the gap.</p>
 <p><strong>“A model is just the code again.”</strong> The model has three variables and four actions. It leaves out the bank’s API, the database driver, retries and logging, on purpose. A spec is useful because it is much smaller than the code: small enough that a machine can examine every state of it.</p>

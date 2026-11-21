@@ -79,9 +79,9 @@
   <div class="k-predict" data-k="ask"></div>
   <div class="k-changes" data-k="changes">
     <div class="k-toggles" role="group" aria-label="Changes to the desk">
-      <button type="button" data-toggle="recheck" aria-pressed="false">Add Recheck before Send</button>
-      <button type="button" data-toggle="delay" aria-pressed="false">Add a random delay</button>
-      <button type="button" data-toggle="claim" aria-pressed="false">Replace Check with atomic Claim</button>
+      <button type="button" data-toggle="recheck" aria-pressed="false">Check again before Send</button>
+      <button type="button" data-toggle="delay" aria-pressed="false">Random delay before start</button>
+      <button type="button" data-toggle="claim" aria-pressed="false">Check and claim in one database write</button>
     </div>
     <div class="k-workers" role="group" aria-label="Workers">
       <span class="k-group-label">Workers</span>
@@ -132,6 +132,7 @@
   <div class="k-win" data-k="win" tabindex="-1" hidden>
     <p class="k-win-head">Fixed: the bakery gets one transfer</p>
     <p>No reachable state breaks NoDoublePayout: <b data-k="win-two">12</b> states with 2 workers, <b data-k="win-three">32</b> with 3. Claim makes “see approved” and “take the loan” one step.</p>
+    <p data-k="win-guess"></p>
     <canvas data-k="bakery" role="img" aria-label="The bank sends one transfer of €50,000 to the bakery."></canvas>
     <p class="k-cap">On Monday the bakery received €100,000. With the claim, every ordering of the workers sends €50,000, once.</p>
   </div>

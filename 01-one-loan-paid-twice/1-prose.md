@@ -441,7 +441,7 @@ The desk counts as fixed when the checker finds no state that breaks `NoDoublePa
 
 ## What people get wrong
 
-**“The tests pass, so the code is correct.”** The tests prove that some behaviors are fine. Our tests covered 2 of the 20 behaviors, and they were the only 2 that were safe. A test suite samples orderings; a model checker covers all of them.
+**“The tests pass, so the code is correct.”** The tests prove that some behaviors are fine. Our tests ran 1 of the 20 behaviors, over and over, and it happened to be one of the only 2 that are safe. A test suite samples orderings; a model checker covers all of them.
 
 **“The bug is rare, so it’s a small bug.”** It was rare in production, but 18 of the 20 orderings pay twice. How often a bug shows up depends on timing, which you don’t control. Whether it *can* show up depends on the design, which you do.
 

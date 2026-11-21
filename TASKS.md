@@ -62,7 +62,7 @@ flowchart TD
 
 ### 2. The loan nobody paid
 
-- [ ] 1 prose and sheet
+- [ ] 1 prose and sheet (drafting by a writer agent, 2026-11-21: liveness, fairness, lease and resume failures checked in TLC, fix with the bank's idempotency key; not shown to the learner before lesson 1's concept check)
 
 ### 3. The bank that answered twice
 

@@ -348,7 +348,7 @@ for state in check(init, no_double_payout):
 ('approved', ('sent', 'sent'), 2)
 ```
 
-The same four-step counterexample that TLC prints. When the invariant holds everywhere, `check` returns the number of distinct states it visited instead.
+The same four-step counterexample that TLC prints. When the invariant holds everywhere, `check` returns the number of distinct states it visited instead. Like this function, TLC stops at the first bad state it meets: on the payout desk it has seen 13 distinct states by then. Ask it to keep going, with the `-continue` flag, and it finds all 17.
 
 Notice the difference from `behaviors`. That function followed every *path*, and there were 20 of them. This one visits every *state*, and there are only 17 reachable states, because many paths pass through the same state. With two workers the difference is small. With three workers the naive desk has 1,428 behaviors but only 75 states. Counting states instead of paths is what makes model checking practical: the work grows with the number of distinct situations the system can be in, not with the number of ways to get there.
 

@@ -606,7 +606,7 @@ else (() => {
     if (explore) {
       ['task', 'changes', 'spec', 'spec-note', 'win'].forEach(k => { $(k).hidden = true; });
       predict($('ask'), {
-        question: 'Predict first. How many distinct states will a model checker visit for the two-worker desk?',
+        question: 'Predict first. How many distinct states can the two-worker desk reach, counting every ordering until both workers are done?',
         options: ['5', '17', '20', '40'], right: '17',
         onAnswered: () => { st.predicted = true; renderExplore(); host.querySelector('.k-step').focus(); },
       });

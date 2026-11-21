@@ -6,7 +6,7 @@ To resume: read `series.md` (world, glossary, next bug), then continue from the 
 
 ## Source rule
 
-There is no source file for this series. Every claim about TLA+ syntax or TLC behaviour is either run in real TLC or listed in the sheet's Assumptions as unconfirmed. Every number about a spec (states, behaviors, counterexample length) is computed by the lesson's `checks/check.py`, a Python breadth-first checker that mirrors the spec action by action. Java is not installed (the `brew install openjdk` attempt on 2026-11-21 was blocked by the permission classifier); when the user installs it, run each lesson's `.tla` through TLC (`tla2tools.jar`, pin a release) and tick "confirmed in TLC" in that lesson's sheet.
+There is no source file for this series. Every claim about TLA+ syntax or TLC behaviour is either run in real TLC or listed in the sheet's Assumptions as unconfirmed. Every number about a spec (states, behaviors, counterexample length) is computed by the lesson's `checks/check.py`, a Python breadth-first checker that mirrors the spec action by action. TLC: OpenJDK from Homebrew (`/opt/homebrew/opt/openjdk/bin/java`) and `~/.local/share/klay-learning-ladder/tla/tla2tools.jar` v1.7.4 (sha256 936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88). Each lesson keeps its specs in `checks/*.tla` with a `.cfg`; run `java -cp <jar> tlc2.TLC -deadlock -cleanup <Spec>.tla` (add `-continue` to count every state) and record the result in the sheet's Assumptions.
 
 ## Deploy
 
@@ -50,7 +50,7 @@ flowchart TD
   - [x] concept-check answers and the build-it assert verified by script (2026-11-21)
   - [ ] read-aloud with agent-voice (ask first: CPU)
   - [ ] fresh-reader subagent (ask first)
-  - [ ] TLA+ module run through SANY and TLC (needs Java)
+  - [x] TLA+ module run through SANY and TLC 2.19 (tla2tools v1.7.4, sha256 936a2620...0e88): counterexample, 17 states with -continue, claim 32 states, all match (2026-11-21)
 - [ ] 3 review stop (user asked to see the figures and lab before reviewing the text, 2026-11-21; building stages 4 and 5 now)
 - [x] 4 figures (8 built: desk, race, steps, behavior, orderings, state-graph, growth, claim; all 16 files pass self_check and verify-geometry, rerun by lead; not yet viewed rendered) (2026-11-21)
 - [x] 5 page: build.py 0, fit.mjs 0, checker asserts and jsdom smoke test rerun by lead; not yet walked in a browser (2026-11-21)
@@ -92,5 +92,4 @@ flowchart TD
 
 - TLA+ blocks render typeset (∧ ∨ ≜ ∃ ∈ □ ⟨⟩ ′, module rules) with a CSS-only "Show ASCII" switch: `_kit/highlight.py` `tla()`, styles at the end of `_kit/page.css` (user, 2026-11-21: "add a render for this syntax"). Not yet checked in a browser.
 
-- Confirm in real TLC: 17 distinct states, NoDoublePayout violated, 4-step counterexample; the `-deadlock` flag and `.cfg` syntax as written.
 - Waiting on the user: review of lesson 1's prose and sheet; go-ahead for the read-aloud and fresh-reader gates.

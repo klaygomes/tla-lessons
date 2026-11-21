@@ -17,6 +17,8 @@ async function payOut(loanId: string) {
 
 Last month the queue got long, so you started a second worker. Same code, two copies, each picking up loans as fast as it can. The queue emptied. Everyone was happy.
 
+[[diagram:desk]]
+
 On Monday the bakery on the harbour called. Their loan was €50,000, and €100,000 arrived in their account. They are honest people, and they would like to know which part is theirs.
 
 You open the logs. Worker A transferred €50,000 for loan 4471. Worker B, a few milliseconds later, transferred €50,000 for loan 4471. Both of them checked the status first. Both of them saw “approved”.

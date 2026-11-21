@@ -23,7 +23,7 @@ Lesson pages are an original course. Each lesson assumes only the lessons before
 |---|---|---|
 | 1 | One loan, paid twice | Why does a five-line payout pay the bakery twice when every test passes? |
 | 2 | The loan nobody paid | The fix never pays twice, so why does a loan sit claimed forever after a deploy? |
-| 3 | The bank that answered twice | When the bank times out and you retry, how do you send the money exactly once? |
+| 3 | The key the bank forgot | The bank remembers idempotency keys for 24 hours, so what happens when a worker resumes after a weekend? |
 | 4 | A desk too big to check | How do you keep the checker finishing when workers, loans and retries multiply? |
 | 5 | Writing the worker as code | How do you write the worker as a program and still decide what counts as one step? |
 | 6 | The ledger that does not add up | How do you move money between two ledgers so that neither ever shows it twice or not at all? |

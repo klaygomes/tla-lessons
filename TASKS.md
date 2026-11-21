@@ -62,9 +62,22 @@ flowchart TD
 
 ### 2. The loan nobody paid
 
-- [ ] 1 prose and sheet (drafting by a writer agent, 2026-11-21: liveness, fairness, lease and resume failures checked in TLC, fix with the bank's idempotency key; not shown to the learner before lesson 1's concept check)
+- [x] 1 prose and sheet, with checks/ (writer agent, 2026-11-21). Kept untracked and undeployed: the learner sees it only after passing lesson 1's concept check; commit and push it then.
+- [ ] 2 gates
+  - [x] TLC: 13 runs via `checks/tlc.sh`, rerun by lead, identical to `checks/tlc-results.txt` (2026-11-21)
+  - [x] check_prose: 0 em dashes, 0 long lines, no sentence with 2+ inline codes; fences 11 and 18 fail standalone by design (2026-11-21)
+  - [ ] read-aloud and fresh-reader (ask first)
+- [ ] 3 review stop
+- [ ] 4 figures
+- [ ] 5 page
+- [ ] 6 learner judge
+- [ ] 7 verification
+- [ ] 8 delivery
+- [ ] 9 concept check: mastery confirmed
+- [ ] 10 problems
+- Glossary terms to add to series.md at delivery: safety property, liveness property, eventually, leads to, stuttering step (lesson 1 named it; lesson 2 defines it), enabled, weak fairness, lasso, idempotency key.
 
-### 3. The bank that answered twice
+### 3. The key the bank forgot
 
 - [ ] 1 prose and sheet
 

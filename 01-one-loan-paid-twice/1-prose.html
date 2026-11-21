@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson text (draft): One Loan, Paid Twice</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../lesson.css">
+<link rel="stylesheet" href="../katex/katex.min.css">
+<style>
+[hidden] { display: none !important; }
+pre.code { margin: 0; max-width: 100%; color: var(--code-text); background: var(--code-bg); border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-code); line-height: var(--leading-code); }
+.display-math { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: var(--space-1) 0; }
+.katex { font-size: var(--text-math); color: var(--ink); }
+.display-math .katex-display { margin: 0; }
+.display-math .katex-display > .katex { font-size: var(--text-math-display); }
+:not(.katex-mathml) > math { font-family: var(--font-math); font-size: var(--text-math); }
+.rule-box { max-width: 100%; }
+table.worked { font-family: var(--font-mono); font-size: var(--text-table); font-variant-numeric: tabular-nums; }
+table.worked td { white-space: nowrap; }
+table.worked th { white-space: normal; vertical-align: bottom; line-height: var(--leading-heading); }
+table.worked td:first-child, table.worked th:first-child { font-family: var(--font-ui); white-space: normal; color: var(--ink-soft); width: 1%; }
+
+.lab h3 { font-size: var(--text-h3); }
+.lab .readout { min-height: 5em; align-content: start; }
+.lab .note { font-size: var(--text-caption); color: var(--ink-soft); }
+.k-ask { display: grid; gap: var(--space-2); }
+.k-ask + .k-ask { margin-top: var(--space-3); }
+.k-ask .k-q { font-weight: var(--weight-bold); }
+.k-ask button.k-wrong { text-decoration: line-through; border-color: var(--rule); color: var(--ink-soft); }
+.k-ask button.k-right { background: var(--input-soft); border-color: var(--input); opacity: 1; }
+.k-ask .k-feedback { min-height: 1.6em; }
+.k-ask .k-feedback.k-bad { color: var(--accent-ink); }
+.k-ask .k-feedback:focus { outline: none; }
+.k-meter { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-1) var(--space-3); align-items: center; font-size: var(--text-caption); }
+.k-meter .bar { height: var(--space-3); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); overflow: hidden; background: var(--paper-2); }
+.k-meter .fill { height: 100%; width: 0; background: var(--accent); }
+.k-meter output { font-family: var(--font-mono); text-align: right; min-width: 5.5em; padding-right: var(--space-1); }
+.k-meter .scale { grid-column: 2; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--text-fig); color: var(--ink-soft); }
+.k-now { font-size: var(--text-caption); color: var(--ink-soft); }
+button.k-toggle[aria-pressed="true"]::before { content: "\2713\00a0"; }
+.k-working, .k-more { border-left: var(--line-mark) solid var(--rule); padding-left: var(--space-4); }
+.k-working { display: grid; gap: var(--space-2); }
+.k-working-note { color: var(--ink-soft); font-size: var(--text-ui); }
+.k-working-open { justify-self: start; }
+.k-working-body, .k-more-body { display: grid; gap: var(--space-block); }
+.k-more-body { margin-top: var(--space-block); }
+.k-working-body:focus { outline: none; }
+.k-more > summary { cursor: pointer; font-family: var(--font-ui); font-weight: var(--weight-medium); color: var(--input); width: fit-content; }
+.k-still-text { display: none; }
+@media (prefers-reduced-motion: reduce) { .k-motion-text { display: none; } .k-still-text { display: inline; } }
+@media (max-width: 520px) { .k-meter { grid-template-columns: 1fr auto; } .k-meter > span:first-child { grid-column: 1 / -1; } .k-meter .bar { grid-column: 1; grid-row: 2; } .k-meter output { grid-column: 2; grid-row: 2; } .k-meter .scale { grid-column: 1; grid-row: 3; } }
+p .katex, li .katex, td .katex { white-space: normal; }
+p .katex-display, li .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+pre.code .c-keyword { color: var(--code-keyword); font-weight: var(--weight-medium); }
+pre.code .c-string { color: var(--code-string); }
+pre.code .c-number { color: var(--code-number); }
+pre.code .c-function { color: var(--code-function); font-weight: var(--weight-medium); }
+pre.code .c-call { color: var(--code-call); }
+pre.code .c-builtin { color: var(--code-builtin); }
+pre.code .c-comment { color: var(--code-comment); font-style: italic; }
+
+.pending { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }
+</style>
+<div class="wrap">
+<nav class="crumbs" aria-label="Course"><a href="../index.html">The Mail Room</a><span aria-hidden="true">/</span><span>Lesson 1</span><span aria-hidden="true">/</span><span>Lesson text (draft)</span></nav>
+<header><h1>One Loan, Paid Twice</h1><p class="links">Lesson text (draft) · <a href="1-sheet.html">Teacher&#x27;s sheet</a></p></header>
+<section id="the-loan-that-was-paid-twice">
+<h2>The loan that was paid twice</h2>
+<p>Welcome to the payout desk. You work at Linden, a small lender that gives loans to small businesses: bakeries, repair shops, a florist who needs a second van. When a loan is approved, somebody has to actually send the money. That somebody is your code.</p>
+<p>The payout service is simple, and it has been running for a year. Approved loans sit in a table. A worker picks a loan, checks that it is still approved, asks the bank to transfer the money, and marks the loan as paid. In TypeScript it is five honest lines:</p>
+<pre class="code" data-lang="ts"><code>async function payOut(loanId: string) {
+  const loan = await db.getLoan(loanId);
+  <span class="c-keyword">if</span> (loan.status !== &quot;approved&quot;) <span class="c-keyword">return</span>;
+  await bank.transfer(loan.account, loan.amount);
+  await db.setStatus(loanId, &quot;paid&quot;);
+}</code></pre>
+<p>Last month the queue got long, so you started a second worker. Same code, two copies, each picking up loans as fast as it can. The queue emptied. Everyone was happy.</p>
+<p>On Monday the bakery on the harbour called. Their loan was €50,000, and €100,000 arrived in their account. They are honest people, and they would like to know which part is theirs.</p>
+<p>You open the logs. Worker A transferred €50,000 for loan 4471. Worker B, a few milliseconds later, transferred €50,000 for loan 4471. Both of them checked the status first. Both of them saw “approved”.</p>
+<p>The tests are green. You run the payout test suite ten thousand times in a loop, and it never pays twice. You stare at the five lines and they look correct, because each line on its own <em>is</em> correct.</p>
+<p>So where is the bug? It isn’t in any line. It lives <em>between</em> the lines, in the moments where one worker has done part of its job and the other worker gets to move. Your tests can’t see those moments, and neither can your eyes, because there are more of them than you think.</p>
+<p>This lesson is about a tool for seeing all of them at once. It is called TLA+, and by the end you will have used its core idea to find this bug in four steps, and then fixed it so that no ordering of the workers, however unlucky, can pay a loan twice.</p>
+</section>
+
+<section id="your-code-as-a-list-of-steps">
+<h2>Your code, as a list of steps</h2>
+<p>Let’s slow the workers down until we can watch them. A program running on a real machine does many things per line, but for this bug only a few moments matter: the moments where a worker reads or changes something the other worker can also see. There are three such moments in <code>payOut</code>:</p>
+<ol><li><strong>Check</strong>: read the loan, see that it is approved.</li><li><strong>Send</strong>: ask the bank to transfer the money.</li><li><strong>Mark</strong>: write “paid” on the loan.</li></ol>
+<p>There is also a fourth, quieter one. If a worker reads the loan and it is already paid, the worker gives up. Call that <strong>Skip</strong>.</p>
+<p>Each of these is a <strong>step</strong>: one indivisible change from one situation to the next. Nothing can happen “halfway through” a step. Another worker can only act between steps, never inside one.</p>
+<p class="pending">[diagram:steps: built on the lesson page]</p>
+<p>Now, what is a “situation”? Think about what you would need to write down to pause the whole system and resume it later. Three things:</p>
+<ul><li>the loan’s <strong>status</strong>: <code>"approved"</code> or <code>"paid"</code>;</li><li>where each worker is in its code, which we will call its <strong>pc</strong> (short for “program counter”): <code>"idle"</code> before it starts, <code>"checked"</code> after Check, <code>"sent"</code> after Send, <code>"done"</code> at the end;</li><li>how many <strong>transfers</strong> the bank has made for this loan: 0, 1, or more.</li></ul>
+<p>Each of these is a <strong>variable</strong>, and one assignment of values to all of them is a <strong>state</strong>. Here is the state before anything has happened:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>approved</td><td>idle</td><td>idle</td><td>0</td></tr></tbody></table></div>
+<p>That’s it. The whole payout desk, as far as this bug is concerned, fits in one row of a table. That’s the first trick of TLA+: throw away every detail that can’t affect the question, until the system is small enough to examine completely.</p>
+</section>
+
+<section id="one-behavior-state-by-state">
+<h2>One behavior, state by state</h2>
+<p>Let’s run the system by hand. A step changes one row into the next row. Which steps can happen first? Both workers are idle and the loan is approved, so either A or B can Check. Let A go first. Then B checks too. Then A sends, then B sends.</p>
+<p>Before you look at the table below, try to predict: after those four steps, what does the last row say?</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>approved</td><td>idle</td><td>idle</td><td>0</td></tr><tr><td>1</td><td>Check(A)</td><td>approved</td><td>checked</td><td>idle</td><td>0</td></tr><tr><td>2</td><td>Check(B)</td><td>approved</td><td>checked</td><td>checked</td><td>0</td></tr><tr><td>3</td><td>Send(A)</td><td>approved</td><td>sent</td><td>checked</td><td>1</td></tr><tr><td>4</td><td>Send(B)</td><td>approved</td><td>sent</td><td>sent</td><td>2</td></tr></tbody></table></div>
+<p>Two transfers. That is the Monday phone call, written as five rows. Look at row 2, where the damage is done: both workers have checked and found “approved”, and nothing either of them can do afterwards will undo what they believe. From row 2 on, two payouts are guaranteed.</p>
+<p>A sequence of states like this one, where each row follows from the one before by a single step, is called a <strong>behavior</strong>. A behavior is one possible history of the system. The table above is one behavior; your test suite exercises other ones.</p>
+<p>Which ones? Your tests call <code>payOut</code> and wait for it to finish, so each worker runs all of its steps before the other starts:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>approved</td><td>idle</td><td>idle</td><td>0</td></tr><tr><td>1</td><td>Check(A)</td><td>approved</td><td>checked</td><td>idle</td><td>0</td></tr><tr><td>2</td><td>Send(A)</td><td>approved</td><td>sent</td><td>idle</td><td>1</td></tr><tr><td>3</td><td>Mark(A)</td><td>paid</td><td>done</td><td>idle</td><td>1</td></tr><tr><td>4</td><td>Skip(B)</td><td>paid</td><td>done</td><td>done</td><td>1</td></tr></tbody></table></div>
+<p>One transfer, everyone is happy. Both tables are behaviors of the same five lines of code. The only difference is the order in which the workers took their turns.</p>
+<p class="pending">[diagram:behavior: built on the lesson page]</p>
+</section>
+
+<section id="how-many-orderings-are-there">
+<h2>How many orderings are there?</h2>
+<p>Here is a question worth sitting with before you answer it. Two workers, each with three or so steps. Count every behavior from the start to the point where both workers are done. How many are there, and how many of them pay the bakery twice?</p>
+<p>Take a guess. Write it down.</p>
+<p>You could enumerate them by hand, but this is exactly the kind of thing a computer is for. Let’s describe the steps in Python: a function that takes a state and lists every state that one step can lead to.</p>
+<pre class="code" data-lang="python"><code>WORKERS = <span class="c-string">&quot;AB&quot;</span>
+
+<span class="c-keyword">def</span> <span class="c-function">next_states</span>(state):
+    status, pc, transfers = state
+    <span class="c-keyword">for</span> i, w <span class="c-keyword">in</span> <span class="c-builtin">enumerate</span>(WORKERS):
+        <span class="c-keyword">def</span> <span class="c-function">move</span>(to):
+            <span class="c-keyword">return</span> pc[:i] + (to,) + pc[i + <span class="c-number">1</span>:]
+        <span class="c-keyword">if</span> pc[i] == <span class="c-string">&quot;idle&quot;</span> <span class="c-keyword">and</span> status == <span class="c-string">&quot;approved&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">f&quot;</span><span class="c-string">Check(</span>{w}<span class="c-string">)</span><span class="c-string">&quot;</span>, (status, <span class="c-call">move</span>(<span class="c-string">&quot;checked&quot;</span>),
+                                  transfers)
+        <span class="c-keyword">if</span> pc[i] == <span class="c-string">&quot;idle&quot;</span> <span class="c-keyword">and</span> status == <span class="c-string">&quot;paid&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">f&quot;</span><span class="c-string">Skip(</span>{w}<span class="c-string">)</span><span class="c-string">&quot;</span>, (status, <span class="c-call">move</span>(<span class="c-string">&quot;done&quot;</span>), transfers)
+        <span class="c-keyword">if</span> pc[i] == <span class="c-string">&quot;checked&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">f&quot;</span><span class="c-string">Send(</span>{w}<span class="c-string">)</span><span class="c-string">&quot;</span>, (status, <span class="c-call">move</span>(<span class="c-string">&quot;sent&quot;</span>),
+                                 transfers + <span class="c-number">1</span>)
+        <span class="c-keyword">if</span> pc[i] == <span class="c-string">&quot;sent&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">f&quot;</span><span class="c-string">Mark(</span>{w}<span class="c-string">)</span><span class="c-string">&quot;</span>, (<span class="c-string">&quot;paid&quot;</span>, <span class="c-call">move</span>(<span class="c-string">&quot;done&quot;</span>), transfers)
+
+init = (<span class="c-string">&quot;approved&quot;</span>, (<span class="c-string">&quot;idle&quot;</span>, <span class="c-string">&quot;idle&quot;</span>), <span class="c-number">0</span>)
+<span class="c-keyword">for</span> name, after <span class="c-keyword">in</span> <span class="c-call">next_states</span>(init):
+    <span class="c-builtin">print</span>(name, after)</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-function">Check</span>(A) (&#x27;approved&#x27;, (&#x27;checked&#x27;, &#x27;idle&#x27;), <span class="c-number">0</span>)
+<span class="c-function">Check</span>(B) (&#x27;approved&#x27;, (&#x27;idle&#x27;, &#x27;checked&#x27;), <span class="c-number">0</span>)</code></pre>
+<p>Read each <code>if</code> as a rule of the form “when this is true, this step may happen, and here is the state it leads to”. From the start, two steps are possible: A checks or B checks. The function doesn’t pick one. It lists both, because both can happen.</p>
+<p>Now follow every branch to the end and count:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">behaviors</span>(state):
+    moves = <span class="c-builtin">list</span>(<span class="c-call">next_states</span>(state))
+    <span class="c-keyword">if</span> <span class="c-keyword">not</span> moves:
+        <span class="c-keyword">return</span> [[state]]
+    <span class="c-keyword">return</span> [[state] + rest
+            <span class="c-keyword">for</span> _, after <span class="c-keyword">in</span> moves
+            <span class="c-keyword">for</span> rest <span class="c-keyword">in</span> <span class="c-call">behaviors</span>(after)]
+
+every = <span class="c-call">behaviors</span>(init)
+twice = [b <span class="c-keyword">for</span> b <span class="c-keyword">in</span> every <span class="c-keyword">if</span> b[-<span class="c-number">1</span>][<span class="c-number">2</span>] &gt; <span class="c-number">1</span>]
+<span class="c-builtin">print</span>(<span class="c-builtin">len</span>(every), <span class="c-string">&quot;behaviors,&quot;</span>, <span class="c-builtin">len</span>(twice), <span class="c-string">&quot;pay twice&quot;</span>)</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">20</span> behaviors, <span class="c-number">18</span> pay twice</code></pre>
+<p>Eighteen out of twenty. Did you guess that high? Most people guess one or two, because the bug <em>feels</em> like a rare accident. It isn’t. Only two behaviors are safe, and you have already met one of them: A does everything, then B skips. The other is its mirror image. Every interleaving where the workers overlap at all pays twice.</p>
+<p>So why did ten thousand test runs never catch it? Because tests don’t pick orderings at random. They pick the same ordering every time: the safe one where each worker finishes before the next one starts. In production the two workers really do overlap, but only when they happen to grab the same loan within a few milliseconds, which is rare enough to hide for a month and common enough to hit a bakery eventually. The bug was never rare in the space of orderings. It was rare in the orderings you happened to try.</p>
+<p class="pending">[lab: built on the lesson page]</p>
+</section>
+
+<section id="the-idea-named">
+<h2>The idea, named</h2>
+<p>Let’s collect what we just did, because it is the whole of TLA+ in miniature.</p>
+<p>We described the system as a <strong>state machine</strong>, which takes two ingredients:</p>
+<ul><li>an <strong>initial condition</strong>, which says which states the system can start in. Here, exactly one: approved, both idle, zero transfers.</li><li>a <strong>next-state relation</strong>, which says, for any state, which states one step can lead to. That was <code>next_states</code>.</li></ul>
+<p>From those two ingredients you get every behavior of the system for free: start in an initial state, take any allowed step, take any allowed step from there, and so on. A state you can reach this way is a <strong>reachable state</strong>.</p>
+<p>Then we asked a question about every reachable state: are there ever two transfers? A property that must be true in every reachable state is called an <strong>invariant</strong>. Ours is short:</p>
+<p class="rule-box"><strong>NoDoublePayout</strong>: the bank has made at most one transfer.</p>
+<p>An invariant is a promise about every moment, not about the end. It doesn’t say “the loan ends up paid once”; it says “at no point, in no behavior, have two transfers been made”. That’s stronger, and it is exactly what the bakery cares about.</p>
+<p>Finally, the piece that does the work: a <strong>model checker</strong> is a program that visits every reachable state of a state machine and checks the invariant in each one. If the invariant fails in some state, the model checker hands back a behavior that leads there from the start, called a <strong>counterexample</strong>. TLA+ comes with a model checker named TLC. You just watched a twenty-line Python version enumerate behaviors; in a moment we will write the version that TLC actually is.</p>
+<p class="pending">[diagram:state-graph: built on the lesson page]</p>
+</section>
+
+<section id="writing-it-down-in-tla">
+<h2>Writing it down in TLA+</h2>
+<p>Here is the payout desk as a TLA+ specification. It says exactly what our Python said, in the language TLA+ uses: plain mathematics.</p>
+<pre class="code" data-lang="tla"><code>----------------------- <span class="c-keyword">MODULE</span> Payout -----------------------
+<span class="c-keyword">EXTENDS</span> Naturals
+
+Workers == {&quot;A&quot;, &quot;B&quot;}
+<span class="c-keyword">VARIABLES</span> status, pc, transfers
+vars == &lt;&lt;status, pc, transfers&gt;&gt;
+
+Init == /\ status = &quot;approved&quot;
+        /\ pc = [w \<span class="c-keyword">in</span> Workers |-&gt; &quot;idle&quot;]
+        /\ transfers = <span class="c-number">0</span>
+
+<span class="c-function">Check</span>(w) == /\ pc[w] = &quot;idle&quot;
+            /\ status = &quot;approved&quot;
+            /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;checked&quot;]
+            /\ <span class="c-keyword">UNCHANGED</span> &lt;&lt;status, transfers&gt;&gt;
+
+<span class="c-function">Skip</span>(w) == /\ pc[w] = &quot;idle&quot;
+           /\ status = &quot;paid&quot;
+           /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;done&quot;]
+           /\ <span class="c-keyword">UNCHANGED</span> &lt;&lt;status, transfers&gt;&gt;
+
+<span class="c-function">Send</span>(w) == /\ pc[w] = &quot;checked&quot;
+           /\ transfers&#x27; = transfers + <span class="c-number">1</span>
+           /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;sent&quot;]
+           /\ <span class="c-keyword">UNCHANGED</span> status
+
+<span class="c-function">Mark</span>(w) == /\ pc[w] = &quot;sent&quot;
+           /\ status&#x27; = &quot;paid&quot;
+           /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;done&quot;]
+           /\ <span class="c-keyword">UNCHANGED</span> transfers
+
+Next == \E w \<span class="c-keyword">in</span> Workers :
+          <span class="c-function">Check</span>(w) \/ <span class="c-function">Skip</span>(w) \/ <span class="c-function">Send</span>(w) \/ <span class="c-function">Mark</span>(w)
+
+Spec == Init /\ [][Next]_vars
+
+NoDoublePayout == transfers &lt;= <span class="c-number">1</span>
+==================================================================</code></pre>
+<p>It looks dense the first time, so let’s read it the way you would read it aloud.</p>
+<p><code>Workers == {"A", "B"}</code> defines a name. The double equals sign means “is defined as”, and the braces make a set: the workers are A and B.</p>
+<p><code>VARIABLES status, pc, transfers</code> declares the three variables of the state. <code>vars</code> is just a name for all three of them together; the angle brackets <code>&lt;&lt; &gt;&gt;</code> make a tuple.</p>
+<p><code>Init</code> is the initial condition. The symbol <code>/\</code> means “and”, written as a little wedge, and the column of them is a bulleted list where every line must hold. So <code>Init</code> says: the status is approved, <em>and</em> <code>pc</code> is the function that maps every worker to idle, <em>and</em> there are zero transfers. The notation <code>[w \in Workers |-&gt; "idle"]</code> reads “the function that takes each <code>w</code> in <code>Workers</code> to <code>"idle"</code>”. In Python it is the dict <code>{w: "idle" for w in WORKERS}</code>. <strong><code>Init</code> is true of exactly one state: the first row of our tables.</strong></p>
+<p>Now the steps. <code>Check(w)</code> describes one step of worker <code>w</code>, and here comes the one new idea in TLA+ notation: the prime. In a formula that describes a step, <code>pc</code> means the value of <code>pc</code> in the state <em>before</em> the step, and <code>pc'</code> (read “pc prime”) means its value in the state <em>after</em>. So a step formula is a statement about a pair of states. Read <code>Check(w)</code> line by line:</p>
+<ul><li><code>pc[w] = "idle"</code>: before the step, worker <code>w</code> is idle;</li><li><code>status = "approved"</code>: before the step, the loan is approved;</li><li><code>pc' = [pc EXCEPT ![w] = "checked"]</code>: after the step, <code>pc</code> is the same function as before except that <code>w</code> now maps to <code>"checked"</code>. The <code>!</code> stands for “the function being changed”, so <code>![w]</code> is “its entry at <code>w</code>”;</li><li><code>UNCHANGED &lt;&lt;status, transfers&gt;&gt;</code>: after the step, status and transfers are what they were.</li></ul>
+<p><strong><code>Check(w)</code> is true of a pair of states exactly when worker <code>w</code> was idle with the loan approved, and afterwards <code>w</code> has checked and nothing else changed.</strong> The first two lines mention no primes, so they only constrain the state before: they say <em>when</em> the step is allowed. That is why there is no <code>if</code> in TLA+. A condition that must hold for a step to happen is just one more line of the “and”.</p>
+<p>A formula like <code>Check(w)</code>, which describes a kind of step, is called an <strong>action</strong>. <code>Skip</code>, <code>Send</code> and <code>Mark</code> read the same way. Notice that <code>Send(w)</code> has <code>transfers' = transfers + 1</code>: after the step, one more transfer exists.</p>
+<p><code>Next</code> puts the actions together. The symbol <code>\/</code> means “or”, and <code>\E w \in Workers :</code> reads “there exists a worker <code>w</code> in <code>Workers</code> such that”. <strong>A step is a <code>Next</code> step when, for some worker, it is a Check, a Skip, a Send or a Mark step of that worker.</strong> This is the next-state relation, and it is precisely <code>next_states</code> in Python: the <code>for</code> loop over workers is the <code>\E</code>, and the four <code>if</code> blocks are the four actions joined by “or”.</p>
+<p><code>Spec</code> says what a behavior of the whole system is. Read <code>[][Next]_vars</code> from the inside out. <code>[Next]_vars</code> means “a <code>Next</code> step, or a step where <code>vars</code> stays unchanged”. The box <code>[]</code> in front means “always”, at every step of the behavior. <strong><code>Spec</code> is true of a behavior when its first state satisfies <code>Init</code> and every step is either a <code>Next</code> step or a step where nothing changes.</strong> Those do-nothing steps, called stuttering steps, look odd now; they become important in the next lesson, when we ask whether anything good is <em>guaranteed</em> to happen. For today, ignore them.</p>
+<p><code>NoDoublePayout</code> is the invariant: a formula about a single state, with no primes, that should be true of every reachable one.</p>
+<p>To check it, you give TLC the spec and the name of the invariant in a small configuration file, <code>Payout.cfg</code>:</p>
+<pre class="code" data-lang="text"><code><span class="c-keyword">SPECIFICATION</span> Spec
+<span class="c-keyword">INVARIANT</span> NoDoublePayout</code></pre>
+<p>and run it with the <code>-deadlock</code> flag, which tells TLC that it is fine for the system to stop once both workers are done:</p>
+<pre class="code" data-lang="bash"><code>java -cp tla2tools.jar tlc2.<span class="c-keyword">TLC</span> -deadlock Payout.tla</code></pre>
+<p>TLC reports that <code>NoDoublePayout</code> is violated and prints a counterexample, state by state. It is four steps long: A checks, A sends, B checks, B sends. Notice that this isn’t the behavior from our first table. It is a different one, just as short, and it shows something the first table hid. Worker A has <em>already sent the money</em>, and worker B still sees “approved”, because A hasn’t reached its Mark step yet. The dangerous window isn’t just between Check and Send. It is everything between Check and Mark.</p>
+</section>
+
+<section id="the-model-checker-as-code">
+<h2>The model checker as code</h2>
+<p>How does TLC find the shortest counterexample? It explores states in <strong>breadth-first</strong> order: first the initial states, then every state one step away, then every state two steps away, and so on, keeping a set of states it has already seen so that it never explores one twice. Because it goes outward one step at a time, the first bad state it meets is one with the shortest possible behavior leading to it.</p>
+<p>Here is that algorithm, using <code>next_states</code> from before. For each new state it remembers its parent, so that it can walk back from a bad state to the start.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">from</span> collections <span class="c-keyword">import</span> deque
+
+<span class="c-keyword">def</span> <span class="c-function">check</span>(init, invariant):
+    parent = {init: <span class="c-keyword">None</span>}
+    queue = <span class="c-call">deque</span>([init])
+    <span class="c-keyword">while</span> queue:
+        state = queue.<span class="c-call">popleft</span>()
+        <span class="c-keyword">if</span> <span class="c-keyword">not</span> <span class="c-call">invariant</span>(state):
+            trace = []
+            <span class="c-keyword">while</span> state <span class="c-keyword">is</span> <span class="c-keyword">not</span> <span class="c-keyword">None</span>:
+                trace.<span class="c-call">append</span>(state)
+                state = parent[state]
+            <span class="c-keyword">return</span> trace[::-<span class="c-number">1</span>]
+        <span class="c-keyword">for</span> _, after <span class="c-keyword">in</span> <span class="c-call">next_states</span>(state):
+            <span class="c-keyword">if</span> after <span class="c-keyword">not</span> <span class="c-keyword">in</span> parent:
+                parent[after] = state
+                queue.<span class="c-call">append</span>(after)
+    <span class="c-keyword">return</span> <span class="c-builtin">len</span>(parent)
+
+no_double_payout = <span class="c-keyword">lambda</span> state: state[<span class="c-number">2</span>] &lt;= <span class="c-number">1</span>
+<span class="c-keyword">for</span> state <span class="c-keyword">in</span> <span class="c-call">check</span>(init, no_double_payout):
+    <span class="c-builtin">print</span>(state)</code></pre>
+<pre class="code" data-lang="text"><code>(&#x27;approved&#x27;, (&#x27;idle&#x27;, &#x27;idle&#x27;), <span class="c-number">0</span>)
+(&#x27;approved&#x27;, (&#x27;checked&#x27;, &#x27;idle&#x27;), <span class="c-number">0</span>)
+(&#x27;approved&#x27;, (&#x27;sent&#x27;, &#x27;idle&#x27;), <span class="c-number">1</span>)
+(&#x27;approved&#x27;, (&#x27;sent&#x27;, &#x27;checked&#x27;), <span class="c-number">1</span>)
+(&#x27;approved&#x27;, (&#x27;sent&#x27;, &#x27;sent&#x27;), <span class="c-number">2</span>)</code></pre>
+<p>The same four-step counterexample that TLC prints. When the invariant holds everywhere, <code>check</code> returns the number of distinct states it visited instead.</p>
+<p>Notice the difference from <code>behaviors</code>. That function followed every <em>path</em>, and there were 20 of them. This one visits every <em>state</em>, and there are only 17 reachable states, because many paths pass through the same state. With two workers the difference is small. With three workers the naive desk has 1,428 behaviors but only 75 states. Counting states instead of paths is what makes model checking practical: the work grows with the number of distinct situations the system can be in, not with the number of ways to get there.</p>
+<p>The cost is easy to state. If the system has <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span> reachable states and each state has at most <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span> possible next steps, breadth-first search does <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>S</mi><mo>⋅</mo><mi>b</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(S \cdot b)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">b</span><span class="mclose">)</span></span></span></span> work and keeps <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>S</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(S)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mclose">)</span></span></span></span> states in memory. TLC is this loop, made very fast, with states stored compactly on disk when memory runs out.</p>
+<p><strong>Build it.</strong> Change <code>next_states</code> into the three-worker version by setting <code>WORKERS = "ABC"</code> and starting from <code>("approved", ("idle",) * 3, 0)</code>. Then:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">assert</span> <span class="c-builtin">len</span>(<span class="c-call">check</span>(init, no_double_payout)) == <span class="c-number">5</span></code></pre>
+<p>The counterexample still has five states: the same four steps, with C idle throughout. More workers don’t make the shortest bug longer.</p>
+</section>
+
+<section id="the-fix-that-isn-t">
+<h2>The fix that isn’t</h2>
+<p>You have the counterexample. The natural reaction is to read it and patch the line where it went wrong. B sent money after A had already sent. So, let B look again just before sending:</p>
+<pre class="code" data-lang="ts"><code>const loan = await db.getLoan(loanId);
+<span class="c-keyword">if</span> (loan.status !== &quot;approved&quot;) <span class="c-keyword">return</span>;
+const again = await db.getLoan(loanId);
+<span class="c-keyword">if</span> (again.status !== &quot;approved&quot;) <span class="c-keyword">return</span>;
+await bank.transfer(loan.account, loan.amount);
+await db.setStatus(loanId, &quot;paid&quot;);</code></pre>
+<p>It feels safer. Is it? Before reading on, decide: will the model checker find a double payout in this version, and if so, how long will the shortest one be?</p>
+<p>Modelling it takes one more action, <code>Recheck(w)</code>, between Check and Send: a worker that has checked reads the status again, goes on if it is still approved, and gives up if it is paid. Send now requires the worker to have rechecked. Running the checker on that version:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>approved</td><td>idle</td><td>idle</td><td>0</td></tr><tr><td>1</td><td>Check(A)</td><td>approved</td><td>checked</td><td>idle</td><td>0</td></tr><tr><td>2</td><td>Recheck(A)</td><td>approved</td><td>rechecked</td><td>idle</td><td>0</td></tr><tr><td>3</td><td>Send(A)</td><td>approved</td><td>sent</td><td>idle</td><td>1</td></tr><tr><td>4</td><td>Check(B)</td><td>approved</td><td>sent</td><td>checked</td><td>1</td></tr><tr><td>5</td><td>Recheck(B)</td><td>approved</td><td>sent</td><td>rechecked</td><td>1</td></tr><tr><td>6</td><td>Send(B)</td><td>approved</td><td>sent</td><td>sent</td><td>2</td></tr></tbody></table></div>
+<p>Still broken. The shortest counterexample grew from four steps to six, and that is all the extra check bought. Across every ordering, 60 of the 70 behaviors still pay twice. The state space grew from 17 states to 26, so there are more places for things to go wrong, not fewer.</p>
+<p>Here is why, and it is the most useful sentence in this lesson. <strong>A check and the action it protects are separate steps, so another worker can always act between them.</strong> Adding a second check moves the gap; it doesn’t close it. No number of reads can close it, because the thing that went wrong was never a missing read. It was that “see approved” and “claim the loan” were two steps instead of one.</p>
+</section>
+
+<section id="why-waiting-doesn-t-help-either">
+<h2>Why waiting doesn’t help either</h2>
+<p>There is one more tempting fix, and it’s worth killing explicitly because it works in testing. Add a random delay before each worker starts, say between zero and two hundred milliseconds, so the workers rarely collide.</p>
+<p>Look at the spec and ask: where would that delay go? There is no clock in it. A TLA+ spec doesn’t say how long a step takes or how far apart two steps are; it says only which steps are possible and in which orders. A delay changes how <em>likely</em> each ordering is. It doesn’t remove any ordering from the set of possible ones. To the model checker, the jittered system has exactly the same 17 states and the same counterexample.</p>
+<p>That’s not a weakness of the tool. It’s the point. You don’t want a payout system that is correct when the network is fast and the database is quiet. You want one that is correct in every ordering, including the one where a garbage-collection pause freezes worker A for a full second between its Check and its Send. The spec gives you a way to ask that question without knowing anything about timing at all.</p>
+</section>
+
+<section id="the-grain-of-a-step">
+<h2>The grain of a step</h2>
+<p>So the bug isn’t in any line, and it can’t be fixed by adding lines. It is a question of <em>what counts as one step</em>. In the spec, each action is <strong>atomic</strong>: it happens all at once, and no other worker can act in the middle of it. The design question is which things you are allowed to make atomic, because the real world decides that, not you.</p>
+<p>Reading the loan and then writing to it are two round trips to the database, so they are two steps, and anything can happen between them. But databases offer one thing that <em>is</em> a single step: a conditional update. This statement reads and writes in one indivisible operation:</p>
+<pre class="code" data-lang="sql"><code><span class="c-keyword">UPDATE</span> loans
+<span class="c-keyword">SET</span> status = &#x27;claimed&#x27;
+<span class="c-keyword">WHERE</span> id = $<span class="c-number">1</span> <span class="c-keyword">AND</span> status = &#x27;approved&#x27;</code></pre>
+<p>If the loan is approved, it becomes claimed, and the database reports one row changed. If another worker got there first, the condition fails, nothing changes, and the database reports zero rows. Two workers can run this at the same moment and exactly one of them will see “one row”. In the spec, Check and the write that claims the loan merge into one action:</p>
+<pre class="code" data-lang="tla"><code><span class="c-function">Claim</span>(w) == /\ pc[w] = &quot;idle&quot;
+            /\ status = &quot;approved&quot;
+            /\ status&#x27; = &quot;claimed&quot;
+            /\ pc&#x27; = [pc <span class="c-keyword">EXCEPT</span> ![w] = &quot;claimed&quot;]
+            /\ <span class="c-keyword">UNCHANGED</span> transfers</code></pre>
+<p>Read it as before: worker <code>w</code> was idle and the loan was approved, and afterwards the loan is claimed and <code>w</code> has claimed it. <strong>The check and the change are lines of the same “and”, so they happen in the same step, and no other worker can act between them.</strong></p>
+<p class="pending">[diagram:claim: built on the lesson page]</p>
+<p>You now have everything you need. Go and fix the desk.</p>
+</section>
+
+<section id="fix-the-bug">
+<h2>Fix the bug</h2>
+<p>In the lab below, you are given the payout desk with its four actions, and a panel of changes you can make to it: add a recheck, add a random delay, run a single worker, or replace Check with an atomic Claim. Each change rewrites the spec. Press “Run the checker” to explore every reachable state.</p>
+<p>The desk counts as fixed when the checker finds no state that breaks <code>NoDoublePayout</code>, with at least two workers running, and still finds none when you add a third. The bank and the bakery both need the queue to keep moving, so “only one worker” is not an answer.</p>
+<p class="pending">[lab-act2: built on the lesson page]</p>
+</section>
+
+<section id="what-people-get-wrong">
+<h2>What people get wrong</h2>
+<p><strong>“The tests pass, so the code is correct.”</strong> The tests prove that some behaviors are fine. Our tests covered 2 of the 20 behaviors, and they were the only 2 that were safe. A test suite samples orderings; a model checker covers all of them.</p>
+<p><strong>“The bug is rare, so it’s a small bug.”</strong> It was rare in production, but 18 of the 20 orderings pay twice. How often a bug shows up depends on timing, which you don’t control. Whether it <em>can</em> show up depends on the design, which you do.</p>
+<p><strong>“Check again right before acting.”</strong> Every check is its own step, and the gap after it is just as wide. Only making the check and the change one atomic step closes the gap.</p>
+<p><strong>“A model is just the code again.”</strong> The model has three variables and four actions. It leaves out the bank’s API, the database driver, retries and logging, on purpose. A spec is useful because it is much smaller than the code: small enough that a machine can examine every state of it.</p>
+</section>
+
+<section id="recap-and-the-next-bug">
+<h2>Recap and the next bug</h2>
+<p>Let’s put the pieces back together.</p>
+<p>A <strong>state</strong> is one assignment of values to the system’s <strong>variables</strong>. A <strong>step</strong> changes one state into the next, and an <strong>action</strong> is a formula describing a kind of step, with primed variables for the values afterwards. A <strong>behavior</strong> is a sequence of states joined by steps. The <strong>initial condition</strong> (<code>Init</code>) and the <strong>next-state relation</strong> (<code>Next</code>) together describe every behavior the system can have. An <strong>invariant</strong> is a property that must hold in every reachable state, and a <strong>model checker</strong> like TLC visits all of them, breadth first, and returns the shortest <strong>counterexample</strong> if the invariant fails.</p>
+<p>The bakery got paid twice because “check” and “act” were two steps. You fixed it by making them one: an atomic claim, which the database really can do.</p>
+<p>Now run your fixed desk past one more scenario. Worker A claims loan 4471, and then the machine it runs on is restarted by a routine deploy, before it sends anything. Add an action for that, <code>Crash(w)</code>, and run the checker again.</p>
+<p>It passes. No state breaks <code>NoDoublePayout</code>. The loan sits there, “claimed”, forever, and nobody will ever pay it twice, because nobody will ever pay it at all.</p>
+<p>Your invariant is perfectly happy with a system that does nothing. Next lesson, we learn how to say “and eventually, the money arrives”.</p>
+</section>
+
+<section id="concept-check">
+<h2>Concept check</h2>
+<p>Write your answers down before you move on.</p>
+<ol><li>In the naive desk, the shortest counterexample has four steps. Is there a counterexample in which worker A has already <em>marked</em> the loan as paid before worker B sends? Explain using the actions, not by trying it.</li><li>Suppose you add a third worker to the naive desk. Will the shortest counterexample get longer, shorter, or stay the same length? Why?</li><li>A teammate proposes this invariant instead: “if the status is paid, there has been exactly one transfer”. Would the model checker catch the bakery bug with it? Find the state that decides it.</li></ol>
+</section>
+
+</div>
+</html>

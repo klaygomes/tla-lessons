@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teacher&#x27;s sheet: One Loan, Paid Twice</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../lesson.css">
+<link rel="stylesheet" href="../katex/katex.min.css">
+<style>
+[hidden] { display: none !important; }
+pre.code { margin: 0; max-width: 100%; color: var(--code-text); background: var(--code-bg); border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-code); line-height: var(--leading-code); }
+.display-math { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: var(--space-1) 0; }
+.katex { font-size: var(--text-math); color: var(--ink); }
+.display-math .katex-display { margin: 0; }
+.display-math .katex-display > .katex { font-size: var(--text-math-display); }
+:not(.katex-mathml) > math { font-family: var(--font-math); font-size: var(--text-math); }
+.rule-box { max-width: 100%; }
+table.worked { font-family: var(--font-mono); font-size: var(--text-table); font-variant-numeric: tabular-nums; }
+table.worked td { white-space: nowrap; }
+table.worked th { white-space: normal; vertical-align: bottom; line-height: var(--leading-heading); }
+table.worked td:first-child, table.worked th:first-child { font-family: var(--font-ui); white-space: normal; color: var(--ink-soft); width: 1%; }
+
+.lab h3 { font-size: var(--text-h3); }
+.lab .readout { min-height: 5em; align-content: start; }
+.lab .note { font-size: var(--text-caption); color: var(--ink-soft); }
+.k-ask { display: grid; gap: var(--space-2); }
+.k-ask + .k-ask { margin-top: var(--space-3); }
+.k-ask .k-q { font-weight: var(--weight-bold); }
+.k-ask button.k-wrong { text-decoration: line-through; border-color: var(--rule); color: var(--ink-soft); }
+.k-ask button.k-right { background: var(--input-soft); border-color: var(--input); opacity: 1; }
+.k-ask .k-feedback { min-height: 1.6em; }
+.k-ask .k-feedback.k-bad { color: var(--accent-ink); }
+.k-ask .k-feedback:focus { outline: none; }
+.k-meter { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-1) var(--space-3); align-items: center; font-size: var(--text-caption); }
+.k-meter .bar { height: var(--space-3); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); overflow: hidden; background: var(--paper-2); }
+.k-meter .fill { height: 100%; width: 0; background: var(--accent); }
+.k-meter output { font-family: var(--font-mono); text-align: right; min-width: 5.5em; padding-right: var(--space-1); }
+.k-meter .scale { grid-column: 2; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--text-fig); color: var(--ink-soft); }
+.k-now { font-size: var(--text-caption); color: var(--ink-soft); }
+button.k-toggle[aria-pressed="true"]::before { content: "\2713\00a0"; }
+.k-working, .k-more { border-left: var(--line-mark) solid var(--rule); padding-left: var(--space-4); }
+.k-working { display: grid; gap: var(--space-2); }
+.k-working-note { color: var(--ink-soft); font-size: var(--text-ui); }
+.k-working-open { justify-self: start; }
+.k-working-body, .k-more-body { display: grid; gap: var(--space-block); }
+.k-more-body { margin-top: var(--space-block); }
+.k-working-body:focus { outline: none; }
+.k-more > summary { cursor: pointer; font-family: var(--font-ui); font-weight: var(--weight-medium); color: var(--input); width: fit-content; }
+.k-still-text { display: none; }
+@media (prefers-reduced-motion: reduce) { .k-motion-text { display: none; } .k-still-text { display: inline; } }
+@media (max-width: 520px) { .k-meter { grid-template-columns: 1fr auto; } .k-meter > span:first-child { grid-column: 1 / -1; } .k-meter .bar { grid-column: 1; grid-row: 2; } .k-meter output { grid-column: 2; grid-row: 2; } .k-meter .scale { grid-column: 1; grid-row: 3; } }
+p .katex, li .katex, td .katex { white-space: normal; }
+p .katex-display, li .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+pre.code .c-keyword { color: var(--code-keyword); font-weight: var(--weight-medium); }
+pre.code .c-string { color: var(--code-string); }
+pre.code .c-number { color: var(--code-number); }
+pre.code .c-function { color: var(--code-function); font-weight: var(--weight-medium); }
+pre.code .c-call { color: var(--code-call); }
+pre.code .c-builtin { color: var(--code-builtin); }
+pre.code .c-comment { color: var(--code-comment); font-style: italic; }
+
+.pending { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }
+</style>
+<div class="wrap">
+<nav class="crumbs" aria-label="Course"><a href="../index.html">The Mail Room</a><span aria-hidden="true">/</span><span>Lesson 1</span><span aria-hidden="true">/</span><span>Teacher&#x27;s sheet</span></nav>
+<header><h1>One Loan, Paid Twice</h1><p class="links">Teacher&#x27;s sheet · <a href="1-prose.html">Lesson text (draft)</a></p></header>
+<section id="overview">
+<h2>Overview</h2>
+<p>Objective: after this, you can model a small concurrent system as a state machine (variables, an initial condition, actions joined into a next-state relation), write it as a TLA+ spec with primed variables and <code>EXCEPT</code>, state a safety property as an invariant, explain how a model checker explores every reachable state breadth first and returns the shortest counterexample, and fix a check-then-act race by changing the grain of a step (an atomic conditional update).</p>
+<p>Source: none on file. Original course written from general knowledge of TLA+ (Lamport's TLA+, the TLC model checker). Every number below was computed by a Python breadth-first checker that mirrors the spec (<code>checks/check.py</code> in this lesson folder).</p>
+<p>Bug: two payout workers both read loan 4471 as approved and both transfer €50,000; the bakery receives €100,000. Tests pass 10,000 times.</p>
+<p>Fix: act 2 of the lab: replace Check with an atomic Claim (conditional update), with 2 workers and then 3, and the checker finds no state that breaks NoDoublePayout.</p>
+<p>Key words: step (not "transition", "tick"), action (not "operation", "event"), state (not "snapshot", "configuration"), behavior (not "trace", "execution", "run", "history" except once as a gloss), counterexample (not "error trace"), worker (not "thread", "process", "consumer"), loan, transfer (not "payment" for the bank operation), payout desk (the system), invariant (not "assertion", "property" alone), reachable state, model checker, TLC, atomic (not "indivisible" after its definition), claim / Claim.</p>
+<p>Terms:</p>
+<ul><li>variable: one named piece of the system's state (<code>status</code>, <code>pc</code>, <code>transfers</code>).</li><li>state: an assignment of values to every variable.</li><li>step: a change from one state to the next; nothing else happens during it.</li><li>action: a formula about a pair of states (unprimed: before, primed: after) describing a kind of step.</li><li>behavior: a sequence of states, each following from the previous by one step.</li><li>initial condition (<code>Init</code>): which states a behavior may start in.</li><li>next-state relation (<code>Next</code>): which pairs of states are allowed steps; the "or" of the actions.</li><li>reachable state: a state some behavior reaches.</li><li>invariant: a property of a single state that must hold in every reachable state.</li><li>model checker: a program that visits every reachable state and checks the invariant; TLC is the TLA+ one.</li><li>counterexample: a behavior from an initial state to a state that breaks the invariant.</li><li>atomic: describes an action that happens in one step, with no other worker acting in the middle.</li><li>stuttering step: a step that leaves <code>vars</code> unchanged (named only; deferred to lesson 2).</li></ul>
+<p>Misconception: "the tests pass, so the code is correct." Why wrong: tests run one ordering (each worker finishes first), which is one of the only 2 safe behaviors of 20.</p>
+<p>Second misconception: "check again before acting" or "add jitter". Why wrong: a check is its own step and the gap after it stays open; a spec has no clock, so a delay removes no ordering.</p>
+<p>Worked examples (all from <code>check.py</code>):</p>
+<ol><li>Naive desk, 2 workers. Behavior Check(A), Check(B), Send(A), Send(B) ends with transfers 2. Safe behavior Check(A), Send(A), Mark(A), Skip(B) ends with 1. Counts: 17 reachable states, 20 complete behaviors, 18 pay twice; the 2 safe ones are "A finishes, B skips" and its mirror. Breadth-first shortest counterexample: Check(A), Send(A), Check(B), Send(B) (4 steps, 5 states). 3 workers: 75 states, 1,428 behaviors, 1,422 pay twice, shortest counterexample still 4 steps. Under a scheduler choosing uniformly among enabled steps, the chance of paying twice is 3/4 with 2 workers, 8/9 with 3 (not in the prose; for questions).</li><li>Recheck desk (Check, Recheck, Send, Mark; Recheck gives up when paid), 2 workers: 26 states, 70 behaviors, 60 pay twice, shortest counterexample 6 steps: Check(A), Recheck(A), Send(A), Check(B), Recheck(B), Send(B). 3 workers: 139 states, 27,294 behaviors, 27,120 pay twice.</li><li>Claim desk (Claim, Send, Mark; Skip when status is not approved; status in {approved, claimed, paid}): 2 workers 12 states, 6 behaviors, 0 pay twice; 3 workers 32 states, 36 behaviors, 0 pay twice. 1 worker: 4 states.</li></ol>
+<p>Figures (stage 2):</p>
+<ul><li>[[diagram:steps]]: the five TypeScript lines on the left, the four steps (Check, Send, Mark, Skip) on the right, with the gaps between steps marked as "the other worker can act here". diagram-design, a flow/annotated-code figure. Still.</li><li>[[diagram:behavior]]: two behaviors as horizontal strips of state cards (the bad one and the test's safe one), same start state, diverging at step 2; the transfers counter highlighted in --accent where it reaches 2, --ok where the safe one ends at 1. Animated: cards slide in one step at a time; still under reduced motion.</li><li>[[diagram:state-graph]]: the 17 reachable states as a layered graph (depth 0 to 6), edges labelled by action, the bad states (transfers 2) in --accent. Animated: breadth-first frontier lights up layer by layer and stops at the first bad state, then the counterexample path is drawn back to the start. Must not appear above the question in "How many orderings are there?" (it is placed after "The idea, named").</li><li>[[diagram:claim]]: before/after: check-then-act as two steps with a gap where B's arrow enters, versus Claim as one step with no gap; the conditional UPDATE beside it. diagram-design comparison. Still.</li></ul>
+<p>Lab (stage 3), iwrzwr study to adapt: <code>Causal Relay</code> or <code>Coupled Nodes</code> (cause and effect, state; confirm by name in the catalog at page time).</p>
+<ul><li>[[lab]] act 1, explore. Prediction first: "Of all the orderings of the two workers, from start to both done, how many pay the bakery twice?" Options: 1, 2, 10, 18 (of 20). Then the learner is the scheduler: two lanes (A, B), each showing its enabled steps as buttons; the state card (status, pc of A, pc of B, transfers) updates per click, the behavior grows as a strip. A "Run the checker" button animates breadth-first exploration of the 17 states and draws the shortest counterexample. A counter shows "behaviors you have tried: n of 20, paid twice: k".</li><li>[[lab-act2]] act 2, fix the bug. Change panel: add Recheck; add random delay; workers 1/2/3; replace Check with atomic Claim. "Run the checker" shows states explored and either the counterexample or "no state breaks NoDoublePayout". Success requires: Claim on, workers ≥ 2, and a passing run at 3 workers. Feedback without giving the answer:<ul><li>Recheck: "Still pays twice: the shortest counterexample is now 6 steps. A check is its own step."</li><li>Delay: "Same 17 states, same counterexample. The spec has no clock."</li><li>1 worker: "No double payout, and no second worker. The queue needs at least two."</li><li>Claim, 2 workers only: "Holds with 2. Try 3 before you ship."</li><li>Success: 12 states (2 workers), 32 states (3 workers), the bakery gets one transfer.</li></ul></li></ul>
+<p>Concept check, answers (never shown to the learner):</p>
+<ol><li>Yes. B needs only to have checked before A marks: Check(A), Send(A), Check(B), Mark(A), Send(B) pays twice with A already marked; 3 of the 20 behaviors have Mark(A) before Send(B) and still pay twice. Look for the reason: Send(B) only requires pc of B = checked, not status = approved; the status was read once, at Check. The window is Check to Mark, not Check to Send.</li><li>Same length (4 steps). The shortest counterexample needs only two workers; the third can stay idle. A model checker can't find a shorter one because two Checks and two Sends are each necessary (each transfer needs its own Send, each Send needs its own Check). More workers make more states (75), not shorter bugs.</li><li>Yes, but later and weaker. The state after Check(A), Check(B), Send(A), Send(B) has transfers 2 and status approved, so the teammate's invariant holds there; it first fails after a Mark, shortest 5 steps (status paid, transfers 2). It would miss a double payout where neither worker reaches Mark (a crash, lesson 2's world). The lesson: state the invariant about what you actually care about (transfers), not about a proxy (status).</li></ol>
+<p>Next bug: with Claim and a Crash(w) action (a worker that has claimed restarts before sending), NoDoublePayout still holds, and the loan stays claimed forever. Safety is satisfied by doing nothing. Lesson 2: liveness, temporal formulas (eventually, leads-to), stuttering and fairness, and a lease that lets another worker retake a stale claim.</p>
+<p>Assumptions:</p>
+<ul><li>No source file: TLA+ syntax (<code>EXCEPT</code>, <code>![w]</code>, <code>UNCHANGED</code>, <code>[][Next]_vars</code>, <code>-deadlock</code>) is written from general knowledge and has not been run through SANY or TLC in this session (no Java on the machine; the JDK install was blocked). Confirm with real TLC before the page ships: expected 17 distinct states, violation of NoDoublePayout, 4-step counterexample (TLC prints the initial state as state 1, so 5 states). TLC's breadth-first search may print a different shortest counterexample of the same length than the Python checker; the prose names Check(A), Send(A), Check(B), Send(B) because the Python checker returns it.</li><li>The conditional UPDATE being atomic under concurrent workers assumes a database where a single-row UPDATE re-evaluates its WHERE clause after waiting for a concurrent writer (true of PostgreSQL under its default isolation). Stated in the prose as a database guarantee, without naming a product.</li><li>Python snippets 2 and 3 continue from snippet 1 (they use <code>next_states</code> and <code>init</code>); run them concatenated. The build-it assert needs <code>WORKERS = "ABC"</code> and the 3-worker <code>init</code>.</li><li>Linden, the bakery and loan 4471 are fictional.</li></ul>
+</section>
+
+</div>
+</html>

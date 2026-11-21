@@ -15,7 +15,7 @@ Lesson pages are an original course. Each lesson assumes only the lessons before
 
 | # | Lesson | Bug | Fix | New terms | Page | Status |
 |---|---|---|---|---|---|---|
-| 1 | One loan, paid twice | two workers both read loan 4471 as approved and both transfer €50,000 | make check and claim one atomic step (a conditional update), checked with 2 and 3 workers | variable, state, step, action, behavior, initial condition, next-state relation, reachable state, invariant, model checker, counterexample, atomic | | 01-one-loan-paid-twice/3-page/3-page.html | page built, waiting on review |
+| 1 | One loan, paid twice | two workers both read loan 4471 as approved and both transfer €50,000 | make check and claim one atomic step (a conditional update), checked with 2 and 3 workers | variable, state, step, action, behavior, initial condition, next-state relation, reachable state, invariant, model checker, counterexample, atomic | | 01-one-loan-paid-twice/3-page/3-page.html | ready; no video in this series |
 
 ## Course plan
 

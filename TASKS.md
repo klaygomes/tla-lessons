@@ -55,8 +55,8 @@ flowchart TD
 - [x] 4 figures (8 built: desk, race, steps, behavior, orderings, state-graph, growth, claim; all 16 files pass self_check and verify-geometry, rerun by lead; not yet viewed rendered) (2026-11-21)
 - [x] 5 page: build.py 0, fit.mjs 0, checker asserts and jsdom smoke test rerun by lead; not yet walked in a browser (2026-11-21)
 - [x] 6 learner judge: ready with polish; all numbers agree; fixes done and rechecked by lead: prediction wording, act 1 tally, status line, neutral act 2 labels with a prediction lock, phone spacing, symbol table wrap and glyphs, state-graph crossings and label, phone codes, behavior card overflow, one prose sentence (2026-11-21). No further judges without asking.
-- [ ] 7 verification
-- [ ] 8 delivery
+- [x] 7 verification: judge cross-checked 20/18, 17, 4 bad, 1,428/75, 26/70/60, 12/32 across prose, figures and labs with its own enumeration; TLC confirms the spec counts (2026-11-21)
+- [x] 8 delivery: series.md row, index, deployed at https://www.estacouveflor.com/tla-lessons/01-one-loan-paid-twice/3-page/3-page.html (2026-11-21)
 - [ ] 9 concept check: mastery confirmed
 - [ ] 10 problems
 

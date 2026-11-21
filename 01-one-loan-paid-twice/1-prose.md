@@ -48,7 +48,7 @@ Each of these is a **step**: one indivisible change from one situation to the ne
 Now, what is a “situation”? Think about what you would need to write down to pause the whole system and resume it later. Three things:
 
 - the loan’s **status**: `"approved"` or `"paid"`;
-- where each worker is in its code, which we will call its **pc** (short for “program counter”): `"idle"` before it starts, `"checked"` after Check, `"sent"` after Send, `"done"` at the end;
+- where each worker is in its code, which we will call its **pc** (short for “program counter”): idle before it starts, checked after Check, sent after Send, done at the end;
 - how many **transfers** the bank has made for this loan: 0, 1, or more.
 
 Each of these is a **variable**, and one assignment of values to all of them is a **state**. Here is the state before anything has happened:
@@ -224,32 +224,75 @@ NoDoublePayout == transfers <= 1
 ====
 ```
 
-TLA+ is typed in plain ASCII (`/\` for “and”, `\E` for “there exists”) and usually read typeset, with the symbols a mathematician would write. The block above shows the typeset form; flip “Show ASCII” to see exactly what you type into the tools. The rule at the top, labelled MODULE Payout, and the double rule at the bottom are not decoration: they are where a module begins and ends, typed as a row of at least four dashes around `MODULE Payout` and a row of at least four equals signs.
+TLA+ is typed in plain ASCII and usually read typeset, with the symbols a mathematician would write. The block above is the typeset form; flip “Show ASCII” to see exactly what you type into the tools. The thin rule labelled MODULE Payout and the double rule at the bottom are not decoration: they mark where a module begins and ends.
 
-It looks dense the first time, so let’s read it the way you would read it aloud.
+It looks dense the first time, but it uses only a handful of symbols. Here they all are, with what you type, how you say it, and the closest Python:
 
-`Workers == {"A", "B"}` defines a name. The double equals sign means “is defined as”, and the braces make a set: the workers are A and B.
+| typeset | you type | say it | in Python |
+|---|---|---|---|
+| ≜ | `==` | “is defined as” | `=` in a definition |
+| ∧ | `/\` | “and” | `and` |
+| ∨ | `\/` | “or” | `or` |
+| ∃ x ∈ S : | `\E x \in S :` | “there is an x in S such that” | `any(... for x in S)` |
+| ⟨ a, b ⟩ | `<<a, b>>` | “the tuple a, b” | `(a, b)` |
+| [ w ∈ S ↦ v ] | `[w \in S \|-> v]` | “the function taking each w in S to v” | `{w: v for w in S}` |
+| x′ | `x'` | “x prime”: x after the step | the new value |
+| □ | `[]` | “always” | (no equivalent) |
 
-`VARIABLES status, pc, transfers` declares the three variables of the state. `vars` is just a name for all three of them together; the angle brackets `<< >>` make a tuple.
+Now let’s read the spec one piece at a time.
 
-`Init` is the initial condition. The symbol `/\` means “and”, written as a little wedge, and the column of them is a bulleted list where every line must hold. So `Init` says: the status is approved, *and* `pc` is the function that maps every worker to idle, *and* there are zero transfers. The notation `[w \in Workers |-> "idle"]` reads “the function that takes each `w` in `Workers` to `"idle"`”. In Python it is the dict `{w: "idle" for w in WORKERS}`. **`Init` is true of exactly one state: the first row of our tables.**
+```tla
+Workers == {"A", "B"}
+VARIABLES status, pc, transfers
+vars == <<status, pc, transfers>>
+```
 
-Now the steps. `Check(w)` describes one step of worker `w`, and here comes the one new idea in TLA+ notation: the prime. In a formula that describes a step, `pc` means the value of `pc` in the state *before* the step, and `pc'` (read “pc prime”) means its value in the state *after*. So a step formula is a statement about a pair of states. Read `Check(w)` line by line:
+The first line names the set of workers, A and B. The second declares the three variables of the state. The third gives all three a single name, vars, so we can talk about them together later.
 
-- `pc[w] = "idle"`: before the step, worker `w` is idle;
-- `status = "approved"`: before the step, the loan is approved;
-- `pc' = [pc EXCEPT ![w] = "checked"]`: after the step, `pc` is the same function as before except that `w` now maps to `"checked"`. The `!` stands for “the function being changed”, so `![w]` is “its entry at `w`”;
-- `UNCHANGED <<status, transfers>>`: after the step, status and transfers are what they were.
+```tla
+Init == /\ status = "approved"
+        /\ pc = [w \in Workers |-> "idle"]
+        /\ transfers = 0
+```
 
-**`Check(w)` is true of a pair of states exactly when worker `w` was idle with the loan approved, and afterwards `w` has checked and nothing else changed.** The first two lines mention no primes, so they only constrain the state before: they say *when* the step is allowed. That is why there is no `if` in TLA+. A condition that must hold for a step to happen is just one more line of the “and”.
+This is the initial condition. A column of ∧ signs is a bulleted list where every line must hold: the status is approved, and every worker is mapped to idle, and there are zero transfers. **Init is true of exactly one state: the first row of our tables.**
 
-A formula like `Check(w)`, which describes a kind of step, is called an **action**. `Skip`, `Send` and `Mark` read the same way. Notice that `Send(w)` has `transfers' = transfers + 1`: after the step, one more transfer exists.
+```tla
+Check(w) == /\ pc[w] = "idle"
+            /\ status = "approved"
+            /\ pc' = [pc EXCEPT ![w] = "checked"]
+            /\ UNCHANGED <<status, transfers>>
+```
 
-`Next` puts the actions together. The symbol `\/` means “or”, and `\E w \in Workers :` reads “there exists a worker `w` in `Workers` such that”. **A step is a `Next` step when, for some worker, it is a Check, a Skip, a Send or a Mark step of that worker.** This is the next-state relation, and it is precisely `next_states` in Python: the `for` loop over workers is the `\E`, and the four `if` blocks are the four actions joined by “or”.
+Here is the one new idea in TLA+ notation: the prime. In a formula that describes a step, a plain variable means its value *before* the step, and the same variable with a prime means its value *after*. So Check is a statement about a pair of states, and it reads line by line:
 
-`Spec` says what a behavior of the whole system is. Read `[][Next]_vars` from the inside out. `[Next]_vars` means “a `Next` step, or a step where `vars` stays unchanged”. The box `[]` in front means “always”, at every step of the behavior. **`Spec` is true of a behavior when its first state satisfies `Init` and every step is either a `Next` step or a step where nothing changes.** Those do-nothing steps, called stuttering steps, look odd now; they become important in the next lesson, when we ask whether anything good is *guaranteed* to happen. For today, ignore them.
+- before the step, worker w is idle;
+- before the step, the loan is approved;
+- after the step, the program counters are the same as before, except that w’s entry is now “checked” (EXCEPT is how TLA+ says “this function with one entry changed”);
+- after the step, the status and the transfers are what they were.
 
-`NoDoublePayout` is the invariant: a formula about a single state, with no primes, that should be true of every reachable one.
+**Check(w) is true of a pair of states exactly when worker w was idle with the loan approved, and afterwards w has checked and nothing else changed.** The first two lines mention no primes, so they only constrain the state before: they say *when* the step is allowed. That is why there is no “if” in TLA+. A condition that must hold for a step to happen is just one more line of the “and”.
+
+A formula like Check, which describes a kind of step, is called an **action**. Skip, Send and Mark read the same way. Send is the one that matters most: its line “transfers prime equals transfers plus one” says that after the step, one more transfer exists.
+
+```tla
+Next == \E w \in Workers :
+          Check(w) \/ Skip(w) \/ Send(w) \/ Mark(w)
+```
+
+**A step is allowed when, for some worker, it is a Check, a Skip, a Send or a Mark step of that worker.** This is the next-state relation, and it is precisely next_states in Python: the loop over workers is the “there is a worker”, and the four if blocks are the four actions joined by “or”.
+
+```tla
+Spec == Init /\ [][Next]_vars
+```
+
+This says what a behavior of the whole system is. Read the end of it from the inside out: the brackets with vars underneath mean “a Next step, or a step where vars stays unchanged”, and the box in front means “always”, at every step. **A behavior is allowed when its first state satisfies Init and every step is either a Next step or a step where nothing changes.** Those do-nothing steps, called stuttering steps, look odd now; they become important in the next lesson, when we ask whether anything good is *guaranteed* to happen. For today, ignore them.
+
+```tla
+NoDoublePayout == transfers <= 1
+```
+
+Finally, the invariant: a formula about a single state, with no primes, that should be true of every reachable one.
 
 To check it, you give TLC the spec and the name of the invariant in a small configuration file, `Payout.cfg`:
 

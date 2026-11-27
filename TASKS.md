@@ -17,7 +17,7 @@ Repo `github.com/klaygomes/tla-lessons`, GitHub Pages from `main /` via `.github
 - Learner: experienced software engineer (TypeScript, AWS, SQL), new to formal methods.
 - Natural teacher voice (`references/writing.md`); no em dashes; curly quotes in prose.
 - Concept before symbol; read every TLA+ formula aloud after it appears (each operator in words, the whole as one bold sentence) and mirror it in a short Python snippet with its real output, lines at most 66 characters.
-- Ask before spawning judges, browsers or read-aloud passes (CPU); writer agents are fine.
+- Ask before spawning judges or browsers (CPU); writer agents are fine. No read-aloud pass in this series (user, 2026-11-27: "no need for this step").
 - Never show lesson N+1 before the learner passes lesson N's concept check.
 
 ## Visual tools
@@ -45,10 +45,10 @@ flowchart TD
 ### 1. One loan, paid twice: state machines, behaviors, invariants, model checking
 
 - [x] 1 prose and sheet, with `checks/` (2026-11-21)
-- [ ] 2 gates
+- [x] 2 gates (read-aloud dropped by the user, 2026-11-27)
   - [x] `_kit/check_prose.py`: 0 em dashes, 0 lines over 66; fences 4, 9 and 11 fail standalone by design (they continue snippet 1) and pass concatenated (2026-11-21)
   - [x] concept-check answers and the build-it assert verified by script (2026-11-21)
-  - [ ] read-aloud with agent-voice (ask first: CPU)
+  - [x] read-aloud: dropped by the user (2026-11-27)
   - [x] fresh-reader subagent: 9 findings fixed (four-steps wording, typeset-only phrasing, 13 states dropped, trace-length note, O(S·b) in words, recap and misconceptions de-duplicated, one prediction prompt, four phrasings); build, fit, check_prose rerun by lead; 5 figure requests pending (window timeline, BFS walk-back, merging paths, stuttering, recheck gap) (2026-11-27)
   - [x] TLA+ module run through SANY and TLC 2.19 (tla2tools v1.7.4, sha256 936a2620...0e88): counterexample, 17 states with -continue, claim 32 states, all match (2026-11-21)
 - [ ] 3 review stop (user asked to see the figures and lab before reviewing the text, 2026-11-21; building stages 4 and 5 now)
@@ -63,11 +63,11 @@ flowchart TD
 ### 2. The loan nobody paid
 
 - [ ] 1 prose and sheet: drafting done, with checks/ (writer agent, 2026-11-21); tick when it ships. Kept untracked and undeployed: the learner sees it only after passing lesson 1's concept check; commit and push it then.
-- [ ] 2 gates
+- [x] 2 gates (read-aloud dropped by the user, 2026-11-27)
   - [x] TLC: 13 runs via `checks/tlc.sh`, rerun by lead, identical to `checks/tlc-results.txt` (2026-11-21)
   - [x] check_prose: 0 em dashes, 0 long lines, no sentence with 2+ inline codes; fences 11 and 18 fail standalone by design (2026-11-21)
   - [x] fresh-reader: all findings fixed (crash continuity, 8 states counted, LivenessOnly cfg explained, WF wording, SCC with a switch example, strong fairness reordered, symbol table and next_steps trimmed, five phrasings); new slots stuttering, enabled, eventually-always, weak-strong, quiet-twin with sheet specs; check_prose, check.py, build_it rerun by lead; prose 6,038 words (2026-11-27)
-  - [ ] read-aloud (running 2026-11-27)
+  - [x] read-aloud: dropped by the user (2026-11-27)
 - [ ] 3 review stop
 - [x] 4 figures: 12 (stranded, stuttering, safety-liveness, lasso, enabled, fairness, eventually-always, weak-strong, quiet-twin, lease-race, resend, idempotency-key), 24 files; self_check and verify-geometry rerun by lead, 0 failures; model in figures.mjs checks 8, 10, 76, 29, 23. Deviations: lease-race in TLC's order, safety-liveness top strip is lesson 1's race, lasso and stuttering draw once (kit cannot loop). Not yet viewed in a browser (2026-11-27)
 - [x] 5 page: build.py 0 (14 slots), fit.mjs 0, rerun by lead; impeccable only lesson 1's three dark-theme false positives; lab.js BFS matches the sheet in all 32 combinations; act 1 question changed to "how many states can stop forever unpaid?" (5) because the prose above answers the sheet's; lab's shortest lease path is Claim(A), Send(A), Expire, Claim(B), Send(B) (5 steps, differs from the prose's TLC path) (2026-11-27)
@@ -81,7 +81,7 @@ flowchart TD
 ### 3. The key the bank forgot
 
 - [x] 1 prose and sheet: 7,669 words, 8 figure specs, labs, 3 concept checks, 3 problems; 33 TLC runs via `checks/tlc.sh` (`-workers 1`), rerun by lead and identical to `tlc-results.txt`; `check.py` matches; check_prose 0 em dashes, 0 long lines, fence 54 fails standalone by design (2026-11-27). Untracked until lesson 2's concept check passes.
-- [ ] 2 gates (fresh-reader, read-aloud; continuity pass against lesson 2)
+- [x] 2 gates (read-aloud dropped by the user, 2026-11-27) (fresh-reader, read-aloud; continuity pass against lesson 2)
   - [x] fresh-reader (`docs/tla-reviewer-brief.md`): 11 fixes (undefined pay@0 and "asking", generated vs distinct, 8,288 cited unseen, FixStale row order, ForgetKey wrongly credited to lesson 2, Claim's owner from lesson 2); check_prose rerun by lead: 7,827 words, only fence 54 fails (2026-11-27)
   - Unconfirmed in the sheet: liveness of the lossy desk (NoDeadEnd checked instead), the window argument (hand proof, TLC at TTL 2 and 3 only), the bank's "valid until" field (story device).
 - [x] 4 figures: 8 (weekend, clock, timeout-guard, clock-bound, two-worlds, stale-answer, deadline, fresh-answer), 16 files, gates rerun by lead, 0 failures; figures.mjs asserts the weekend steps, MaxTime 0 to 6 counts, Ask and FixStale traces; clock-bound short-clock bars neutral, not green (2026-11-27)
@@ -92,7 +92,7 @@ flowchart TD
 ### 4. A desk too big to check
 
 - [x] 1 prose and sheet: 6,433 words; 39 TLC runs via `checks/tlc.sh` (`-workers 1`), rerun by lead and identical to `tlc-results.txt` (the 15 s unbounded run included); `check.py` exit 0; check_prose 0 em dashes, 0 long lines, fence 45 fails standalone by design (2026-11-27). Untracked until lesson 3's concept check passes.
-- [ ] 2 gates (read-aloud; sheet resync)
+- [x] 2 gates (read-aloud dropped by the user, 2026-11-27) (read-aloud; sheet resync)
   - [x] fresh-reader + syntax audit: syntax fixed (generated/distinct/queue and depth explained after the output, CONSTANTS with several values, `{A, B}` in cfg, scope of `\E l \in Loans :`, EXTENDS TLC and Naturals, "action constraint", `<=` in Bounds); "constant" now a recap of lesson 3; constraint mirror replaced; stopped-run numbers made approximate; false "factor of ten" removed; opening recaps lesson 3's real fix; ending rewritten to set up Noor (lesson 5); check_prose rerun by lead: 7,108 words, fence 47 by design (2026-11-27)
   - [x] sheet resync: "constant" a recap, depth added, Next bug leads to Noor's PlusCal rewrite, 15 s run approximate, misconceptions split to four (2026-11-27)
 - [x] 4 figures: 5 (explosion, counter, symmetry, constraint, small-scope), 10 files, gates rerun by lead, 0 failures; figures.mjs ports check.py and fails on any mismatch; explosion caption corrected by lead to the real per-loan multipliers with 3 workers (×15, ×11, ×9.5); light theme not viewed (2026-11-27)
@@ -104,7 +104,7 @@ flowchart TD
 ### 5. Writing the worker as code
 
 - [x] 1 prose and sheet: 6,809 words; 21 pcal.trans translations and 29 TLC runs via `checks/tlc.sh` (`-workers 1`), rerun by lead and identical to `tlc-results.txt`; `check.py` matches; check_prose 0 em dashes, 0 long lines, fences 5, 15, 22 fail standalone by design (2026-11-27). Untracked until lesson 4's concept check passes.
-- [ ] 2 gates (fresh-reader, read-aloud; continuity pass: one line mentions lesson 3 in general terms)
+- [x] 2 gates (read-aloud dropped by the user, 2026-11-27) (fresh-reader, read-aloud; continuity pass: one line mentions lesson 3 in general terms)
   - [x] fresh-reader: fixed `\*` comments, deadlock, states generated / left on queue, check.py references, `status[x]`, Terminating, "same 14" with no antecedent, "lesson 1's desk without the key"; 12/32 vs lesson 2's 8 reconciled in prose (sheet may need a note); continuity with lesson 4 not checked (prose missing then); check_prose rerun by lead: 6,951 words, fences 5, 15, 22 by design (2026-11-27)
   - Unconfirmed in the sheet: the "Missing label" rule, Termination checked only under PROPERTY, FIFO pool making fair+ honest, SQL in hints not run.
 - [x] 4 figures: 6 (two-calls, labels, translation, interactions, poll, flicker), 12 files, gates rerun by lead, 0 failures; no state counts shown, so nothing gives away the predictions; flicker has about 60 px of empty space above its first row (fix in the layout pass) (2026-11-27)
@@ -115,7 +115,7 @@ flowchart TD
 ### 6. The ledger that does not add up
 
 - [x] 1 prose and sheet: 6,555 words after fixes; TLC runs via `checks/tlc.sh` (`-workers 1`), rerun by lead and identical to `tlc-results.txt`; `check.py` exit 0; check_prose 0 em dashes, 0 long lines, fences 18, 39 by design (2026-11-27). Untracked until lesson 5's concept check passes.
-- [ ] 2 gates (fresh-reader, read-aloud); syntax audit fixes and the new ending to lesson 7 done (see Open items)
+- [x] 2 gates (read-aloud dropped by the user, 2026-11-27) (fresh-reader, read-aloud); syntax audit fixes and the new ending to lesson 7 done (see Open items)
 - [x] 4 figures: 7 (two-ledgers, sum-over, conservation, crash-window, two-phase, outbox, at-least-once), 14 files, gates rerun by lead, 0 failures; figures.mjs recomputes every total and stops the build on a mismatch; light theme not viewed (2026-11-27)
 - [x] 5 page: build.py 0 (9 slots), fit.mjs 0, rerun by lead; lab.js BFS matches all 16 design/key/loans rows of the sheet; act 1 Moment Balance beam, act 2 Error Escrow chart; fixed only with outbox in the same transaction plus keyed credit at 2 and 3 loans; impeccable only the known dark-theme false positives; lab's liveness lasso is the shortest the search finds, not TLC's 7-step one (2026-11-27)
 - [x] 6 learner judge: three rounds, each ready with polish (round 1: 8 items, round 2: 5 incl. "4 of 23 states" wording against check.py, round 3: 5), all fixed; only the same-transaction outbox with the keyed credit wins, at 2 and 3 loans; rerun by lead (2026-11-27)
@@ -124,7 +124,7 @@ flowchart TD
 ### 7. Does the code match the spec?
 
 - [x] 1 prose and sheet: 7,266 words; 27 TLC runs via `checks/tlc.sh` (`-workers 1`), rerun by lead and identical to `tlc-results.txt`; `check.py` exit 0; check_prose 0 em dashes, 0 long lines, fences 23, 27, 30, 34, 36 fail standalone by design (2026-11-27). Untracked until lesson 6's concept check passes.
-- [ ] 2 gates (fresh-reader, read-aloud; continuity pass: recaps of lessons 3 to 6)
+- [x] 2 gates (read-aloud dropped by the user, 2026-11-27) (fresh-reader, read-aloud; continuity pass: recaps of lessons 3 to 6)
   - [x] fresh-reader + syntax audit: fixed undefined Loan, lease switch, SCC recap, TLC column locations, TablePaid and Pay read-alouds, ENABLED of the mapped Pay, "breadth first" (the code is depth first), `Abstract!Spec` explained two sections late, StutterFree error lines; one-line nod to lesson 3's clock; check_prose rerun by lead: 7,563 words, fences 23, 27, 30, 34, 36 by design (2026-11-27)
   - [x] lesson 6's ending rewritten to lead into lesson 7's opening (2026-11-27)
   - Unconfirmed in the sheet: TLC ignoring THEOREM, the reason TLA+ allows stuttering (general knowledge). `PROPERTY Abstract!Spec` in a cfg is a real TLC error, so the lesson defines `Refines`.
@@ -137,7 +137,7 @@ flowchart TD
 ### 8. When checking is not enough
 
 - [x] 1 prose and sheet: 5,479 words; 34 TLC runs via `checks/tlc.sh` (`-workers 1`), rerun by lead and identical to `tlc-results.txt`; `check.py` exit 0; check_prose 0 em dashes, 0 long lines, fences 6, 9, 15, 18, 24, 27 fail standalone by design (continue the base snippet) (2026-11-27). Untracked until lesson 7's concept check passes.
-- [ ] 2 gates (fresh-reader, read-aloud; continuity pass: recap lines for lessons 3 to 7)
+- [x] 2 gates (read-aloud dropped by the user, 2026-11-27) (fresh-reader, read-aloud; continuity pass: recap lines for lessons 3 to 7)
   - [x] fresh-reader + syntax audit: 12 syntax gaps fixed (EXTENDS, `/\` binds tighter than `=>`, cfg INIT/NEXT/CONSTANT/INVARIANT, TLC state header, `[A |-> ...]`, generated/distinct/queue, depth, Cardinality and FiniteSets, PROPERTY with `[][StepKeeps]_vars`, FALSE, THEOREM); counting snippet's TypeError fixed (renamed `count_inv`, `count_steps`); CTI rule corrected (check the candidate on reachable states first, then strengthen); busy CTI added; opening and closing moved to Maren (lesson 7's hand-off); recaps of lessons 2, 3, 4, 6 corrected; check_prose rerun by lead: 6,255 words, fences 6, 9, 15, 18, 24, 27 by design (2026-11-27)
   - [x] sheet resync: busy-CTI note, Bug line opens on Maren, recaps corrected, misconceptions split to four (2026-11-27)
   - Unconfirmed in the sheet: TLAPS, Apalache and trace validation not run (tlapm not installed); per-action argument is a hand proof; the 7-worker bug is hypothetical.

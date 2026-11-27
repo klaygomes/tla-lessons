@@ -8,7 +8,8 @@ TITLE = "The payout desk: lessons in TLA+"
 INTRO = "You run the service that pays out loans at a small lender. Every lesson opens on a bug in the payout desk, and ends when you fix it yourself in a lab."
 
 STATES = {
-    "ready": "Ready",
+    "complete": "Complete",
+    "ready": "Published",
     "page": "Page built",
     "drafted": "Text drafted",
     "writing": "Being written",
@@ -44,6 +45,8 @@ def state(n, steps):
     done = lambda k: steps.get(k, (False, ""))[0]
     page = folder / "3-page/3-page.html" if folder else None
     prose = folder / "1-prose.md" if folder else None
+    if all(done(k) for k in range(1, STEPS + 1)) and page and page.exists():
+        return "complete", page
     if done(8) and page and page.exists():
         return "ready", page
     if done(5) and page and page.exists():
@@ -59,8 +62,8 @@ def item(n, title, question, steps):
     key, target = state(n, steps)
     ticked = sum(1 for k in range(1, STEPS + 1) if steps.get(k, (False, ""))[0])
     links = []
-    if key in ("ready", "page"):
-        label = "Open the lesson" if key == "ready" else "Open the page (draft)"
+    if key in ("complete", "ready", "page"):
+        label = "Open the page (draft)" if key == "page" else "Open the lesson"
         links.append((target, label))
     if target:
         folder = target.parent.parent if target.parent.name == "3-page" else target.parent
@@ -99,8 +102,8 @@ def build():
 .course p {{ margin: 0 0 var(--space-1); }}
 .course .links {{ display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); font-family: var(--font-ui); font-size: var(--text-small); }}
 .course .state {{ padding: 0 var(--space-2); border-radius: var(--radius-sm); background: var(--paper-2); color: var(--ink-soft); }}
-.course .is-ready .state {{ background: var(--ok-soft); color: var(--ok); }}
-.course .is-page .state, .course .is-drafted .state {{ background: var(--input-soft); color: var(--input); }}
+.course .is-complete .state {{ background: var(--ok-soft); color: var(--ok); }}
+.course .is-ready .state, .course .is-page .state, .course .is-drafted .state {{ background: var(--input-soft); color: var(--input); }}
 .course .is-writing .state {{ background: var(--accent-soft); color: var(--accent-ink); }}
 .course .steps {{ color: var(--ink-soft); font-family: var(--font-mono); }}
 .course meter {{ width: var(--space-20); vertical-align: middle; }}
@@ -111,7 +114,7 @@ def build():
 <header>
 <h1>{TITLE}</h1>
 <p class="question">{INTRO}</p>
-<p class="summary">{html.escape(summary)}. Each lesson has {STEPS} steps, from the draft text to your concept check and problems.</p>
+<p class="summary">{html.escape(summary)}. Each lesson has {STEPS} steps, from the draft text to your concept check and problems; a published lesson is open to read, and it is complete once you have reviewed it, passed its concept check and done its problems.</p>
 </header>
 <ol class="course">
 {items}

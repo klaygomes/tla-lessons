@@ -28,7 +28,7 @@ Under `~/.local/share/klay-learning-ladder/` (paths from `scripts/ensure.sh`): d
 
 ```mermaid
 flowchart TD
-  P[1. Prose + sheet + checks/] --> G[2. Gates: lint, read-aloud, fresh reader]
+  P[1. Prose + sheet + checks/] --> G[2. Gates: lint, fresh reader]
   G --> R{3. User reviews prose}
   R -->|changes| P
   R -->|ok| F[4. Figures]
@@ -166,4 +166,4 @@ flowchart TD
 
 - TLA+ blocks render typeset (∧ ∨ ≜ ∃ ∈ □ ⟨⟩ ′, module rules) with a CSS-only "Show ASCII" switch: `_kit/highlight.py` `tla()`, styles at the end of `_kit/page.css` (user, 2026-11-21: "add a render for this syntax"). Not yet checked in a browser.
 
-- Waiting on the user: review of lesson 1's prose and sheet; go-ahead for the read-aloud and fresh-reader gates.
+- Waiting on the user: lesson 1's concept check (its three questions were put in chat on 2026-11-27); then review, concept check and problems for each lesson in turn. Each lesson from 2 on is delivered (series.md row and glossary, index, commit, push) only after the previous lesson's concept check passes.

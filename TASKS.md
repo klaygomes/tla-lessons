@@ -86,6 +86,8 @@ flowchart TD
   - Unconfirmed in the sheet: liveness of the lossy desk (NoDeadEnd checked instead), the window argument (hand proof, TLC at TTL 2 and 3 only), the bank's "valid until" field (story device).
 - [x] 4 figures: 8 (weekend, clock, timeout-guard, clock-bound, two-worlds, stale-answer, deadline, fresh-answer), 16 files, gates rerun by lead, 0 failures; figures.mjs asserts the weekend steps, MaxTime 0 to 6 counts, Ask and FixStale traces; clock-bound short-clock bars neutral, not green (2026-11-27)
 - [x] 5 page: build.py 0 (10 slots), fit.mjs 0, rerun by lead after the figures landed; lab.js matches all 48 rows of `checks/lab-table.txt` and 238, 62, 228, 7,252, 43,176, 28,021, 54,305; act 2 succeeds only with the real fix at 48 h with 2 and 3 workers; studies Delay Vernier, Packet Stitch, Context Lease (2026-11-27)
+- [x] 6 learner judge: round 1 ready with polish (10 items), round 2 ready with polish (6 small items), all fixed; no luck path (only the real fix of 12 combinations at 48 h); build, fit and check_prose rerun by lead after each round (2026-11-27)
+- [x] 7 verification: verify judge, three views teach one model; every count matches TLC; 5 items fixed (win needs the 48 h clock, window ordinals, shorter-schedule clause, grayscale legend, (4471, 0)) (2026-11-27)
 
 ### 4. A desk too big to check
 
@@ -95,6 +97,8 @@ flowchart TD
   - [x] sheet resync: "constant" a recap, depth added, Next bug leads to Noor's PlusCal rewrite, 15 s run approximate, misconceptions split to four (2026-11-27)
 - [x] 4 figures: 5 (explosion, counter, symmetry, constraint, small-scope), 10 files, gates rerun by lead, 0 failures; figures.mjs ports check.py and fails on any mismatch; explosion caption corrected by lead to the real per-loan multipliers with 3 workers (×15, ×11, ×9.5); light theme not viewed (2026-11-27)
 - [x] 5 page: build.py 0 (7 slots), fit.mjs 0, rerun by lead; lab.js matches all 72 rows of the sheet's lab table and TLC's 3×3, constraint, deleted-counter and symmetry counts; act 1 question changed to "two lost replies per run, how many states?" (13,195, confirmed by lead with check.py) because the prose answers the sheet's; unbounded runs stop at 200,000 states and say so (2026-11-27)
+- [x] 6 learner judge: round 1 ready with polish (8 items), round 2 ready with polish (5 items), all fixed; no luck path (CONSTRAINT, MaxRetries 0 and symmetry with liveness rejected); TLC confirmed depth = states on the longest path (3-step chain prints depth 4) and TLCGet("level") 0 in Init; FloristBudget "232 distinct, depth 4" keeps states up to 3 steps, step 4 generated then cut; rerun by lead (2026-11-27)
+- [x] 7 verification: verify judge, three views teach one model; numbers match TLC; fixed off-screen unbounded run, depth wording, MaxRetries 0, deleted-counter ending, "or by you" (2026-11-27)
   - Unconfirmed in the sheet: symmetry hiding a liveness violation (no case built; TLC prints its own warning), the unbounded spec failing liveness by losing every reply, small-scope hypothesis stated as observation.
 
 ### 5. Writing the worker as code
@@ -105,6 +109,8 @@ flowchart TD
   - Unconfirmed in the sheet: the "Missing label" rule, Termination checked only under PROPERTY, FIFO pool making fair+ honest, SQL in hints not run.
 - [x] 4 figures: 6 (two-calls, labels, translation, interactions, poll, flicker), 12 files, gates rerun by lead, 0 failures; no state counts shown, so nothing gives away the predictions; flicker has about 60 px of empty space above its first row (fix in the layout pass) (2026-11-27)
 - [x] 5 page: build.py 0 (8 slots), fit.mjs 0, rerun by lead; lab.js matches check.py (2 workers 8/8/12/21/21/34, 3 workers 20/20/32/114/114/229; counterexamples 4, 6, 6 steps as TLC; placements 000 and 100 refused); studies Section Gate and Choke Pair; act 1 prediction changed (the sheet's is answered above the lab); translator lamp ink/amber, green kept for solved (2026-11-27)
+- [x] 6 learner judge: round 1 not ready (rule table leaked, act 2 won by one toggle, raw headings, lost asterisks), round 2 ready with polish (6 items), all fixed; act 2 now opens on Noor's honest spec and only 1 of 16 combinations wins; rerun by lead (2026-11-27)
+- [x] 7 verification: verify judge, three views teach one model; numbers match TLC; one name for "mark paid" (`db.setStatus`), undeclared `loan` fixed, stray SVG commas removed (2026-11-27)
 
 ### 6. The ledger that does not add up
 
@@ -112,6 +118,8 @@ flowchart TD
 - [ ] 2 gates (fresh-reader, read-aloud); syntax audit fixes and the new ending to lesson 7 done (see Open items)
 - [x] 4 figures: 7 (two-ledgers, sum-over, conservation, crash-window, two-phase, outbox, at-least-once), 14 files, gates rerun by lead, 0 failures; figures.mjs recomputes every total and stops the build on a mismatch; light theme not viewed (2026-11-27)
 - [x] 5 page: build.py 0 (9 slots), fit.mjs 0, rerun by lead; lab.js BFS matches all 16 design/key/loans rows of the sheet; act 1 Moment Balance beam, act 2 Error Escrow chart; fixed only with outbox in the same transaction plus keyed credit at 2 and 3 loans; impeccable only the known dark-theme false positives; lab's liveness lasso is the shortest the search finds, not TLC's 7-step one (2026-11-27)
+- [x] 6 learner judge: three rounds, each ready with polish (round 1: 8 items, round 2: 5 incl. "4 of 23 states" wording against check.py, round 3: 5), all fixed; only the same-transaction outbox with the keyed credit wins, at 2 and 3 loans; rerun by lead (2026-11-27)
+- [x] 7 verification: verify judge, three views teach one model; stuck loan corrected to 4472 per TLC (prose and sheet); lamp names per design; two-phase lane marked hypothetical (2026-11-27)
 
 ### 7. Does the code match the spec?
 
@@ -122,6 +130,9 @@ flowchart TD
   - Unconfirmed in the sheet: TLC ignoring THEOREM, the reason TLA+ allows stuttering (general knowledge). `PROPERTY Abstract!Spec` in a cfg is a real TLC error, so the lesson defines `Refines`.
 - [x] 4 figures: 7 (pilot, two-levels, implication, mapping-choices, stutter, failure-step, liveness-carried), 14 files, gates rerun by lead, 0 failures; figures.mjs asserts 99/24/224, 122/30, 60 and the no-key trace; implication labels describe the steps instead of naming the designs (would answer a later prediction); two-levels and failure-step run down the page for phone width (2026-11-27)
 - [x] 5 page: build.py 0 (9 slots), fit.mjs 0, rerun by lead; no raw hex in sources; lab.js matches check.py (act 1: 99 states, 24 Pay, 224 stutter; 431 with 3 workers; act 2: 60, 122, 99, 272, 566, 431); studies Transcode Window and Revision Strata; act 1's answer-giving table and figure locked until the learner answers; send-first no-key trace is check.py's 7-step order, not TLC's (2026-11-27)
+- [x] 6 learner judge: round 1 ready with polish (5 items plus act 2 given away), round 2 ready with polish (7 items incl. playback stalling off screen), all fixed; act 2 asks "pilot with the key off: which lamps go red?" (both; confirmed by lead with check.py: double payout and lasso, not run in TLC), framed as a check of what was read; traces now in TLC's order; rerun by lead (2026-11-27)
+- [x] 7 verification: verify judge, three views teach one model; numbers match TLC; pilot trace now TLC's worker A, "the mapping" everywhere, lab lens names match the prose (2026-11-27)
+  - [ ] phone lasso figure: the faint "paid, 1" card sits tight against its arrow
 
 ### 8. When checking is not enough
 
@@ -132,11 +143,13 @@ flowchart TD
   - Unconfirmed in the sheet: TLAPS, Apalache and trace validation not run (tlapm not installed); per-action argument is a hand proof; the 7-worker bug is hypothetical.
 - [x] 4 figures: 5 (growth, dominoes, cti, strengthen, one-worker), 10 files, gates rerun by lead, 0 failures; figures.mjs asserts 2N + 2^N, region sizes 144/96/72/49, the TLC CTIs; one-worker draws the other 299 workers idle, not "a few done" as the sheet said (done cannot coexist with another worker's claim) (2026-11-27)
 - [x] 5 page: build.py 0 (7 slots), fit.mjs 0, rerun by lead; lab.js matches every candidate mix at 2 and 3 workers and Inv 49/163/541/1,783; act 2 wins only with Owed and Unclaimed; Moment Balance only in the win panel (2026-11-27)
+- [x] 6 learner judge: three rounds, each ready with polish (round 1: 8 items, round 2: 7 incl. a regression hiding `first_cti`, round 3: 4), all fixed; act 2 counts only after a weaker candidate's CTI is examined, revealed answers do not count, reachability marker off until answered; round 3 judge re-ran every snippet and assert; rerun by lead (2026-11-27)
+- [x] 7 verification: verify judge, three views teach one model; numbers match TLC; spec line matches the prose's Inv, win beam all idle, dominoes "state n", strengthen field key (2026-11-27)
   - [x] sheet: one-worker spec now "all idle but one" (2026-11-27)
 
 ## Open items
 
-- Do not run `_kit/index.py` before a lesson ships: lessons 2 to 8 now have built pages, and index.py links any lesson with step 5 ticked ("Open the page (draft)"), which would publish broken links to untracked pages and show the learner lessons before their concept checks. Teach index.py to link only committed lessons, or run it only at delivery.
+- [x] `_kit/index.py` links a lesson only once its `1-prose.md` is committed, so it is safe to run any time; unshipped lessons show status and step count without links (2026-11-27)
 - Polish left for the learner judge pass (needs the user's OK): lesson 2's lab lease path (Claim A, Send A, Expire, Claim B, Send B) differs from the prose's TLC path; lesson 5's flicker figure has 60 px of empty space on top; light theme not viewed for lessons 4, 6, 7 figures; lessons 6 and 7 labs show check.py's shortest traces where the prose shows TLC's.
 
 - Stages 4 and 5 for lessons 2 to 8 started 2026-11-27 (user: "lets finish this", "spawn more agents"): one figures builder and one page builder per lesson, brief `docs/tla-build-brief.md`. Lead reruns build.py, fit.mjs and the figure gates before ticking. Learner judges, read-aloud and verification still need the user's go-ahead (CPU). Nothing from lessons 2 to 8 is committed or linked until each earlier concept check passes.

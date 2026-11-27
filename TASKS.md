@@ -71,8 +71,8 @@ flowchart TD
 - [ ] 3 review stop
 - [x] 4 figures: 12 (stranded, stuttering, safety-liveness, lasso, enabled, fairness, eventually-always, weak-strong, quiet-twin, lease-race, resend, idempotency-key), 24 files; self_check and verify-geometry rerun by lead, 0 failures; model in figures.mjs checks 8, 10, 76, 29, 23. Deviations: lease-race in TLC's order, safety-liveness top strip is lesson 1's race, lasso and stuttering draw once (kit cannot loop). Not yet viewed in a browser (2026-11-27)
 - [x] 5 page: build.py 0 (14 slots), fit.mjs 0, rerun by lead; impeccable only lesson 1's three dark-theme false positives; lab.js BFS matches the sheet in all 32 combinations; act 1 question changed to "how many states can stop forever unpaid?" (5) because the prose above answers the sheet's; lab's shortest lease path is Claim(A), Send(A), Expire, Claim(B), Send(B) (5 steps, differs from the prose's TLC path) (2026-11-27)
-- [ ] 6 learner judge
-- [ ] 7 verification
+- [x] 6 learner judge: round 1 ready with polish (raw headings, act 2 ending credited resume for lease+key and all-on wins, lab wording vs prose, captions, small text), round 2 ready with polish (8 items: all-on no longer unlocks, quiet-twin crash marker, ∪ and ¬ explained, prediction answers behind reveals), all fixed; lab matches check.py in 32 of 32 combinations; rerun by lead (2026-11-27)
+- [x] 7 verification: verify judge, three views teach one model; lab traces in TLC's order (Expire first); "possible" replaced by "enabled"; lasso is "a path into a reachable loop" (2026-11-27)
 - [ ] 8 delivery
 - [ ] 9 concept check: mastery confirmed
 - [ ] 10 problems

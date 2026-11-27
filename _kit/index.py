@@ -1,6 +1,5 @@
 import html
 import re
-import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -40,18 +39,13 @@ def progress():
     return found
 
 
-def shipped(path):
-    return subprocess.run(["git", "-C", str(ROOT), "ls-files", "--error-unmatch", str(path)],
-                          capture_output=True).returncode == 0
-
-
 def state(n, steps):
     number, part = (n[:-1], n[-1]) if n[-1] in "ab" else (n, "")
     folder = next(iter(sorted(ROOT.glob(f"{int(number):02d}{part}-*/"))), None)
     done = lambda k: steps.get(k, (False, ""))[0]
     page = folder / "3-page/3-page.html" if folder else None
     prose = folder / "1-prose.md" if folder else None
-    if folder and not shipped(folder / "1-prose.md"):
+    if folder and not (folder / "1-prose.md").exists():
         return ("drafted" if done(1) else "writing" if "drafting" in steps.get(1, (False, ""))[1] else "planned"), None
     if all(done(k) for k in range(1, STEPS + 1)) and page and page.exists():
         return "complete", page

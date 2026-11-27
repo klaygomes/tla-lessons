@@ -1,0 +1,433 @@
+===== -config Desk2.cfg Desk.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:52:04.
+Model checking completed. No error has been found.
+9 states generated, 8 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 5.
+===== -config Desk3.cfg Desk.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:52:09.
+Model checking completed. No error has been found.
+19 states generated, 14 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 6.
+===== -config Desk4.cfg Desk.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:52:15.
+Model checking completed. No error has been found.
+41 states generated, 24 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+===== -config Desk5.cfg Desk.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:52:21.
+Model checking completed. No error has been found.
+91 states generated, 42 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 8.
+===== -config Desk6.cfg Desk.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:52:26.
+Model checking completed. No error has been found.
+205 states generated, 76 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 9.
+===== -config Desk12.cfg Desk.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:52:32.
+Model checking completed. No error has been found.
+24601 states generated, 4120 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 15.
+===== -config Ind0.cfg Desk.tla
+Finished computing initial states: 96 distinct states generated at 2026-11-27 17:52:38.
+Error: Invariant Ind0 is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "claimed"]
+/\ transfers = 1
+State 2: <Send line 18, col 12 to line 21, col 30 of module Desk>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "sent"]
+/\ transfers = 2
+104 states generated, 97 distinct states found, 92 states left on queue.
+The depth of the complete state graph search is 2.
+===== -config Ind1.cfg Desk.tla
+Finished computing initial states: 72 distinct states generated at 2026-11-27 17:52:43.
+Error: Invariant Ind1 is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+State 2: <Claim line 12, col 13 to line 16, col 34 of module Desk>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+75 states generated, 73 distinct states found, 70 states left on queue.
+The depth of the complete state graph search is 2.
+===== -config Inductive2.cfg Desk.tla
+Finished computing initial states: 49 distinct states generated at 2026-11-27 17:52:49.
+Model checking completed. No error has been found.
+105 states generated, 49 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 1.
+===== -config Inductive3.cfg Desk.tla
+Finished computing initial states: 163 distinct states generated at 2026-11-27 17:52:55.
+Model checking completed. No error has been found.
+436 states generated, 163 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 1.
+===== -config Inductive4.cfg Desk.tla
+Finished computing initial states: 541 distinct states generated at 2026-11-27 17:53:00.
+Model checking completed. No error has been found.
+1733 states generated, 541 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 1.
+===== -config Inductive5.cfg Desk.tla
+Finished computing initial states: 1783 distinct states generated at 2026-11-27 17:53:06.
+Model checking completed. No error has been found.
+6648 states generated, 1783 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 1.
+===== -config InvReach3.cfg Desk.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:53:12.
+Model checking completed. No error has been found.
+19 states generated, 14 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 6.
+===== -config InitHolds.cfg Proof.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:53:17.
+Model checking completed. No error has been found.
+19 states generated, 14 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 6.
+===== -config Obligations.cfg Proof.tla
+Finished computing initial states: 163 distinct states generated at 2026-11-27 17:53:23.
+Model checking completed. No error has been found.
+436 states generated, 163 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 1.
+===== -config ObligationsWeak.cfg Proof.tla
+Finished computing initial states: 243 distinct states generated at 2026-11-27 17:53:29.
+Error: Action property WeakProp is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle", C |-> "idle"]
+/\ transfers = 1
+State 2: <Claim line 12, col 13 to line 16, col 34 of module Desk>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle", C |-> "idle"]
+/\ transfers = 1
+247 states generated, 244 distinct states found, 241 states left on queue.
+The depth of the complete state graph search is 2.
+===== -config BusyReach.cfg Desk.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:53:34.
+Error: Invariant OnlyOneBusy is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 12, col 13 to line 16, col 34 of module Desk>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 18, col 12 to line 21, col 30 of module Desk>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Mark line 23, col 12 to line 26, col 33 of module Desk>
+/\ status = "paid"
+/\ pc = [A |-> "done", B |-> "idle"]
+/\ transfers = 1
+State 5: <Skip line 28, col 12 to line 31, col 45 of module Desk>
+/\ status = "paid"
+/\ pc = [A |-> "done", B |-> "done"]
+/\ transfers = 1
+8 states generated, 8 distinct states found, 1 states left on queue.
+The depth of the complete state graph search is 5.
+===== -config Busy.cfg Desk.tla
+Finished computing initial states: 25 distinct states generated at 2026-11-27 17:53:40.
+Error: Invariant Ind3 is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "paid"
+/\ pc = [A |-> "idle", B |-> "claimed"]
+/\ transfers = 0
+State 2: <Skip line 28, col 12 to line 31, col 45 of module Desk>
+/\ status = "paid"
+/\ pc = [A |-> "done", B |-> "claimed"]
+/\ transfers = 0
+38 states generated, 26 distinct states found, 9 states left on queue.
+The depth of the complete state graph search is 2.
+===== -config Vacuous.cfg Desk.tla
+Finished computing initial states: 0 distinct states generated at 2026-11-27 17:53:45.
+Model checking completed. No error has been found.
+0 states generated, 0 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 1.
+===== -config LeaseInd.cfg LeaseDesk.tla
+Finished computing initial states: 49 distinct states generated at 2026-11-27 17:53:51.
+Error: Invariant Inv is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "claimed"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+State 2: <Expire line 4, col 11 to line 6, col 40 of module LeaseDesk>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+53 states generated, 50 distinct states found, 46 states left on queue.
+The depth of the complete state graph search is 2.
+===== -config LeaseReach.cfg LeaseDesk.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:53:57.
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 12, col 13 to line 16, col 34 of module Desk>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 18, col 12 to line 21, col 30 of module Desk>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Expire line 4, col 11 to line 6, col 40 of module LeaseDesk>
+/\ status = "approved"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 5: <Claim line 12, col 13 to line 16, col 34 of module Desk>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "claimed"]
+/\ transfers = 1
+State 6: <Send line 18, col 12 to line 21, col 30 of module Desk>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "sent"]
+/\ transfers = 2
+26 states generated, 18 distinct states found, 3 states left on queue.
+The depth of the complete state graph search is 6.
+===== -config Naive1.cfg Naive.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:54:02.
+Model checking completed. No error has been found.
+4 states generated, 4 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 4.
+===== -config Naive2.cfg Naive.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:54:08.
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Check line 12, col 13 to line 15, col 46 of module Naive>
+/\ status = "approved"
+/\ pc = [A |-> "checked", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 22, col 12 to line 25, col 30 of module Naive>
+/\ status = "approved"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Check line 12, col 13 to line 15, col 46 of module Naive>
+/\ status = "approved"
+/\ pc = [A |-> "sent", B |-> "checked"]
+/\ transfers = 1
+State 5: <Send line 22, col 12 to line 25, col 30 of module Naive>
+/\ status = "approved"
+/\ pc = [A |-> "sent", B |-> "sent"]
+/\ transfers = 2
+16 states generated, 13 distinct states found, 4 states left on queue.
+The depth of the complete state graph search is 5.
+===== -config LeaseCrash1.cfg LeaseCrash.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:54:14.
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 13, col 13 to line 17, col 47 of module LeaseCrash>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed"]
+/\ transfers = 0
+State 3: <Expire line 40, col 11 to line 42, col 49 of module LeaseCrash>
+/\ status = "approved"
+/\ pc = [A |-> "claimed"]
+/\ transfers = 0
+State 4: <Send line 24, col 12 to line 27, col 43 of module LeaseCrash>
+/\ status = "approved"
+/\ pc = [A |-> "sent"]
+/\ transfers = 1
+State 5: <Crash line 34, col 13 to line 38, col 46 of module LeaseCrash>
+/\ status = "approved"
+/\ pc = [A |-> "idle"]
+/\ transfers = 1
+State 6: <Claim line 13, col 13 to line 17, col 47 of module LeaseCrash>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed"]
+/\ transfers = 1
+State 7: <Send line 24, col 12 to line 27, col 43 of module LeaseCrash>
+/\ status = "claimed"
+/\ pc = [A |-> "sent"]
+/\ transfers = 2
+20 states generated, 16 distinct states found, 3 states left on queue.
+The depth of the complete state graph search is 7.
+===== -config LeaseCrash2.cfg LeaseCrash.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:54:19.
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 13, col 13 to line 17, col 47 of module LeaseCrash>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Expire line 40, col 11 to line 42, col 49 of module LeaseCrash>
+/\ status = "approved"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 4: <Send line 24, col 12 to line 27, col 43 of module LeaseCrash>
+/\ status = "approved"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 5: <Claim line 13, col 13 to line 17, col 47 of module LeaseCrash>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "claimed"]
+/\ transfers = 1
+State 6: <Send line 24, col 12 to line 27, col 43 of module LeaseCrash>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "sent"]
+/\ transfers = 2
+44 states generated, 27 distinct states found, 9 states left on queue.
+The depth of the complete state graph search is 6.
+===== -config ResumeCrash1.cfg ResumeCrash.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:54:25.
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ owner = "nobody"
+/\ status = "approved"
+/\ pc = [A |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 14, col 13 to line 19, col 47 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "claimed"]
+/\ transfers = 0
+State 3: <Send line 32, col 12 to line 35, col 50 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "sent"]
+/\ transfers = 1
+State 4: <Crash line 42, col 13 to line 46, col 53 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "idle"]
+/\ transfers = 1
+State 5: <Resume line 21, col 14 to line 25, col 63 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "claimed"]
+/\ transfers = 1
+State 6: <Send line 32, col 12 to line 35, col 50 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "sent"]
+/\ transfers = 2
+10 states generated, 10 distinct states found, 1 states left on queue.
+The depth of the complete state graph search is 6.
+===== -config ResumeCrash2.cfg ResumeCrash.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:54:30.
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ owner = "nobody"
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 14, col 13 to line 19, col 47 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 32, col 12 to line 35, col 50 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Crash line 42, col 13 to line 46, col 53 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+State 5: <Resume line 21, col 14 to line 25, col 63 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+State 6: <Send line 32, col 12 to line 35, col 50 of module ResumeCrash>
+/\ owner = "A"
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 2
+20 states generated, 20 distinct states found, 4 states left on queue.
+The depth of the complete state graph search is 6.
+===== -config NaiveInd.cfg NaiveInd.tla
+Finished computing initial states: 64 distinct states generated at 2026-11-27 17:54:36.
+Error: Invariant Ind0 is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "checked"]
+/\ transfers = 1
+State 2: <Send line 22, col 12 to line 25, col 30 of module Naive>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "sent"]
+/\ transfers = 2
+72 states generated, 65 distinct states found, 60 states left on queue.
+The depth of the complete state graph search is 2.
+===== -config Fixed2.cfg Fixed.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:54:42.
+Model checking completed. No error has been found.
+21 states generated, 15 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 5.
+===== -config FixedWeak2.cfg Fixed.tla
+Finished computing initial states: 576 distinct states generated at 2026-11-27 17:54:47.
+Error: Invariant P1Weak is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ owner = "A"
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "claimed"]
+/\ transfers = 1
+State 2: <Send line 33, col 12 to line 38, col 41 of module Fixed>
+/\ owner = "A"
+/\ status = "approved"
+/\ keys = {4471}
+/\ pc = [A |-> "idle", B |-> "sent"]
+/\ transfers = 2
+592 states generated, 577 distinct states found, 569 states left on queue.
+The depth of the complete state graph search is 2.
+===== -config FixedInd2.cfg Fixed.tla
+Finished computing initial states: 288 distinct states generated at 2026-11-27 17:54:53.
+Model checking completed. No error has been found.
+976 states generated, 288 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 1.
+===== -config Fixed3.cfg Fixed.tla
+Finished computing initial states: 1 distinct state generated at 2026-11-27 17:54:59.
+Model checking completed. No error has been found.
+40 states generated, 28 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 6.
+===== -config FixedWeak3.cfg Fixed.tla
+Finished computing initial states: 3072 distinct states generated at 2026-11-27 17:55:04.
+Error: Invariant P1Weak is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ owner = "A"
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle", C |-> "claimed"]
+/\ transfers = 1
+State 2: <Send line 33, col 12 to line 38, col 41 of module Fixed>
+/\ owner = "A"
+/\ status = "approved"
+/\ keys = {4471}
+/\ pc = [A |-> "idle", B |-> "idle", C |-> "sent"]
+/\ transfers = 2
+3095 states generated, 3073 distinct states found, 3065 states left on queue.
+The depth of the complete state graph search is 2.
+===== -config FixedInd3.cfg Fixed.tla
+Finished computing initial states: 1536 distinct states generated at 2026-11-27 17:55:10.
+Model checking completed. No error has been found.
+7008 states generated, 1536 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 1.

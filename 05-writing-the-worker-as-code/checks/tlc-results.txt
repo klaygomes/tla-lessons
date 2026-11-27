@@ -1,0 +1,487 @@
+===== pcal.trans OneLabel.tla
+===== pcal.trans TwoLabels.tla
+===== pcal.trans TwoLabelsP.tla
+===== pcal.trans ReadWrite.tla
+===== pcal.trans ReadWriteOne.tla
+===== pcal.trans Desk.tla
+===== pcal.trans DeskUnfair.tla
+===== pcal.trans TwoLoans.tla
+===== pcal.trans TwoLoansSplit.tla
+===== pcal.trans LeaseDesk.tla
+===== pcal.trans LeaseDeskNoKey.tla
+===== pcal.trans Line.tla
+===== pcal.trans LineStrong.tla
+===== pcal.trans Ledger.tla
+===== pcal.trans LedgerCreditFirst.tla
+===== pcal.trans Place000.tla
+
+Unrecoverable error:
+ -- Missing label at the following location:
+     line 10, column 11.
+
+===== pcal.trans Place001.tla
+===== pcal.trans Place010.tla
+===== pcal.trans Place100.tla
+
+Unrecoverable error:
+ -- Missing label at the following location:
+     line 10, column 11.
+
+===== pcal.trans Place101.tla
+===== pcal.trans Place110.tla
+===== OneLabel.tla
+Model checking completed. No error has been found.
+18 states generated, 12 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 5.
+===== OneLabel3.tla
+Model checking completed. No error has been found.
+62 states generated, 32 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 6.
+===== TwoLabels.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "check", B |-> "check"]
+/\ transfers = 0
+State 2: <check line 29, col 16 to line 33, col 51 of module TwoLabels>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "check"]
+/\ transfers = 0
+State 3: <check line 29, col 16 to line 33, col 51 of module TwoLabels>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "claim"]
+/\ transfers = 0
+State 4: <claim line 35, col 16 to line 38, col 37 of module TwoLabels>
+/\ status = "claimed"
+/\ pc = [A |-> "send", B |-> "claim"]
+/\ transfers = 0
+State 5: <send line 40, col 15 to line 43, col 33 of module TwoLabels>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "claim"]
+/\ transfers = 1
+State 6: <claim line 35, col 16 to line 38, col 37 of module TwoLabels>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "send"]
+/\ transfers = 1
+State 7: <send line 40, col 15 to line 43, col 33 of module TwoLabels>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "mark"]
+/\ transfers = 2
+37 states generated, 27 distinct states found, 4 states left on queue.
+The depth of the complete state graph search is 7.
+===== -continue TwoLabels.tla (summary only)
+Model checking completed. No error has been found.
+51 states generated, 34 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 9.
+invariant violations reported: 6
+===== TwoLabels3.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "check", B |-> "check", C |-> "check"]
+/\ transfers = 0
+State 2: <check line 29, col 16 to line 33, col 51 of module TwoLabels>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "check", C |-> "check"]
+/\ transfers = 0
+State 3: <check line 29, col 16 to line 33, col 51 of module TwoLabels>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "claim", C |-> "check"]
+/\ transfers = 0
+State 4: <claim line 35, col 16 to line 38, col 37 of module TwoLabels>
+/\ status = "claimed"
+/\ pc = [A |-> "send", B |-> "claim", C |-> "check"]
+/\ transfers = 0
+State 5: <send line 40, col 15 to line 43, col 33 of module TwoLabels>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "claim", C |-> "check"]
+/\ transfers = 1
+State 6: <claim line 35, col 16 to line 38, col 37 of module TwoLabels>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "send", C |-> "check"]
+/\ transfers = 1
+State 7: <send line 40, col 15 to line 43, col 33 of module TwoLabels>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "mark", C |-> "check"]
+/\ transfers = 2
+149 states generated, 94 distinct states found, 32 states left on queue.
+The depth of the complete state graph search is 7.
+===== TwoLabelsP.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "check", B |-> "check"]
+/\ transfers = 0
+State 2: <check line 30, col 16 to line 34, col 51 of module TwoLabelsP>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "check"]
+/\ transfers = 0
+State 3: <check line 30, col 16 to line 34, col 51 of module TwoLabelsP>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "claim"]
+/\ transfers = 0
+State 4: <claim line 36, col 16 to line 39, col 37 of module TwoLabelsP>
+/\ status = "claimed"
+/\ pc = [A |-> "send", B |-> "claim"]
+/\ transfers = 0
+State 5: <send line 41, col 15 to line 44, col 33 of module TwoLabelsP>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "claim"]
+/\ transfers = 1
+State 6: <claim line 36, col 16 to line 39, col 37 of module TwoLabelsP>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "send"]
+/\ transfers = 1
+State 7: <send line 41, col 15 to line 44, col 33 of module TwoLabelsP>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "mark"]
+/\ transfers = 2
+37 states generated, 27 distinct states found, 4 states left on queue.
+The depth of the complete state graph search is 7.
+===== Place001.tla
+Model checking completed. No error has been found.
+12 states generated, 8 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 4.
+===== Place010.tla
+Model checking completed. No error has been found.
+12 states generated, 8 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 4.
+===== Place101.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "check", B |-> "check"]
+/\ transfers = 0
+State 2: <check line 26, col 16 to line 30, col 51 of module Place101>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "check"]
+/\ transfers = 0
+State 3: <check line 26, col 16 to line 30, col 51 of module Place101>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "claim"]
+/\ transfers = 0
+State 4: <claim line 32, col 16 to line 35, col 52 of module Place101>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "claim"]
+/\ transfers = 1
+State 5: <claim line 32, col 16 to line 35, col 52 of module Place101>
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "mark"]
+/\ transfers = 2
+17 states generated, 15 distinct states found, 5 states left on queue.
+The depth of the complete state graph search is 5.
+===== Place110.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "check", B |-> "check"]
+/\ transfers = 0
+State 2: <check line 26, col 16 to line 30, col 51 of module Place110>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "check"]
+/\ transfers = 0
+State 3: <check line 26, col 16 to line 30, col 51 of module Place110>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "claim"]
+/\ transfers = 0
+State 4: <claim line 32, col 16 to line 35, col 37 of module Place110>
+/\ status = "claimed"
+/\ pc = [A |-> "send", B |-> "claim"]
+/\ transfers = 0
+State 5: <send line 37, col 15 to line 40, col 51 of module Place110>
+/\ status = "paid"
+/\ pc = [A |-> "Done", B |-> "claim"]
+/\ transfers = 1
+State 6: <claim line 32, col 16 to line 35, col 37 of module Place110>
+/\ status = "claimed"
+/\ pc = [A |-> "Done", B |-> "send"]
+/\ transfers = 1
+State 7: <send line 37, col 15 to line 40, col 51 of module Place110>
+/\ status = "paid"
+/\ pc = [A |-> "Done", B |-> "Done"]
+/\ transfers = 2
+27 states generated, 21 distinct states found, 3 states left on queue.
+The depth of the complete state graph search is 7.
+===== -continue Place101.tla (summary only)
+Model checking completed. No error has been found.
+31 states generated, 21 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+invariant violations reported: 6
+===== -continue Place110.tla (summary only)
+Model checking completed. No error has been found.
+31 states generated, 21 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+invariant violations reported: 1
+===== ReadWrite.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ seen = [A |-> "nothing", B |-> "nothing"]
+/\ status = "approved"
+/\ pc = [A |-> "read", B |-> "read"]
+/\ transfers = 0
+State 2: <read line 34, col 15 to line 37, col 50 of module ReadWrite>
+/\ seen = [A |-> "approved", B |-> "nothing"]
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "read"]
+/\ transfers = 0
+State 3: <read line 34, col 15 to line 37, col 50 of module ReadWrite>
+/\ seen = [A |-> "approved", B |-> "approved"]
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "claim"]
+/\ transfers = 0
+State 4: <claim line 39, col 16 to line 45, col 49 of module ReadWrite>
+/\ seen = [A |-> "approved", B |-> "approved"]
+/\ status = "claimed"
+/\ pc = [A |-> "send", B |-> "claim"]
+/\ transfers = 0
+State 5: <send line 47, col 15 to line 50, col 45 of module ReadWrite>
+/\ seen = [A |-> "approved", B |-> "approved"]
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "claim"]
+/\ transfers = 1
+State 6: <claim line 39, col 16 to line 45, col 49 of module ReadWrite>
+/\ seen = [A |-> "approved", B |-> "approved"]
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "send"]
+/\ transfers = 1
+State 7: <send line 47, col 15 to line 50, col 45 of module ReadWrite>
+/\ seen = [A |-> "approved", B |-> "approved"]
+/\ status = "claimed"
+/\ pc = [A |-> "mark", B |-> "mark"]
+/\ transfers = 2
+45 states generated, 36 distinct states found, 9 states left on queue.
+The depth of the complete state graph search is 7.
+===== -continue ReadWrite.tla (summary only)
+Model checking completed. No error has been found.
+66 states generated, 45 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 9.
+invariant violations reported: 6
+===== ReadWriteOne.tla
+Model checking completed. No error has been found.
+21 states generated, 15 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 5.
+===== Desk.tla
+Model checking completed. No error has been found.
+29 states generated, 23 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+===== Desk3.tla
+Model checking completed. No error has been found.
+61 states generated, 46 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 8.
+===== DeskUnfair.tla
+Error: Temporal properties were violated.
+Error: The following behavior constitutes a counter-example:
+State 1: <Initial predicate>
+/\ owner = "nobody"
+/\ crashed = FALSE
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "poll", B |-> "poll"]
+/\ transfers = 0
+State 2: <poll line 48, col 15 to line 59, col 57 of module DeskUnfair>
+/\ owner = "B"
+/\ crashed = FALSE
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "poll", B |-> "send"]
+/\ transfers = 0
+State 3: <send line 61, col 15 to line 73, col 46 of module DeskUnfair>
+/\ owner = "B"
+/\ crashed = TRUE
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "poll", B |-> "poll"]
+/\ transfers = 0
+State 4: <poll line 48, col 15 to line 59, col 57 of module DeskUnfair>
+/\ owner = "B"
+/\ crashed = TRUE
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "poll", B |-> "send"]
+/\ transfers = 0
+State 5: <send line 61, col 15 to line 73, col 46 of module DeskUnfair>
+/\ owner = "B"
+/\ crashed = TRUE
+/\ status = "claimed"
+/\ keys = {4471}
+/\ pc = [A |-> "poll", B |-> "mark"]
+/\ transfers = 1
+State 6: Stuttering
+29 states generated, 23 distinct states found, 0 states left on queue.
+===== TwoLoans.tla
+Model checking completed. No error has been found.
+61 states generated, 43 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+===== TwoLoans3.tla
+Model checking completed. No error has been found.
+145 states generated, 91 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+===== TwoLoansSplit.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = (4471 :> "approved" @@ 4472 :> "approved")
+/\ pc = [A |-> "pick", B |-> "pick"]
+/\ mine = [A |-> 0, B |-> 0]
+/\ transfers = (4471 :> 0 @@ 4472 :> 0)
+State 2: <pick line 40, col 15 to line 44, col 50 of module TwoLoansSplit>
+/\ status = (4471 :> "approved" @@ 4472 :> "approved")
+/\ pc = [A |-> "claim", B |-> "pick"]
+/\ mine = [A |-> 4471, B |-> 0]
+/\ transfers = (4471 :> 0 @@ 4472 :> 0)
+State 3: <pick line 40, col 15 to line 44, col 50 of module TwoLoansSplit>
+/\ status = (4471 :> "approved" @@ 4472 :> "approved")
+/\ pc = [A |-> "claim", B |-> "claim"]
+/\ mine = [A |-> 4471, B |-> 4471]
+/\ transfers = (4471 :> 0 @@ 4472 :> 0)
+State 4: <claim line 46, col 16 to line 49, col 49 of module TwoLoansSplit>
+/\ status = (4471 :> "claimed" @@ 4472 :> "approved")
+/\ pc = [A |-> "send", B |-> "claim"]
+/\ mine = [A |-> 4471, B |-> 4471]
+/\ transfers = (4471 :> 0 @@ 4472 :> 0)
+State 5: <send line 51, col 15 to line 54, col 45 of module TwoLoansSplit>
+/\ status = (4471 :> "claimed" @@ 4472 :> "approved")
+/\ pc = [A |-> "mark", B |-> "claim"]
+/\ mine = [A |-> 4471, B |-> 4471]
+/\ transfers = (4471 :> 1 @@ 4472 :> 0)
+State 6: <claim line 46, col 16 to line 49, col 49 of module TwoLoansSplit>
+/\ status = (4471 :> "claimed" @@ 4472 :> "approved")
+/\ pc = [A |-> "mark", B |-> "send"]
+/\ mine = [A |-> 4471, B |-> 4471]
+/\ transfers = (4471 :> 1 @@ 4472 :> 0)
+State 7: <send line 51, col 15 to line 54, col 45 of module TwoLoansSplit>
+/\ status = (4471 :> "claimed" @@ 4472 :> "approved")
+/\ pc = [A |-> "mark", B |-> "mark"]
+/\ mine = [A |-> 4471, B |-> 4471]
+/\ transfers = (4471 :> 2 @@ 4472 :> 0)
+101 states generated, 70 distinct states found, 22 states left on queue.
+The depth of the complete state graph search is 7.
+===== -continue TwoLoansSplit.tla (summary only)
+Model checking completed. No error has been found.
+457 states generated, 281 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 17.
+invariant violations reported: 112
+===== LeaseDesk.tla
+Model checking completed. No error has been found.
+249 states generated, 103 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 9.
+===== LeaseDeskNoKey.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ owner = "nobody"
+/\ crashed = FALSE
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "poll", B |-> "poll", lease |-> "expire"]
+/\ transfers = 0
+State 2: <poll line 55, col 15 to line 66, col 57 of module LeaseDeskNoKey>
+/\ owner = "A"
+/\ crashed = FALSE
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "send", B |-> "poll", lease |-> "expire"]
+/\ transfers = 0
+State 3: <expire line 91, col 11 to line 95, col 60 of module LeaseDeskNoKey>
+/\ owner = "A"
+/\ crashed = FALSE
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "send", B |-> "poll", lease |-> "expire"]
+/\ transfers = 0
+State 4: <send line 68, col 15 to line 77, col 46 of module LeaseDeskNoKey>
+/\ owner = "A"
+/\ crashed = FALSE
+/\ status = "approved"
+/\ keys = {4471}
+/\ pc = [A |-> "mark", B |-> "poll", lease |-> "expire"]
+/\ transfers = 1
+State 5: <poll line 55, col 15 to line 66, col 57 of module LeaseDeskNoKey>
+/\ owner = "B"
+/\ crashed = FALSE
+/\ status = "claimed"
+/\ keys = {4471}
+/\ pc = [A |-> "mark", B |-> "send", lease |-> "expire"]
+/\ transfers = 1
+State 6: <send line 68, col 15 to line 77, col 46 of module LeaseDeskNoKey>
+/\ owner = "B"
+/\ crashed = FALSE
+/\ status = "claimed"
+/\ keys = {4471}
+/\ pc = [A |-> "mark", B |-> "mark", lease |-> "expire"]
+/\ transfers = 2
+61 states generated, 42 distinct states found, 18 states left on queue.
+The depth of the complete state graph search is 6.
+===== Line.tla
+Error: Temporal properties were violated.
+Error: The following behavior constitutes a counter-example:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "claim", B |-> "claim", recon |-> "take"]
+/\ line = "free"
+/\ transfers = 0
+State 2: <claim line 39, col 16 to line 43, col 49 of module Line>
+/\ status = "claimed"
+/\ pc = [A |-> "send", B |-> "claim", recon |-> "take"]
+/\ line = "free"
+/\ transfers = 0
+State 3: <take line 58, col 9 to line 62, col 44 of module Line>
+/\ status = "claimed"
+/\ pc = [A |-> "send", B |-> "claim", recon |-> "give"]
+/\ line = "busy"
+/\ transfers = 0
+State 4: <give line 64, col 9 to line 67, col 44 of module Line>
+/\ status = "claimed"
+/\ pc = [A |-> "send", B |-> "claim", recon |-> "take"]
+/\ line = "free"
+/\ transfers = 0
+Back to state 3: <take line 58, col 9 to line 62, col 44 of module Line>
+25 states generated, 14 distinct states found, 0 states left on queue.
+===== LineStrong.tla
+Model checking completed. No error has been found.
+25 states generated, 14 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 5.
+===== Ledger.tla
+Error: Invariant MoneyKept is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ loanbook = 0
+/\ pc = [A |-> "debit"]
+/\ funding = 50000
+State 2: <debit line 24, col 10 to line 27, col 30 of module Ledger>
+/\ loanbook = 0
+/\ pc = [A |-> "credit"]
+/\ funding = 0
+2 states generated, 2 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 2.
+===== LedgerCreditFirst.tla
+Error: Invariant MoneyKept is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ loanbook = 0
+/\ pc = [A |-> "credit"]
+/\ funding = 50000
+State 2: <credit line 24, col 11 to line 27, col 30 of module LedgerCreditFirst>
+/\ loanbook = 50000
+/\ pc = [A |-> "debit"]
+/\ funding = 50000
+2 states generated, 2 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 2.
+===== TwoLoans.tla without -deadlock
+Error: Deadlock reached.
+Error: The behavior up to this point is:
+61 states generated, 43 distinct states found, 5 states left on queue.
+===== diff of TwoLabels and TwoLabelsP translations
+identical apart from the checksum line
+===== fairness lines of the translations
+Desk.tla:        /\ \A self \in Workers : WF_vars(w(self))
+Line.tla:        /\ \A self \in Workers : WF_vars(w(self))
+Line.tla:        /\ WF_vars(r)
+LineStrong.tla:        /\ \A self \in Workers : SF_vars(w(self))
+LineStrong.tla:        /\ WF_vars(r)

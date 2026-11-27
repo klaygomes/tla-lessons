@@ -1,0 +1,164 @@
+===== Live.tla
+Error: Temporal properties were violated.
+Error: The following behavior constitutes a counter-example:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 12, col 13 to line 16, col 34 of module Live>
+/\ status = "claimed"
+/\ pc = [A |-> "idle", B |-> "claimed"]
+/\ transfers = 0
+State 3: <Send line 23, col 12 to line 26, col 30 of module Live>
+/\ status = "claimed"
+/\ pc = [A |-> "idle", B |-> "sent"]
+/\ transfers = 1
+State 4: Stuttering
+9 states generated, 8 distinct states found, 0 states left on queue.
+===== LiveFair.tla
+Model checking completed. No error has been found.
+9 states generated, 8 distinct states found, 0 states left on queue.
+===== Crash.tla
+Error: Temporal properties were violated.
+Error: The following behavior constitutes a counter-example:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 13, col 13 to line 17, col 47 of module Crash>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 24, col 12 to line 27, col 43 of module Crash>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Crash line 34, col 13 to line 38, col 46 of module Crash>
+/\ status = "claimed"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+State 5: Stuttering
+13 states generated, 10 distinct states found, 0 states left on queue.
+===== Lease.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 13, col 13 to line 17, col 47 of module Lease>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Expire line 40, col 11 to line 42, col 49 of module Lease>
+/\ status = "approved"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 4: <Send line 24, col 12 to line 27, col 43 of module Lease>
+/\ status = "approved"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 5: <Claim line 13, col 13 to line 17, col 47 of module Lease>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "claimed"]
+/\ transfers = 1
+State 6: <Send line 24, col 12 to line 27, col 43 of module Lease>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "sent"]
+/\ transfers = 2
+44 states generated, 27 distinct states found, 9 states left on queue.
+===== -config LivenessOnly.cfg Lease.tla
+Model checking completed. No error has been found.
+163 states generated, 76 distinct states found, 0 states left on queue.
+===== Resume.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 14, col 13 to line 19, col 47 of module Resume>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 32, col 12 to line 35, col 50 of module Resume>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Crash line 42, col 13 to line 46, col 53 of module Resume>
+/\ status = "claimed"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+State 5: <Resume line 21, col 14 to line 25, col 63 of module Resume>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+State 6: <Send line 32, col 12 to line 35, col 50 of module Resume>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 2
+20 states generated, 20 distinct states found, 4 states left on queue.
+===== -config LivenessOnly.cfg Resume.tla
+Model checking completed. No error has been found.
+29 states generated, 29 distinct states found, 0 states left on queue.
+===== IdemKey.tla
+Model checking completed. No error has been found.
+25 states generated, 23 distinct states found, 0 states left on queue.
+===== IdemKey3.tla
+Model checking completed. No error has been found.
+55 states generated, 46 distinct states found, 0 states left on queue.
+===== LeaseKey.tla
+Model checking completed. No error has been found.
+134 states generated, 57 distinct states found, 0 states left on queue.
+===== ForgetKey.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 16, col 13 to line 21, col 53 of module ForgetKey>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 36, col 12 to line 41, col 50 of module ForgetKey>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Forget line 54, col 11 to line 56, col 64 of module ForgetKey>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 5: <Crash line 48, col 13 to line 52, col 59 of module ForgetKey>
+/\ status = "claimed"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+State 6: <Resume line 23, col 14 to line 28, col 44 of module ForgetKey>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+State 7: <Send line 36, col 12 to line 41, col 50 of module ForgetKey>
+/\ status = "claimed"
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 2
+44 states generated, 34 distinct states found, 6 states left on queue.
+===== -config MoneyOnly.cfg Crash.tla
+Error: Temporal properties were violated.
+Error: The following behavior constitutes a counter-example:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 13, col 13 to line 17, col 47 of module Crash>
+/\ status = "claimed"
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Crash line 34, col 13 to line 38, col 46 of module Crash>
+/\ status = "claimed"
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 4: Stuttering
+13 states generated, 10 distinct states found, 0 states left on queue.
+===== -config MoneyOnly.cfg IdemKey.tla
+Model checking completed. No error has been found.
+25 states generated, 23 distinct states found, 0 states left on queue.

@@ -1,0 +1,74 @@
+{
+  "stranded": {
+    "title": "The claim nobody finished",
+    "caption": "Thursday. The claim lives in the table, but the memory of why lives in a process the deploy ended. Nobody asks about 4471 again, and the bank never hears a thing.",
+    "animated": true,
+    "phone": true
+  },
+  "stuttering": {
+    "title": "The desk that just stops",
+    "caption": "After Send(B), every step is a stuttering step: each card is the one before it again. Mark(B) is allowed in every one of those states, and it never happens.",
+    "animated": true,
+    "phone": true
+  },
+  "safety-liveness": {
+    "title": "Two kinds of promises",
+    "caption": "A safety violation has a moment: the strip ends at the bad card. A liveness violation has none: every card is fine, and only the strip going on forever without the good thing is wrong.",
+    "animated": false,
+    "phone": true
+  },
+  "lasso": {
+    "title": "A path into a loop",
+    "caption": "A lasso: a path from the start into a loop the behavior repeats forever. On the payout desk the loop is one state stuttering; with real cycles, TLC names the state the loop goes back to.",
+    "animated": true,
+    "phone": true
+  },
+  "enabled": {
+    "title": "Enabled is not taken",
+    "caption": "Enabled means a step of the action could be taken from this state. A behavior takes at most one step next; the other enabled steps stay enabled, not taken.",
+    "animated": false,
+    "phone": true
+  },
+  "fairness": {
+    "title": "Weak fairness forbids waiting forever",
+    "caption": "Weak fairness forbids the top line: an action enabled from some point on, forever, must eventually happen. After the crash nothing is enabled, so weak fairness makes no demand at all.",
+    "animated": true,
+    "phone": true
+  },
+  "eventually-always": {
+    "title": "Eventually always, always eventually",
+    "caption": "The top strip also satisfies the bottom one; not the other way round.",
+    "animated": false,
+    "phone": true
+  },
+  "weak-strong": {
+    "title": "Weak and strong fairness",
+    "caption": "Weak fairness only promises an action that stays enabled. Strong fairness also promises one that keeps coming back. The payout desk only needs the weak kind.",
+    "animated": true,
+    "phone": true
+  },
+  "quiet-twin": {
+    "title": "Thursday and its quiet twin",
+    "caption": "The twins differ only in where the crash lands: before Send or after it. One is loud and one is quiet, and both leave a claim nobody will finish.",
+    "animated": false,
+    "phone": true
+  },
+  "lease-race": {
+    "title": "The lease expired under a slow worker",
+    "caption": "The steps of the TLC counterexample: Claim(A), Expire, Send(A), Claim(B), Send(B). An expired lease lets someone else in; it does not stop the old holder.",
+    "animated": true,
+    "phone": true
+  },
+  "resend": {
+    "title": "Resume sends twice",
+    "caption": "The steps of the TLC counterexample: Claim(A), Send(A), Crash(A), Resume(A), Send(A). The restarted worker does what a claim tells it to do: send.",
+    "animated": true,
+    "phone": true
+  },
+  "idempotency-key": {
+    "title": "The bank remembers the key",
+    "caption": "The same steps as the resend: Claim(A), Send(A), Crash(A), Resume(A), Send(A). The second Send lands on a key the bank already has, so it moves no money.",
+    "animated": true,
+    "phone": true
+  }
+}

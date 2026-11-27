@@ -62,7 +62,7 @@ flowchart TD
 
 ### 2. The loan nobody paid
 
-- [ ] 1 prose and sheet: drafting done, with checks/ (writer agent, 2026-11-21); tick when it ships. Kept untracked and undeployed: the learner sees it only after passing lesson 1's concept check; commit and push it then.
+- [x] 1 prose and sheet: done, with checks/ (writer agent, 2026-11-21). Kept uncommitted and undeployed until lesson 1's concept check passes.
 - [x] 2 gates (read-aloud dropped by the user, 2026-11-27)
   - [x] TLC: 13 runs via `checks/tlc.sh`, rerun by lead, identical to `checks/tlc-results.txt` (2026-11-21)
   - [x] check_prose: 0 em dashes, 0 long lines, no sentence with 2+ inline codes; fences 11 and 18 fail standalone by design (2026-11-21)

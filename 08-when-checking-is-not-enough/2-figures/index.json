@@ -1,0 +1,32 @@
+{
+  "growth": {
+    "title": "Every worker doubles the desk",
+    "caption": "Reachable states as TLC counted them, on a log scale: each bar is 2N + 2^N. Past the break, the bar for 300 workers would need a number with 91 digits; it leaves the chart.",
+    "animated": false,
+    "phone": true
+  },
+  "dominoes": {
+    "title": "Two checks cover the whole row",
+    "caption": "Condition 1 pushes the first domino. Condition 2 says every domino, whichever one it is, knocks over the next. Together they cover the row however long it is; condition 3 turns \"fallen\" into \"no double payout\".",
+    "animated": true,
+    "phone": true
+  },
+  "cti": {
+    "title": "A step out of a state nobody reaches",
+    "caption": "With two workers, 96 states satisfy NoDoublePayout but only 8 are reachable. The CTI starts in the gap between them: a state the desk never visits, one step from paying twice.",
+    "animated": false,
+    "phone": true
+  },
+  "strengthen": {
+    "title": "Two rounds of strengthening",
+    "caption": "Each round adds a conjunct that rules out the last CTI's first state and keeps every reachable state: 96, then 72, then 49 states. Inside Inv, every step stays inside, which is why TLC reports depth 1.",
+    "animated": true,
+    "phone": true
+  },
+  "one-worker": {
+    "title": "One step moves one worker",
+    "caption": "One step of a 300-worker desk. Send moves one worker: one claim fewer, one transfer more, and the budget stays at 1. The other 299 workers play no part, which is why the argument works for any number of them.",
+    "animated": true,
+    "phone": true
+  }
+}

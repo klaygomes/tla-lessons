@@ -1,0 +1,50 @@
+{
+  "weekend": {
+    "title": "A key that outlived its memory",
+    "caption": "The bank kept key 4471 for 24 hours. Worker A came back after 64, sent the same key, and the bank paid €50,000 a second time.",
+    "animated": false,
+    "phone": true
+  },
+  "clock": {
+    "title": "Time moves only on Tick",
+    "caption": "The weekend as states. Only the two Tick steps move the dial, each by 12 hours; every other step happens inside a tick, and as many of them as you like fit in one.",
+    "animated": true,
+    "phone": true
+  },
+  "timeout-guard": {
+    "title": "A timeout switches Forget on",
+    "caption": "A timeout switches an action on; it does not force it. From tick 2 the bank may forget key 4471 at any moment, or never, and from then on a resend may pay twice.",
+    "animated": false,
+    "phone": true
+  },
+  "clock-bound": {
+    "title": "A short clock hides the weekend",
+    "caption": "Each extra tick adds states. MaxTime 0 and 1 have no double payout because the clock never reaches the key’s 24 hours; from MaxTime 2 on, every clock contains the weekend.",
+    "animated": false,
+    "phone": true
+  },
+  "two-worlds": {
+    "title": "Two worlds, one view from A",
+    "caption": "A lost request and a lost reply. The bank differs, 0 transfers or 1, but worker A sees exactly the same thing in both: waiting, no reply.",
+    "animated": true,
+    "phone": true
+  },
+  "stale-answer": {
+    "title": "True when written, false when read",
+    "caption": "True when written, false when read. The bank answered “absent” while the payment was still in the network; by the time worker A read it, the money had moved and the key was gone.",
+    "animated": true,
+    "phone": true
+  },
+  "deadline": {
+    "title": "The window must end before the key can",
+    "caption": "Window 1 closes a tick before the bank may forget the key, so every request of the window that pays lands on it. Window 2 ends on the tick the key may vanish: same tick, either order.",
+    "animated": false,
+    "phone": true
+  },
+  "fresh-answer": {
+    "title": "An absent from the wrong window",
+    "caption": "Both answers were written at tick 2. The first came after the first window closed and was right to trust; the other was read in the second window, and only the check m.at > deadline tells them apart.",
+    "animated": false,
+    "phone": true
+  }
+}

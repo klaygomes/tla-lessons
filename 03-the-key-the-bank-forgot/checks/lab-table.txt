@@ -1,0 +1,71 @@
+Clock MaxTime=3 TTL=2: 238 states, double payout in 8 steps: Claim(A), Send(A), Tick, Tick, Forget, Crash(A), Resume(A), Send(A), dead ends 0
+ClockShort MaxTime=1: 62 states, no double payout, dead ends 0
+ClockAsk MaxTime=3: 228 states, no double payout, dead ends 0
+ClockAsk MaxTime=6: 591 states, no double payout, dead ends 0
+LossyKeep TTL=9: 4496 states, no double payout, dead ends 0
+Lossy TTL=2: 7252 states, double payout in 9 steps: Claim(A), Send(A), Deliver, Tick, Tick, Forget, Retry(A), Send(A), Deliver, dead ends 0
+Ask TTL=2: 43176 states, double payout in 11 steps: Claim(A), Send(A), AskBank(A), Answer, Deliver, Tick, Tick, Forget, GotAbsent(A), Send(A), Deliver, dead ends 0
+DeadlineOnly MaxTime=3: 1648 states, no double payout, dead ends 192
+Fix MaxTime=3: 8288 states, no double payout, dead ends 0
+Fix MaxTime=4: 28021 states, no double payout, dead ends 0
+FixLongWindow Window=2: 4036 states, double payout in 9 steps: Claim(A), Send(A), Deliver, Tick, Tick, Forget, Retry(A), Send(A), Deliver, dead ends 0
+FixStale3 MaxTime=3: 8288 states, no double payout, dead ends 0
+FixStale MaxTime=4: 33829 states, double payout in 17 steps: Claim(A), Tick, Tick, AskBank(A), Answer, AskBank(A), GotAbsent(A), Answer, Send(A), Deliver, Tick, Tick, Forget, AskBank(A), GotAbsent(A), Send(A), Deliver, dead ends 0
+FixNoRefuse MaxTime=3: 11536 states, double payout in 9 steps: Claim(A), Send(A), Deliver, Tick, Retry(A), Send(A), Tick, Forget, Deliver, dead ends 0
+FixNoRefuse MaxTime=4: 44785 states, double payout in 9 steps: Claim(A), Send(A), Deliver, Tick, Retry(A), Send(A), Tick, Forget, Deliver, dead ends 0
+Clock TTL=6 MaxTime=3: 188 states, no double payout, dead ends 0
+Clock TTL=6 MaxTime=6: 519 states, double payout in 12 steps: Claim(A), Send(A), Tick, Tick, Tick, Tick, Tick, Tick, Forget, Crash(A), Resume(A), Send(A), dead ends 0
+Fix TTL=3 Window=2 MaxTime=5: 27390 states, no double payout, dead ends 0
+Fix TTL=3 Window=3 MaxTime=5: 14126 states, double payout in 10 steps: Claim(A), Send(A), Deliver, Tick, Tick, Tick, Forget, Retry(A), Send(A), Deliver, dead ends 0
+Fix3 3 workers MaxTime=4: 54305 states, no double payout, dead ends 0
+
+Clock growth (TTL=2), MaxTime -> states:
+[(0, 23), (1, 62), (2, 139), (3, 238), (4, 365), (5, 514), (6, 685)]
+resend on timeout | window - | workers 2 | clock 1 | 466 states | safe | dead ends 0
+resend on timeout | window - | workers 2 | clock 3 | 7252 states | double in 9 | dead ends 0
+resend on timeout | window - | workers 2 | clock 4 | 22929 states | double in 9 | dead ends 0
+resend on timeout | window - | workers 3 | clock 1 | 902 states | safe | dead ends 0
+resend on timeout | window - | workers 3 | clock 3 | 14584 states | double in 9 | dead ends 0
+resend on timeout | window - | workers 3 | clock 4 | 46415 states | double in 9 | dead ends 0
+ask first | window - | workers 2 | clock 1 | 3782 states | safe | dead ends 0
+ask first | window - | workers 2 | clock 3 | 43176 states | double in 11 | dead ends 0
+ask first | window - | workers 2 | clock 4 | 112741 states | double in 11 | dead ends 0
+ask first | window - | workers 3 | clock 1 | 7412 states | safe | dead ends 0
+ask first | window - | workers 3 | clock 3 | 85918 states | double in 11 | dead ends 0
+ask first | window - | workers 3 | clock 4 | 225017 states | double in 11 | dead ends 0
+deadline | window 1 | workers 2 | clock 1 | 366 states | safe | dead ends 0
+deadline | window 1 | workers 2 | clock 3 | 1648 states | safe | dead ends 192
+deadline | window 1 | workers 2 | clock 4 | 2661 states | safe | dead ends 384
+deadline | window 1 | workers 3 | clock 1 | 692 states | safe | dead ends 0
+deadline | window 1 | workers 3 | clock 3 | 3154 states | safe | dead ends 288
+deadline | window 1 | workers 3 | clock 4 | 5105 states | safe | dead ends 576
+deadline | window 2 | workers 2 | clock 1 | 366 states | safe | dead ends 0
+deadline | window 2 | workers 2 | clock 3 | 2104 states | double in 9 | dead ends 96
+deadline | window 2 | workers 2 | clock 4 | 3649 states | double in 9 | dead ends 304
+deadline | window 2 | workers 3 | clock 1 | 692 states | safe | dead ends 0
+deadline | window 2 | workers 3 | clock 3 | 4054 states | double in 9 | dead ends 144
+deadline | window 2 | workers 3 | clock 4 | 7055 states | double in 9 | dead ends 456
+ask + deadline | window 1 | workers 2 | clock 1 | 366 states | safe | dead ends 0
+ask + deadline | window 1 | workers 2 | clock 3 | 8288 states | safe | dead ends 0
+ask + deadline | window 1 | workers 2 | clock 4 | 33829 states | double in 17 | dead ends 0
+ask + deadline | window 1 | workers 3 | clock 1 | 692 states | safe | dead ends 0
+ask + deadline | window 1 | workers 3 | clock 3 | 16114 states | safe | dead ends 0
+ask + deadline | window 1 | workers 3 | clock 4 | 66065 states | double in 17 | dead ends 0
+ask + deadline | window 2 | workers 2 | clock 1 | 366 states | safe | dead ends 0
+ask + deadline | window 2 | workers 2 | clock 3 | 4036 states | double in 9 | dead ends 0
+ask + deadline | window 2 | workers 2 | clock 4 | 11997 states | double in 9 | dead ends 0
+ask + deadline | window 2 | workers 3 | clock 1 | 692 states | safe | dead ends 0
+ask + deadline | window 2 | workers 3 | clock 3 | 7888 states | double in 9 | dead ends 0
+ask + deadline | window 2 | workers 3 | clock 4 | 23501 states | double in 9 | dead ends 0
+ask + deadline + fresh answer | window 1 | workers 2 | clock 1 | 366 states | safe | dead ends 0
+ask + deadline + fresh answer | window 1 | workers 2 | clock 3 | 8288 states | safe | dead ends 0
+ask + deadline + fresh answer | window 1 | workers 2 | clock 4 | 28021 states | safe | dead ends 0
+ask + deadline + fresh answer | window 1 | workers 3 | clock 1 | 692 states | safe | dead ends 0
+ask + deadline + fresh answer | window 1 | workers 3 | clock 3 | 16114 states | safe | dead ends 0
+ask + deadline + fresh answer | window 1 | workers 3 | clock 4 | 54305 states | safe | dead ends 0
+ask + deadline + fresh answer | window 2 | workers 2 | clock 1 | 366 states | safe | dead ends 0
+ask + deadline + fresh answer | window 2 | workers 2 | clock 3 | 4036 states | double in 9 | dead ends 0
+ask + deadline + fresh answer | window 2 | workers 2 | clock 4 | 11997 states | double in 9 | dead ends 0
+ask + deadline + fresh answer | window 2 | workers 3 | clock 1 | 692 states | safe | dead ends 0
+ask + deadline + fresh answer | window 2 | workers 3 | clock 3 | 7888 states | double in 9 | dead ends 0
+ask + deadline + fresh answer | window 2 | workers 3 | clock 4 | 23501 states | double in 9 | dead ends 0

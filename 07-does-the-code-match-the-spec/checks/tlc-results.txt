@@ -1,0 +1,517 @@
+===== PayOnce.tla
+Checking temporal properties for the complete state space with 2 total distinct states at (2026-11-27 18:41:11)
+Model checking completed. No error has been found.
+2 states generated, 2 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 2.
+===== QueueDesk.tla
+Checking temporal properties for the complete state space with 99 total distinct states at (2026-11-27 18:41:13)
+Model checking completed. No error has been found.
+249 states generated, 99 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config AtSend.cfg QueueDesk.tla
+Error: Action property line 14, col 17 to line 14, col 29 of module PayOnce is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module QueueDesk>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Send line 26, col 12 to line 29, col 47 of module QueueDesk>
+/\ transfers = 0
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+5 states generated, 5 distinct states found, 2 states left on queue.
+The depth of the complete state graph search is 3.
+===== -config AtTable.cfg QueueDesk.tla
+Error: Action property line 14, col 17 to line 14, col 29 of module PayOnce is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module QueueDesk>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Send line 26, col 12 to line 29, col 47 of module QueueDesk>
+/\ transfers = 0
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 4: <Confirm line 31, col 15 to line 36, col 53 of module QueueDesk>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "idle"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+14 states generated, 12 distinct states found, 6 states left on queue.
+The depth of the complete state graph search is 4.
+===== -config Trivial.cfg QueueDesk.tla
+Checking temporal properties for the complete state space with 99 total distinct states at (2026-11-27 18:41:15)
+Error: Temporal properties were violated.
+Error: The following behavior constitutes a counter-example:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module QueueDesk>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Send line 26, col 12 to line 29, col 47 of module QueueDesk>
+/\ transfers = 0
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 4: <Confirm line 31, col 15 to line 36, col 53 of module QueueDesk>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "idle"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 5: <Expire line 22, col 11 to line 24, col 63 of module QueueDesk>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "idle"]
+/\ keys = {4471}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 6: <Receive line 16, col 15 to line 20, col 63 of module QueueDesk>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "claimed"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 7: <Crash line 44, col 13 to line 48, col 59 of module QueueDesk>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "idle"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = TRUE
+/\ status = "approved"
+State 8: <Mark line 38, col 12 to line 42, col 52 of module QueueDesk>
+/\ transfers = 1
+/\ pc = [A |-> "done", B |-> "idle"]
+/\ keys = {4471}
+/\ queue = "deleted"
+/\ crashed = TRUE
+/\ status = "paid"
+State 9: Stuttering
+249 states generated, 99 distinct states found, 0 states left on queue.
+===== -config TrivialSafety.cfg QueueDesk.tla
+Model checking completed. No error has been found.
+249 states generated, 99 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config SafetyOnly.cfg QueueDesk.tla
+Model checking completed. No error has been found.
+249 states generated, 99 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config Bang.cfg QueueDesk.tla
+Error: The property Abstract specified in the configuration file
+is not defined in the specification.
+===== StutterFree.tla
+Error: Action property line 4, col 35 to line 4, col 55 of module StutterFree is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module QueueDesk>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+2 states generated, 2 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 2.
+===== NoKey.tla
+Error: Action property line 14, col 17 to line 14, col 29 of module PayOnce is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module NoKey>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Expire line 22, col 11 to line 24, col 63 of module NoKey>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 4: <Send line 26, col 12 to line 29, col 47 of module NoKey>
+/\ transfers = 0
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 5: <Confirm line 31, col 15 to line 35, col 53 of module NoKey>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "idle"]
+/\ keys = {4471}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 6: <Receive line 16, col 15 to line 20, col 63 of module NoKey>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "claimed"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 7: <Send line 26, col 12 to line 29, col 47 of module NoKey>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "sent"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 8: <Confirm line 31, col 15 to line 35, col 53 of module NoKey>
+/\ transfers = 2
+/\ pc = [A |-> "confirmed", B |-> "confirmed"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+113 states generated, 57 distinct states found, 17 states left on queue.
+The depth of the complete state graph search is 8.
+===== -config NoKeyInv.cfg NoKey.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module NoKey>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Expire line 22, col 11 to line 24, col 63 of module NoKey>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 4: <Send line 26, col 12 to line 29, col 47 of module NoKey>
+/\ transfers = 0
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 5: <Confirm line 31, col 15 to line 35, col 53 of module NoKey>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "idle"]
+/\ keys = {4471}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 6: <Receive line 16, col 15 to line 20, col 63 of module NoKey>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "claimed"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 7: <Send line 26, col 12 to line 29, col 47 of module NoKey>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "sent"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 8: <Confirm line 31, col 15 to line 35, col 53 of module NoKey>
+/\ transfers = 2
+/\ pc = [A |-> "confirmed", B |-> "confirmed"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+113 states generated, 57 distinct states found, 17 states left on queue.
+The depth of the complete state graph search is 8.
+===== -config NoKeyAll.cfg NoKey.tla
+Model checking completed. No error has been found.
+288 states generated, 122 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 15.
+===== NoLease.tla
+Checking temporal properties for the complete state space with 99 total distinct states at (2026-11-27 18:41:19)
+Error: Temporal properties were violated.
+Error: The following behavior constitutes a counter-example:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module NoLease>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "claimed"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Crash line 44, col 13 to line 48, col 59 of module NoLease>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = TRUE
+/\ status = "approved"
+State 4: Stuttering
+249 states generated, 99 distinct states found, 0 states left on queue.
+===== -config SafetyOnly.cfg NoLease.tla
+Model checking completed. No error has been found.
+249 states generated, 99 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== QueueDesk3.tla
+Checking temporal properties for the complete state space with 431 total distinct states at (2026-11-27 18:41:21)
+Model checking completed. No error has been found.
+1493 states generated, 431 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 18.
+===== QueueDesk4.tla
+Checking temporal properties for the complete state space with 1923 total distinct states at (2026-11-27 18:41:22)
+Model checking completed. No error has been found.
+8449 states generated, 1923 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 23.
+===== NoKey3.tla
+Error: Action property line 14, col 17 to line 14, col 29 of module PayOnce is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle", C |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module NoKey>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle", C |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Expire line 22, col 11 to line 24, col 63 of module NoKey>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle", C |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 4: <Send line 26, col 12 to line 29, col 47 of module NoKey>
+/\ transfers = 0
+/\ pc = [A |-> "sent", B |-> "idle", C |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 5: <Confirm line 31, col 15 to line 35, col 53 of module NoKey>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "idle", C |-> "idle"]
+/\ keys = {4471}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 6: <Receive line 16, col 15 to line 20, col 63 of module NoKey>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "claimed", C |-> "idle"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 7: <Send line 26, col 12 to line 29, col 47 of module NoKey>
+/\ transfers = 1
+/\ pc = [A |-> "confirmed", B |-> "sent", C |-> "idle"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 8: <Confirm line 31, col 15 to line 35, col 53 of module NoKey>
+/\ transfers = 2
+/\ pc = [A |-> "confirmed", B |-> "confirmed", C |-> "idle"]
+/\ keys = {4471}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+255 states generated, 112 distinct states found, 42 states left on queue.
+The depth of the complete state graph search is 8.
+===== MarkFirst.tla
+Checking temporal properties for the complete state space with 60 total distinct states at (2026-11-27 18:41:23)
+Error: Temporal properties were violated.
+Error: The following behavior constitutes a counter-example:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module MarkFirst>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Mark line 38, col 12 to line 42, col 52 of module MarkFirst>
+/\ transfers = 0
+/\ pc = [A |-> "marked", B |-> "idle"]
+/\ keys = {}
+/\ queue = "deleted"
+/\ crashed = FALSE
+/\ status = "paid"
+State 4: <Crash line 44, col 13 to line 48, col 59 of module MarkFirst>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "deleted"
+/\ crashed = TRUE
+/\ status = "paid"
+State 5: Stuttering
+120 states generated, 60 distinct states found, 0 states left on queue.
+===== -config MarkFirstOwn.cfg MarkFirst.tla
+Checking temporal properties for the complete state space with 60 total distinct states at (2026-11-27 18:41:23)
+Model checking completed. No error has been found.
+120 states generated, 60 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config SafetyOnly.cfg MarkFirst.tla
+Model checking completed. No error has been found.
+120 states generated, 60 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== MarkFirst3.tla
+Checking temporal properties for the complete state space with 272 total distinct states at (2026-11-27 18:41:25)
+Error: Temporal properties were violated.
+Error: The following behavior constitutes a counter-example:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle", C |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module MarkFirst>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle", C |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Mark line 38, col 12 to line 42, col 52 of module MarkFirst>
+/\ transfers = 0
+/\ pc = [A |-> "marked", B |-> "idle", C |-> "idle"]
+/\ keys = {}
+/\ queue = "deleted"
+/\ crashed = FALSE
+/\ status = "paid"
+State 4: <Crash line 44, col 13 to line 48, col 59 of module MarkFirst>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle", C |-> "idle"]
+/\ keys = {}
+/\ queue = "deleted"
+/\ crashed = TRUE
+/\ status = "paid"
+State 5: Stuttering
+760 states generated, 272 distinct states found, 0 states left on queue.
+===== -config Liar.cfg MarkFirst.tla
+Checking temporal properties for the complete state space with 60 total distinct states at (2026-11-27 18:41:25)
+Model checking completed. No error has been found.
+120 states generated, 60 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config Liar.cfg QueueDesk.tla
+Checking temporal properties for the complete state space with 99 total distinct states at (2026-11-27 18:41:26)
+Model checking completed. No error has been found.
+249 states generated, 99 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== SplitMark.tla
+Checking temporal properties for the complete state space with 171 total distinct states at (2026-11-27 18:41:27)
+Model checking completed. No error has been found.
+445 states generated, 171 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 15.
+===== BooksQueue.tla
+Checking temporal properties for the complete state space with 99 total distinct states at (2026-11-27 18:41:27)
+Model checking completed. No error has been found.
+249 states generated, 99 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== BooksPilot.tla
+Error: Action property line 19, col 20 to line 19, col 42 of module PayRecord is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ transfers = 0
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ keys = {}
+/\ queue = "visible"
+/\ crashed = FALSE
+/\ status = "approved"
+State 2: <Receive line 16, col 15 to line 20, col 63 of module MarkFirst>
+/\ transfers = 0
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ keys = {}
+/\ queue = "hidden"
+/\ crashed = FALSE
+/\ status = "approved"
+State 3: <Mark line 38, col 12 to line 42, col 52 of module MarkFirst>
+/\ transfers = 0
+/\ pc = [A |-> "marked", B |-> "idle"]
+/\ keys = {}
+/\ queue = "deleted"
+/\ crashed = FALSE
+/\ status = "paid"
+5 states generated, 5 distinct states found, 2 states left on queue.
+The depth of the complete state graph search is 3.
+===== IdemKeyRefines.tla
+Checking temporal properties for the complete state space with 23 total distinct states at (2026-11-27 18:41:28)
+Model checking completed. No error has been found.
+25 states generated, 23 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.

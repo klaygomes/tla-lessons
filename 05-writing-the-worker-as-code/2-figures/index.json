@@ -1,0 +1,38 @@
+{
+  "two-calls": {
+    "title": "Two calls, one step",
+    "caption": "Time runs down the page. Both workers find the loan approved before either saves it, so both send money; only the bank's idempotency key refuses the second transfer. The spec calls find and save one step; the code makes them two.",
+    "animated": true,
+    "phone": true
+  },
+  "labels": {
+    "title": "A label begins a step",
+    "caption": "Each cut line is a label. Everything between two cut lines runs as one step, so the other worker can act only at a cut line.",
+    "animated": false,
+    "phone": true
+  },
+  "translation": {
+    "title": "What the translator writes",
+    "caption": "One action per label, named after it. The translator also writes pc, the end of the desk and the Termination property; where the labels go is still up to you.",
+    "animated": false,
+    "phone": true
+  },
+  "interactions": {
+    "title": "One label per real interaction",
+    "caption": "Draw a line from each call to its label. Two calls landing on one label hide a gap the spec can never show.",
+    "animated": false,
+    "phone": true
+  },
+  "poll": {
+    "title": "Three branches, three awaits",
+    "caption": "Each branch of poll runs only when its await is true. For worker B, looking at a loan claimed by A, all three are false: no step is possible, so B waits.",
+    "animated": false,
+    "phone": true
+  },
+  "flicker": {
+    "title": "Enabled again and again",
+    "caption": "A's send flickers on and off with the line. Weak fairness promises nothing for a step that keeps switching off; strong fairness promises it happens, because it is enabled again and again.",
+    "animated": true,
+    "phone": true
+  }
+}

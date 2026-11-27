@@ -1,0 +1,32 @@
+{
+  "explosion": {
+    "title": "Each loan multiplies the states",
+    "caption": "Distinct states from TLC, at most one lost reply per run, on a log scale, so equal steps to the right mean equal multiples. Each loan pushes every bar right: with three workers it multiplies the count by 15, then 11, then 9.5, close to the ×10 ticks.",
+    "animated": false,
+    "phone": true
+  },
+  "counter": {
+    "title": "A queue that never drains",
+    "caption": "Each level of the search is one column. With a bound, the columns rise and fall to nothing: the queue empties. With an unbounded counter they settle at about 5,000 and never stop, because every lap of the retry loop is a new state.",
+    "animated": true,
+    "phone": true
+  },
+  "symmetry": {
+    "title": "Six names, one state",
+    "caption": "Renaming the workers never changes what can happen, so the checker keeps one state for all six names. Over workers and loans together, that turns 261,673 states into 968.",
+    "animated": true,
+    "phone": true
+  },
+  "constraint": {
+    "title": "What a constraint cuts",
+    "caption": "TLC builds the states just past the line and checks the invariant on them, then stops. Everything after them, including a bank that loses every reply forever, is never looked at, and the output only hints at it through the generated count.",
+    "animated": false,
+    "phone": true
+  },
+  "small-scope": {
+    "title": "One step past the edge",
+    "caption": "The budget stops the search one step before the bug, and the run then looks exactly like a pass. Beside it, a bigger desk finds the same three-step bug, just after more states.",
+    "animated": false,
+    "phone": true
+  }
+}

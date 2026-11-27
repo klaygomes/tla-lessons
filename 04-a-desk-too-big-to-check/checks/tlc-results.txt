@@ -1,0 +1,193 @@
+===== -config growth/W1L1.cfg Desk.tla
+Model checking completed. No error has been found.
+21 states generated, 17 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+===== -config growth/W1L2.cfg Desk.tla
+Model checking completed. No error has been found.
+123 states generated, 85 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config growth/W1L3.cfg Desk.tla
+Model checking completed. No error has been found.
+484 states generated, 314 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config growth/W1L4.cfg Desk.tla
+Model checking completed. No error has been found.
+1581 states generated, 997 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 16.
+===== -config growth/W2L1.cfg Desk.tla
+Model checking completed. No error has been found.
+41 states generated, 33 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+===== -config growth/W2L2.cfg Desk.tla
+Model checking completed. No error has been found.
+661 states generated, 327 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config growth/W2L3.cfg Desk.tla
+Model checking completed. No error has been found.
+5797 states generated, 2379 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config growth/W2L4.cfg Desk.tla
+Model checking completed. No error has been found.
+38105 states generated, 14325 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 16.
+===== -config growth/W3L1.cfg Desk.tla
+Model checking completed. No error has been found.
+61 states generated, 49 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+===== -config growth/W3L2.cfg Desk.tla
+Model checking completed. No error has been found.
+1615 states generated, 727 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config growth/W3L3.cfg Desk.tla
+Model checking completed. No error has been found.
+23752 states generated, 8218 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config growth/W3L4.cfg Desk.tla
+Model checking completed. No error has been found.
+259333 states generated, 77845 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 16.
+===== -config growth/W4L1.cfg Desk.tla
+Model checking completed. No error has been found.
+81 states generated, 65 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+===== -config growth/W4L2.cfg Desk.tla
+Model checking completed. No error has been found.
+2985 states generated, 1285 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config growth/W4L3.cfg Desk.tla
+Model checking completed. No error has been found.
+62161 states generated, 19853 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config growth/W4L4.cfg Desk.tla
+Model checking completed. No error has been found.
+977169 states generated, 261673 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 16.
+===== -config retries/R0.cfg Desk.tla
+Model checking completed. No error has been found.
+277 states generated, 157 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 9.
+===== -config retries/R1.cfg Desk.tla
+Model checking completed. No error has been found.
+661 states generated, 327 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config retries/R2.cfg Desk.tla
+Model checking completed. No error has been found.
+1073 states generated, 499 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 11.
+===== -config retries/R3.cfg Desk.tla
+Model checking completed. No error has been found.
+1489 states generated, 671 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 12.
+===== -config retries/R4.cfg Desk.tla
+Model checking completed. No error has been found.
+1905 states generated, 843 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config Small.cfg Desk.tla
+Model checking completed. No error has been found.
+661 states generated, 327 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config Live.cfg Desk.tla
+Model checking completed. No error has been found.
+23752 states generated, 8218 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config Sym.cfg Desk.tla
+Model checking completed. No error has been found.
+2803 states generated, 823 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 16.
+===== -config SymLive.cfg Desk.tla
+Warning: Declaring symmetry during liveness checking is dangerous. It might cause TLC to miss violations of the stated liveness properties. Please check liveness without symmetry defined.
+Model checking completed. No error has been found.
+181 states generated, 90 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config SymWorkers.cfg Desk.tla
+Model checking completed. No error has been found.
+4459 states generated, 1527 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config Big.cfg OpenDesk.tla
+Model checking completed. No error has been found.
+9852697 states generated, 2724825 distinct states found, 4983 states left on queue.
+The depth of the complete state graph search is 554.
+===== -config Constraint.cfg OpenDesk.tla
+Model checking completed. No error has been found.
+28090 states generated, 8218 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 13.
+===== -config ConstraintLive.cfg OpenDesk.tla
+Warning: Declaring state or action constraints during liveness checking is dangerous: Please read section 14.3.5 on page 247 of Specifying Systems (https://lamport.azurewebsites.net/tla/book.html) and optionally the discussion at https://discuss.tlapl.us/msg00994.html for more details.
+Model checking completed. No error has been found.
+761 states generated, 327 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config NoCount.cfg NoCount.tla
+Model checking completed. No error has been found.
+501 states generated, 197 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 9.
+===== -config NoCountLive.cfg NoCount.tla
+Model checking completed. No error has been found.
+19018 states generated, 5167 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 12.
+===== -config NoKeyW1L1.cfg NoKey.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+State 2: <Claim line 20, col 16 to line 26, col 65 of module Desk>
+State 3: <Lost line 45, col 12 to line 49, col 60 of module Desk>
+State 4: <Send line 40, col 12 to line 43, col 65 of module Desk>
+8 states generated, 8 distinct states found, 3 states left on queue.
+The depth of the complete state graph search is 4.
+===== -config NoKeyW2L2.cfg NoKey.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+State 2: <Claim line 20, col 16 to line 26, col 65 of module Desk>
+State 3: <Lost line 45, col 12 to line 49, col 60 of module Desk>
+State 4: <Send line 40, col 12 to line 43, col 65 of module Desk>
+25 states generated, 23 distinct states found, 15 states left on queue.
+The depth of the complete state graph search is 4.
+===== -config NoKeyW3L3.cfg NoKey.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+State 2: <Claim line 20, col 16 to line 26, col 65 of module Desk>
+State 3: <Lost line 45, col 12 to line 49, col 60 of module Desk>
+State 4: <Send line 40, col 12 to line 43, col 65 of module Desk>
+80 states generated, 62 distinct states found, 49 states left on queue.
+The depth of the complete state graph search is 4.
+===== -config NoKeyCheap.cfg NoKey.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+State 2: <Claim line 20, col 16 to line 26, col 65 of module Desk>
+State 3: <Lost line 45, col 12 to line 49, col 60 of module Desk>
+State 4: <Send line 40, col 12 to line 43, col 65 of module Desk>
+25 states generated, 22 distinct states found, 15 states left on queue.
+The depth of the complete state graph search is 4.
+===== -config FloristOneVan.cfg Florist.tla
+Model checking completed. No error has been found.
+1615 states generated, 727 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config Florist.cfg Florist.tla
+Error: Invariant PaidMeansMoney is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+State 2: <Claim line 20, col 16 to line 26, col 65 of module Desk>
+State 3: <Send line 40, col 12 to line 43, col 65 of module Desk>
+State 4: <Claim line 20, col 16 to line 26, col 65 of module Desk>
+State 5: <Send line 40, col 12 to line 43, col 65 of module Desk>
+State 6: <Mark line 51, col 12 to line 55, col 68 of module Desk>
+1949 states generated, 1035 distinct states found, 680 states left on queue.
+The depth of the complete state graph search is 6.
+===== -config FloristBudget.cfg Florist.tla
+Model checking completed. No error has been found.
+1360 states generated, 232 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 4.
+===== -config FloristSmall.cfg Florist.tla
+Error: Invariant PaidMeansMoney is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+State 2: <Claim line 20, col 16 to line 26, col 65 of module Desk>
+State 3: <Send line 40, col 12 to line 43, col 65 of module Desk>
+State 4: <Mark line 51, col 12 to line 55, col 68 of module Desk>
+State 5: <Claim line 20, col 16 to line 26, col 65 of module Desk>
+State 6: <Send line 40, col 12 to line 43, col 65 of module Desk>
+State 7: <Mark line 51, col 12 to line 55, col 68 of module Desk>
+70 states generated, 56 distinct states found, 15 states left on queue.
+The depth of the complete state graph search is 7.

@@ -1,0 +1,143 @@
+<style>
+.lab > * { min-width: 0; }
+.lab .k-predict { display: grid; gap: var(--space-2); padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); background: var(--paper-2); }
+.k-predict .k-q { font-weight: var(--weight-bold); }
+.k-predict button.k-right { background: var(--input-soft); border-color: var(--input); opacity: 1; }
+.k-predict button.k-missed { border-color: var(--accent); color: var(--accent-ink); opacity: 1; }
+.k-predict .k-feedback:empty, .lab .readout p:empty { display: none; }
+.lab .readout { min-height: 0; }
+.k-predict .k-feedback.k-bad { color: var(--accent-ink); }
+.k-predict .k-feedback:focus { outline: none; }
+.lab .k-group { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.lab .k-group-label { font-weight: var(--weight-bold); margin-right: var(--space-2); }
+.lab .k-group button { min-height: calc(var(--space-10) + var(--space-1)); }
+.lab .k-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.lab .k-lane { display: grid; gap: var(--space-2); align-content: start; padding: var(--space-3); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); }
+.lab .k-lane-name { font-weight: var(--weight-bold); }
+.lab .k-lane .row { min-height: calc(var(--space-10) + var(--space-1)); }
+.lab .k-lane-note { color: var(--ink-soft); font-size: var(--text-caption); }
+.lab button.k-step { border-color: var(--input); color: var(--input); font-family: var(--font-mono); font-size: var(--text-ui); min-height: calc(var(--space-10) + var(--space-1)); }
+.lab button.k-step:hover { background: var(--input-soft); }
+.lab button.k-crash { border-style: dashed; border-color: var(--ink-soft); color: var(--ink); min-height: calc(var(--space-10) + var(--space-1)); }
+.lab .k-cap { font-size: var(--text-small); line-height: var(--leading-caption); color: var(--ink-soft); }
+.lab .k-head-title { font-weight: var(--weight-bold); font-size: var(--text-ui); }
+.lab .k-panel { display: grid; gap: var(--space-2); min-width: 0; }
+.lab .k-lamp { display: flex; align-items: baseline; gap: var(--space-2); margin: 0; }
+.lab .k-lamp-dot { flex: none; width: var(--space-3); height: var(--space-3); border-radius: 50%; border: var(--line-strong) solid var(--ink-soft); transform: translateY(1px); }
+.lab .k-lamp-even .k-lamp-dot { background: var(--ink); border-color: var(--ink); }
+.lab .k-lamp-ok .k-lamp-dot { background: var(--ok); border-color: var(--ok); }
+.lab .k-lamp-ok .k-lamp-text { color: var(--ok); font-weight: var(--weight-medium); }
+.lab .k-lamp-bad .k-lamp-dot { background: var(--accent); border-color: var(--accent); border-radius: var(--radius-sm); }
+.lab .k-lamp-bad .k-lamp-text { color: var(--accent-ink); font-weight: var(--weight-medium); }
+.lab .k-lamp-off .k-lamp-text { color: var(--ink-soft); }
+.lab .k-lamps { display: grid; gap: var(--space-2); }
+.lab .k-strip { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.lab .k-strip li { display: grid; padding: var(--space-1) var(--space-2); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); background: var(--paper); font-family: var(--font-mono); font-size: var(--text-micro); line-height: var(--leading-ui); font-variant-numeric: tabular-nums; }
+.lab .k-strip .k-card-step { font-family: var(--font-ui); font-weight: var(--weight-medium); color: var(--ink); }
+.lab .k-strip li > span:not(.k-card-step) { color: var(--ink-soft); }
+.lab .k-strip li.k-bad { border-color: var(--accent); background: var(--accent-soft); }
+.lab .k-strip li.k-bad .k-card-t { color: var(--accent-ink); font-weight: var(--weight-medium); }
+.lab .k-strip li.k-loop { border-style: dashed; border-color: var(--accent); }
+.lab .k-tally { font-family: var(--font-mono); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.lab .k-tally .k-bad-n { color: var(--accent-ink); font-weight: var(--weight-medium); }
+.lab .k-reveal { font-weight: var(--weight-bold); border-left: var(--line-mark) solid var(--accent); padding-left: var(--space-3); }
+.lab .readout p.k-good { color: var(--ok); font-weight: var(--weight-medium); }
+.lab button.k-primary, .act2 button.k-primary { background: var(--input); border-color: var(--input); color: var(--paper); font-weight: var(--weight-bold); }
+.lab button.k-primary:hover, .act2 button.k-primary:hover { background: var(--ink); border-color: var(--ink); }
+.lab button.k-primary:disabled:hover { background: var(--input); border-color: var(--input); }
+.act2 { display: grid; gap: var(--space-2); }
+.act2 .note { font-size: var(--text-caption); color: var(--ink-soft); }
+.act2 button.k-primary { justify-self: start; padding: var(--space-4) var(--space-6); font-size: var(--text-h3); line-height: var(--leading-ui); text-align: left; }
+.lab .k-checker, .lab .k-trace { display: grid; gap: var(--space-3); }
+.lab .k-states { font-family: var(--font-mono); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.lab pre.k-spec { white-space: pre; }
+.lab pre.k-spec .k-line { display: block; }
+.lab pre.k-spec .k-line.k-changed { background: var(--input-soft); margin-inline: calc(-1 * var(--space-2)); padding-inline: var(--space-2); border-radius: var(--radius-sm); }
+.lab .k-win { display: grid; gap: var(--space-2); border: var(--line-strong) solid var(--ok); border-radius: var(--radius); background: var(--ok-soft); padding: var(--space-4); }
+.lab .k-win:focus { outline: none; }
+.lab .k-win p { margin: 0; }
+.lab .k-win .k-win-head { font-family: var(--font-title); font-weight: var(--weight-bold); font-size: var(--text-h3); line-height: var(--leading-heading); }
+.lab .k-win b { color: var(--ok); font-family: var(--font-mono); font-weight: var(--weight-medium); font-variant-numeric: tabular-nums; }
+.lab .k-win canvas { width: 100%; display: block; }
+.lab .jump { font-size: var(--text-caption); }
+.lab .story { font-weight: var(--weight-medium); }
+@media (max-width: 520px) {
+  .lab .k-lanes { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }
+  .lab .k-lane { padding: var(--space-2); }
+  .act2 button.k-primary { font-size: var(--text-ui); padding: var(--space-3) var(--space-4); }
+}
+</style>
+<template id="ledger-lab">
+  <div class="task" data-k="task"><p class="story">Month-end is coming. Pick a design for the payout, run the checker, and ship only when the books add up and every loan settles, with two loans and still with three.</p></div>
+  <div class="k-predict" data-k="ask"></div>
+  <div class="k-group" role="group" aria-label="Order of the two writes" data-k="order">
+    <span class="k-group-label">Order</span>
+    <button type="button" data-order="debit" aria-pressed="true">debit first</button>
+    <button type="button" data-order="credit" aria-pressed="false">credit first</button>
+  </div>
+  <div data-k="design" class="k-panel">
+    <div class="k-group" role="group" aria-label="Design">
+      <span class="k-group-label">Design</span>
+      <button type="button" data-design="debit" aria-pressed="true">two writes, debit first</button>
+      <button type="button" data-design="credit" aria-pressed="false">two writes, credit first</button>
+      <button type="button" data-design="outbox2" aria-pressed="false">outbox, separate transaction</button>
+      <button type="button" data-design="outbox1" aria-pressed="false">outbox, same transaction</button>
+    </div>
+    <div class="k-group" role="group" aria-label="Loan ledger credit">
+      <span class="k-group-label">Credit</span>
+      <button type="button" data-key="off" aria-pressed="true">plain (adds the amount)</button>
+      <button type="button" data-key="on" aria-pressed="false">keyed by loan id</button>
+    </div>
+    <div class="k-group" role="group" aria-label="Loans">
+      <span class="k-group-label">Loans</span>
+      <button type="button" data-loans="2" aria-pressed="true">2</button>
+      <button type="button" data-loans="3" aria-pressed="false">3</button>
+    </div>
+  </div>
+  <p class="note" data-k="spec-note">The desk’s actions right now; tinted lines changed with your last choice. Shorthand: <code>pc′[l] = "done"</code> stands for <code>pc′ = [pc EXCEPT ![l] = "done"]</code>, and a variable a line does not mention stays unchanged. One deploy per run: Crash, CrashWorker or CrashRelay, whichever the design has.</p>
+  <pre class="code k-spec" data-k="spec"></pre>
+  <div class="k-lanes" data-k="lanes" role="group" aria-label="Scheduler: the writes each job may make now"></div>
+  <div class="k-panel" data-k="scene-wrap">
+    <span class="k-head-title">The balance</span>
+    <canvas data-k="scene" class="stage" role="img"></canvas>
+    <p class="k-cap">Left, the pot: €200,000, dashed. Right, the treasury and each loan account, stacked. The beam is level when both sides weigh the same. A dashed block is money in no ledger; amber hatching over the stack, below the pot line, is money counted twice. Amber marks only states at rest, where no job is between its writes.</p>
+  </div>
+  <p class="k-lamp" data-k="lamp"><span class="k-lamp-dot" aria-hidden="true"></span><span class="k-lamp-text"></span></p>
+  <p class="note" data-k="cards-note">Each card is one state of this run, named for the step that made it: Debit(4471) is loan 4471’s debit, Crash(4471) a deploy hitting its job. The lesson defines these actions further down. “At rest” means no job is between its two writes.</p>
+  <ol class="k-strip" data-k="strip" aria-label="This run, state by state"></ol>
+  <p class="k-tally" data-k="tally"></p>
+  <p class="k-reveal" data-k="reveal" hidden>Short every time with debit first, over every time with credit first. The order picks the sign of the error, not its absence.</p>
+  <div class="readout" aria-live="polite">
+    <p data-k="why"></p>
+  </div>
+  <div class="row">
+    <button type="button" class="k-primary" data-k="run">Run the checker</button>
+    <button type="button" data-k="reset">Reset</button>
+  </div>
+  <div class="k-checker" data-k="checker" hidden>
+    <p class="k-states" data-k="states" aria-live="polite"></p>
+    <div class="k-lamps">
+      <p class="k-lamp" data-k="lamp-safe"><span class="k-lamp-dot" aria-hidden="true"></span><span class="k-lamp-text"></span></p>
+      <p class="k-lamp" data-k="lamp-live"><span class="k-lamp-dot" aria-hidden="true"></span><span class="k-lamp-text"></span></p>
+    </div>
+    <div class="k-trace" data-k="trace" hidden>
+      <p class="k-head-title" data-k="trace-title"></p>
+      <canvas data-k="escrow" class="stage" role="img"></canvas>
+      <p class="k-cap">One column per state, numbered as in the cards below. Its height is the total: treasury, plus what the outbox still owes (the dashed line beside it, outbox designs only), plus every loan account. The short ticks and the dashed line mark the pot, €200,000; amber shows how far a state at rest is off.</p>
+      <ol class="k-strip" data-k="trace-strip" aria-label="The shortest run that breaks the books, state by state"></ol>
+    </div>
+    <div class="k-trace" data-k="lasso" hidden>
+      <p class="k-head-title" data-k="lasso-title"></p>
+      <ol class="k-strip" data-k="lasso-strip" aria-label="A fair behavior that never settles, state by state"></ol>
+    </div>
+  </div>
+  <div class="k-win" data-k="win" tabindex="-1" hidden>
+    <p class="k-win-head">Fixed: the books add up at month-end</p>
+    <p>Both lamps green: <b data-k="win-two">37</b> states with 2 loans, <b data-k="win-three">181</b> with 3. The debit and the debt commit together, the relay delivers at least once, and the key makes a second delivery change nothing.</p>
+    <p data-k="win-guess"></p>
+    <canvas data-k="win-scene" role="img" aria-label="Every state of a run with a relay crash and a redelivery totals €200,000."></canvas>
+    <p class="k-cap">Pay 4471, Deliver, the relay crashes, Deliver again, Ack, then 4472. Every column reaches the pot: last month €50,000 was in no ledger, this month €0 is.</p>
+  </div>
+  <p class="jump" data-k="jump"><a href="#fix-the-bug">Ready to fix it? Jump to the challenge.</a></p>
+</template>
+<div class="lab" id="lab"></div>

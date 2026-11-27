@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson text (draft): The Key the Bank Forgot</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../lesson.css">
+<link rel="stylesheet" href="../katex/katex.min.css">
+<style>
+[hidden] { display: none !important; }
+pre.code { margin: 0; max-width: 100%; color: var(--code-text); background: var(--code-bg); border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-code); line-height: var(--leading-code); }
+.display-math { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: var(--space-1) 0; }
+.katex { font-size: var(--text-math); color: var(--ink); }
+.display-math .katex-display { margin: 0; }
+.display-math .katex-display > .katex { font-size: var(--text-math-display); }
+:not(.katex-mathml) > math { font-family: var(--font-math); font-size: var(--text-math); }
+.rule-box { max-width: 100%; }
+table.worked { font-family: var(--font-mono); font-size: var(--text-table); font-variant-numeric: tabular-nums; }
+table.worked td { white-space: nowrap; }
+table.worked th { white-space: normal; vertical-align: bottom; line-height: var(--leading-heading); }
+table.worked td:first-child, table.worked th:first-child { font-family: var(--font-ui); white-space: normal; color: var(--ink-soft); width: 1%; }
+
+.lab h3 { font-size: var(--text-h3); }
+.lab .readout { min-height: 5em; align-content: start; }
+.lab .note { font-size: var(--text-caption); color: var(--ink-soft); }
+.k-ask { display: grid; gap: var(--space-2); }
+.k-ask + .k-ask { margin-top: var(--space-3); }
+.k-ask .k-q { font-weight: var(--weight-bold); }
+.k-ask button.k-wrong { text-decoration: line-through; border-color: var(--rule); color: var(--ink-soft); }
+.k-ask button.k-right { background: var(--input-soft); border-color: var(--input); opacity: 1; }
+.k-ask .k-feedback { min-height: 1.6em; }
+.k-ask .k-feedback.k-bad { color: var(--accent-ink); }
+.k-ask .k-feedback:focus { outline: none; }
+.k-meter { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-1) var(--space-3); align-items: center; font-size: var(--text-caption); }
+.k-meter .bar { height: var(--space-3); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); overflow: hidden; background: var(--paper-2); }
+.k-meter .fill { height: 100%; width: 0; background: var(--accent); }
+.k-meter output { font-family: var(--font-mono); text-align: right; min-width: 5.5em; padding-right: var(--space-1); }
+.k-meter .scale { grid-column: 2; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--text-fig); color: var(--ink-soft); }
+.k-now { font-size: var(--text-caption); color: var(--ink-soft); }
+button.k-toggle[aria-pressed="true"]::before { content: "\2713\00a0"; }
+.k-working, .k-more { border-left: var(--line-mark) solid var(--rule); padding-left: var(--space-4); }
+.k-working { display: grid; gap: var(--space-2); }
+.k-working-note { color: var(--ink-soft); font-size: var(--text-ui); }
+.k-working-open { justify-self: start; }
+.k-working-body, .k-more-body { display: grid; gap: var(--space-block); }
+.k-working > *, .k-working-body > *, .k-more-body > * { min-width: 0; }
+.k-more-body { margin-top: var(--space-block); }
+.k-working-body:focus { outline: none; }
+.k-more > summary { cursor: pointer; font-family: var(--font-ui); font-weight: var(--weight-medium); color: var(--input); width: fit-content; }
+.k-still-text { display: none; }
+@media (prefers-reduced-motion: reduce) { .k-motion-text { display: none; } .k-still-text { display: inline; } }
+@media (max-width: 520px) { .k-meter { grid-template-columns: 1fr auto; } .k-meter > span:first-child { grid-column: 1 / -1; } .k-meter .bar { grid-column: 1; grid-row: 2; } .k-meter output { grid-column: 2; grid-row: 2; } .k-meter .scale { grid-column: 1; grid-row: 3; } }
+p .katex, li .katex, td .katex { white-space: normal; }
+p .katex-display, li .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+pre.code .c-keyword { color: var(--code-keyword); font-weight: var(--weight-medium); }
+pre.code .c-string { color: var(--code-string); }
+pre.code .c-number { color: var(--code-number); }
+pre.code .c-function { color: var(--code-function); font-weight: var(--weight-medium); }
+pre.code .c-call { color: var(--code-call); }
+pre.code .c-builtin { color: var(--code-builtin); }
+pre.code .c-comment { color: var(--code-comment); font-style: italic; }
+.tla-block { position: relative; }
+.tla-switch { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); font-family: var(--font-ui); font-size: var(--text-small); color: var(--ink-soft); margin-bottom: var(--space-1); cursor: pointer; }
+.tla-switch input { accent-color: var(--input); }
+pre.code .tla-sym { display: inline-block; width: calc(var(--w) * 1ch); text-align: center; color: var(--code-keyword); }
+pre.code .tla-sym[data-align="end"] { text-align: end; }
+pre.code .tla-sym[data-align="start"] { text-align: start; }
+pre.code .tla-prime { color: var(--accent); font-weight: var(--weight-medium); }
+pre.code .tla-a { display: none; }
+pre.code .c-rule { color: var(--code-comment); }
+.tla-sub sub, .prose sub { font-size: var(--text-micro); }
+.tla-block:has(.tla-switch input:checked) .tla-sym { width: auto; }
+.tla-block:has(.tla-switch input:checked) .tla-g { display: none; }
+.tla-block:has(.tla-switch input:checked) .tla-a { display: inline; }
+pre.code .tla-rule .tla-g { display: inline-flex; width: 100%; }
+pre.code .tla-module { display: flex; align-items: center; gap: var(--space-2); width: 100%; }
+pre.code .tla-module::before, pre.code .tla-module::after { content: ""; flex: 1; border-top: var(--line-hair) solid var(--code-comment); }
+pre.code .tla-end { display: block; width: 100%; height: var(--space-1); border-top: var(--line-hair) solid var(--code-comment); border-bottom: var(--line-hair) solid var(--code-comment); }
+.tla-block:has(.tla-switch input:checked) .tla-rule .tla-g { display: none; }
+.table { color: var(--ink); background: linear-gradient(to right, var(--paper) 30%, transparent) left / var(--space-8) 100% no-repeat local, linear-gradient(to left, var(--paper) 30%, transparent) right / var(--space-8) 100% no-repeat local, radial-gradient(farthest-side at 0 50%, var(--rule), transparent) left / var(--space-3) 100% no-repeat scroll, radial-gradient(farthest-side at 100% 50%, var(--rule), transparent) right / var(--space-3) 100% no-repeat scroll; }
+table.worked.k-symbols td { white-space: normal; }
+table.worked.k-symbols td code { white-space: nowrap; }
+table.worked.k-symbols td:first-child { font-family: var(--font-mono); font-size: var(--text-h3); color: var(--code-keyword); }
+@media (max-width: 520px) { table.worked.k-symbols td code { white-space: normal; } }
+
+.pending { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }
+</style>
+<div class="wrap">
+<nav class="crumbs" aria-label="Course"><a href="../index.html">The Payout Desk</a><span aria-hidden="true">/</span><span>Lesson 3</span><span aria-hidden="true">/</span><span>Lesson text (draft)</span></nav>
+<header><h1>The Key the Bank Forgot</h1><p class="links">Lesson text (draft) · <a href="1-sheet.html">Teacher&#x27;s sheet</a></p></header>
+<section id="paid-twice-after-the-weekend">
+<h2>Paid twice, after the weekend</h2>
+<p>Monday, 09:40. Finance runs the weekly reconciliation and two lines refuse to match. Two transfers of €50,000 to the bakery on the harbour, both with reference 4471. One left on Friday at 17:00. The other left on Monday at 09:12.</p>
+<p>You know this desk. In lesson 2 you made it survive a deploy: a restarted worker resumes the loans claimed in its own name, and every transfer carries the loan’s id as its idempotency key, so the bank pays a repeated request only once. The checker passed with two workers and with three. So what happened?</p>
+<p>Worker A’s log tells it in four lines. Friday, 17:00: “claimed loan 4471”, then “sent transfer 4471”. Then nothing, because the machine’s disk died before A could mark the loan paid, and nobody replaced it until Monday morning. Monday, 09:12: “resumed claim 4471”, then “sent transfer 4471”. Worker A did exactly what lesson 2 taught it. It found its own claim and sent again, with key 4471, trusting the bank to recognise it.</p>
+<p>The bank didn’t. Its documentation says so in small print: “Idempotency keys are kept for 24 hours.” By Monday the key was 64 hours old. To the bank, the second request was a brand new transfer, and it paid.</p>
+<p class="pending">[diagram:weekend: built on the lesson page]</p>
+<p>Lesson 2 ended on this scene, and on the one step that causes it: a step in which the bank forgets every key it holds. Written down, it is:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Forget</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> keys <span class="tla-sym tla-op" data-align="center" style="--w:1"><span class="tla-g">≠</span><span class="tla-a">#</span></span> {}
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> keys<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = {}
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>status, owner, pc, transfers, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>≠ (typed <code>#</code>) is “not equal”, and {} is the empty set. Before the step, the bank holds at least one key; after it, the bank holds none; everything else stays as it was. From the keys {4471} it leads to {}, and from {} it can’t happen at all. <strong>Forget is a step in which the bank drops every key it holds, at any moment it holds one.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">forget</span>(keys):
+    <span class="c-keyword">if</span> keys != <span class="c-builtin">set</span>():
+        <span class="c-keyword">yield</span> <span class="c-builtin">set</span>()
+
+<span class="c-builtin">print</span>(<span class="c-builtin">list</span>(<span class="c-call">forget</span>({<span class="c-number">4471</span>})), <span class="c-builtin">list</span>(<span class="c-call">forget</span>(<span class="c-builtin">set</span>())))</code></pre>
+<pre class="code" data-lang="text"><code>[set()] []</code></pre>
+<p>TLC found the double payout in six steps. But look at the words “at any moment”. This Forget may happen one second after the transfer. Against a bank like that, no resend is ever safe, and the honest conclusion would be that idempotency keys are useless. That isn’t the bank you have. Your bank forgets <em>after 24 hours</em>, and a desk that knows when the bank forgets can plan around it.</p>
+<p>The spec can’t say “after 24 hours”. It has no time in it at all. This lesson puts time in, and then, because time brings a new kind of trouble with it, lets the network lose messages. By the end you will have a worker that sends the money at most once even on Monday, and the checker will agree.</p>
+</section>
+
+<section id="where-is-saturday">
+<h2>Where is Saturday?</h2>
+<p>Here is a question to sit with before reading on. Lesson 2’s spec describes Thursday’s deploy as a behavior, a table of states, one row per step. In a table like that, which row is Saturday?</p>
+<p>None of them. A state assigns a value to every variable, and no variable says what time it is. A step says what changed, and nothing about how long it took. Two steps in a row could be a microsecond apart or a weekend apart, and the spec can’t tell the difference. That was a feature in lesson 2: EventuallyPaid had no deadline, so it needed no clock.</p>
+<p>The bank’s rule, though, is all about time. So we add time the only way a spec ever adds anything: as a variable.</p>
+<p>The new variable is called now, and it holds the current time as a whole number of <strong>ticks</strong>. We choose what a tick means. Here, one tick is 12 hours: Friday 17:00 is tick 0, Saturday 05:00 is tick 1, Saturday 17:00 is tick 2. A new kind of step, <strong>Tick</strong>, adds one to now and changes nothing else. Every other step leaves now alone. So time passes only by Tick steps, and any number of other steps can happen between two ticks.</p>
+<p>The bank changes too. When it pays, it stores the key together with the time it paid, as a pair: (4471, 0) means “key 4471, stored at tick 0”. And it may forget a key only once the key has been kept for 24 hours, which is two ticks. We call that length TTL, short for “time to live”, the usual name for how long a cache keeps an entry.</p>
+<h3>The weekend, by hand</h3>
+<p>Let’s replay Friday with a clock column. Before you look at rows 4 to 6, decide: could the bank forget the key at row 4?</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">now</th><th scope="col">when</th><th scope="col">pc of A</th><th scope="col">keys</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>0</td><td>Fri 17:00</td><td>idle</td><td>{}</td><td>0</td></tr><tr><td>1</td><td>Claim(A)</td><td>0</td><td>Fri 17:00</td><td>claimed</td><td>{}</td><td>0</td></tr><tr><td>2</td><td>Send(A)</td><td>0</td><td>Fri 17:00</td><td>sent</td><td>{(4471, 0)}</td><td>1</td></tr><tr><td>3</td><td>Crash(A)</td><td>0</td><td>Fri 17:00</td><td>idle</td><td>{(4471, 0)}</td><td>1</td></tr><tr><td>4</td><td>Tick</td><td>1</td><td>Sat 05:00</td><td>idle</td><td>{(4471, 0)}</td><td>1</td></tr><tr><td>5</td><td>Tick</td><td>2</td><td>Sat 17:00</td><td>idle</td><td>{(4471, 0)}</td><td>1</td></tr><tr><td>6</td><td>Forget</td><td>2</td><td>Sat 17:00</td><td>idle</td><td>{}</td><td>1</td></tr><tr><td>7</td><td>Resume(A)</td><td>2</td><td>Sat 17:00</td><td>claimed</td><td>{}</td><td>1</td></tr><tr><td>8</td><td>Send(A)</td><td>2</td><td>Sat 17:00</td><td>sent</td><td>{(4471, 2)}</td><td>2</td></tr></tbody></table></div>
+<p>No, it couldn’t. At row 4 the key is 12 hours old, and the bank keeps keys for 24. Forget becomes possible only at row 5, when now reaches 0 + 2. Try the other order too: if worker A had resumed before the two ticks, the key would still be there, the second Send would land on it, and the bank would pay nothing. The bug needs the clock to pass the key’s 24 hours between the two sends. That is the weekend, and the model doesn’t care whether it was 24 hours or 64: any gap of at least two ticks is a weekend to this bank.</p>
+<p>Here is the same replay in Python, with the bank forgetting as soon as it is allowed to:</p>
+<pre class="code" data-lang="python"><code>TTL = <span class="c-number">2</span>
+now, keys, transfers = <span class="c-number">0</span>, <span class="c-builtin">set</span>(), <span class="c-number">0</span>
+
+<span class="c-keyword">def</span> <span class="c-function">send</span>():
+    <span class="c-keyword">global</span> keys, transfers
+    <span class="c-keyword">if</span> <span class="c-keyword">not</span> <span class="c-builtin">any</span>(loan == <span class="c-number">4471</span> <span class="c-keyword">for</span> loan, _ <span class="c-keyword">in</span> keys):
+        transfers += <span class="c-number">1</span>
+        keys = keys | {(<span class="c-number">4471</span>, now)}
+
+<span class="c-keyword">def</span> <span class="c-function">forget</span>():
+    <span class="c-keyword">global</span> keys
+    keys = {k <span class="c-keyword">for</span> k <span class="c-keyword">in</span> keys <span class="c-keyword">if</span> now &lt; k[<span class="c-number">1</span>] + TTL}
+
+<span class="c-call">send</span>()
+<span class="c-keyword">for</span> _ <span class="c-keyword">in</span> <span class="c-builtin">range</span>(<span class="c-number">2</span>):
+    now += <span class="c-number">1</span>
+    <span class="c-call">forget</span>()
+    <span class="c-builtin">print</span>(now, keys, transfers)
+<span class="c-call">send</span>()
+<span class="c-builtin">print</span>(now, keys, transfers)</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">1</span> {(<span class="c-number">4471</span>, <span class="c-number">0</span>)} <span class="c-number">1</span>
+<span class="c-number">2</span> set() <span class="c-number">1</span>
+<span class="c-number">2</span> {(<span class="c-number">4471</span>, <span class="c-number">2</span>)} <span class="c-number">2</span></code></pre>
+<p>At tick 1 the key survives. At tick 2 it is gone, and the next send pays a second time, with a fresh key stamped at tick 2.</p>
+<p class="pending">[lab: built on the lesson page]</p>
+</section>
+
+<section id="time-is-just-a-variable">
+<h2>Time is just a variable</h2>
+<p>You have just seen the whole trick, so let’s name it before writing it down: <strong>real time is modelled as an ordinary variable, and the passing of time as an ordinary action.</strong> Nothing about TLA+ changes. The clock is one more column in the table, and Tick is one more kind of step.</p>
+<p class="pending">[diagram:clock: built on the lesson page]</p>
+<p>Two new words first. A <strong>constant</strong> is a name the spec leaves open, to be filled in by the configuration file when TLC runs it. We need two. TTL is the bank’s memory, in ticks. MaxTime is the last tick the clock may reach, and we will see in a moment why the clock needs a last tick at all.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-keyword">CONSTANTS</span> MaxTime, TTL
+<span class="c-keyword">VARIABLES</span> now, status, owner, pc, transfers, keys, crashed</code></pre></div>
+<p>The keyword CONSTANTS declares the constants, just as VARIABLES declares the variables; the spec uses MaxTime and TTL by name and never says what they are. The variables are lesson 2’s fixed desk (status, owner, pc, transfers, keys, crashed) plus now. Init adds now = 0. Here is the clock’s step:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Tick</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> now &lt; MaxTime
+        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> now<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = now + <span class="c-number">1</span>
+        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>status, owner, pc, transfers, keys,
+                       crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Remember that a column of ∧ signs means every line must hold, and that a primed variable is its value after the step. Line by line: before the step, now is less than MaxTime; after it, now is one more than before; every other variable stays as it was. With MaxTime 3, from tick 2 the one Tick goes to tick 3, and from tick 3 there is none. <strong>Tick is a step in which the clock moves forward one tick, as long as it hasn’t reached MaxTime, and nothing else changes.</strong></p>
+<pre class="code" data-lang="python"><code>MAX_TIME = <span class="c-number">3</span>
+
+<span class="c-keyword">def</span> <span class="c-function">tick</span>(now):
+    <span class="c-keyword">if</span> now &lt; MAX_TIME:
+        <span class="c-keyword">yield</span> now + <span class="c-number">1</span>
+
+now, seen = <span class="c-number">0</span>, [<span class="c-number">0</span>]
+<span class="c-keyword">while</span> steps := <span class="c-builtin">list</span>(<span class="c-call">tick</span>(now)):
+    now = steps[<span class="c-number">0</span>]
+    seen.<span class="c-call">append</span>(now)
+<span class="c-builtin">print</span>(seen)</code></pre>
+<pre class="code" data-lang="text"><code>[<span class="c-number">0</span>, <span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>]</code></pre>
+<p>Why stop at MaxTime? Because TLC visits every reachable state, and a clock that can always tick once more makes infinitely many of them. So we give the model a finite clock, and after MaxTime the model simply stops ticking. That is a small lie about the world, and later in this lesson it will cost us something real.</p>
+<p>Three things follow from making time an action, and they are worth saying out loud.</p>
+<p>First, nothing forces Tick to happen, and nothing forces it to wait. Worker A can take five steps inside one tick, or the clock can race through a whole weekend while every worker sits still. Both happen in production: a fast machine, a dead machine.</p>
+<p>Second, the clock is <strong>discrete</strong>: it jumps from tick to tick, with nothing in between. We can’t say 17:00:03, only tick 0. That is enough whenever the only question is which side of a line a step falls on, and here it is: was the second send more or less than 24 hours after the first? Make ticks as coarse as your rules allow. Every extra tick is extra states.</p>
+<p>Third, now is time as an outside observer would read it, not any machine’s clock. Nobody reads it unless an action mentions it, and the first action to mention it is the bank’s.</p>
+<h3>A timeout is a guard</h3>
+<p>The bank’s keys are now pairs, and the spec reads them like this:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Known</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∃</span><span class="tla-a">\E</span></span> k <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> keys : k[<span class="c-number">1</span>] = Loan
+
+<span class="c-function">Forget</span>(k) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> now <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≥</span><span class="tla-a">&gt;=</span></span> k[<span class="c-number">2</span>] + TTL
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> keys<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = keys \ {k}
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, pc, transfers,
+                             crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Loan is 4471, as in lesson 2. A pair is a tuple, and k[1] is its first element, k[2] its second: TLA+ counts from 1. The ∃ reads “there is”, so Known says: there is a key in keys whose loan part is 4471. The backslash between two sets is set difference, “keys without k”. And ≥ is “at least”. Forget(k) line by line: before the step, now is at least the key’s stored time plus TTL; after it, the bank’s keys are the old ones without k; nothing else changes. <strong>Known is true when the bank holds a key for loan 4471, and Forget(k) is a step in which the bank drops key k once it is at least TTL ticks old.</strong></p>
+<pre class="code" data-lang="python"><code>TTL = <span class="c-number">2</span>
+
+<span class="c-keyword">def</span> <span class="c-function">known</span>(keys):
+    <span class="c-keyword">return</span> <span class="c-builtin">any</span>(k[<span class="c-number">0</span>] == <span class="c-number">4471</span> <span class="c-keyword">for</span> k <span class="c-keyword">in</span> keys)
+
+<span class="c-keyword">def</span> <span class="c-function">forget</span>(now, keys):
+    <span class="c-keyword">for</span> k <span class="c-keyword">in</span> keys:
+        <span class="c-keyword">if</span> now &gt;= k[<span class="c-number">1</span>] + TTL:
+            <span class="c-keyword">yield</span> keys - {k}
+
+keys = <span class="c-builtin">frozenset</span>({(<span class="c-number">4471</span>, <span class="c-number">0</span>)})
+<span class="c-keyword">for</span> now <span class="c-keyword">in</span> <span class="c-builtin">range</span>(<span class="c-number">4</span>):
+    after = [<span class="c-builtin">set</span>(a) <span class="c-keyword">for</span> a <span class="c-keyword">in</span> <span class="c-call">forget</span>(now, keys)]
+    <span class="c-builtin">print</span>(now, <span class="c-call">known</span>(keys), after)</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">0</span> True []
+<span class="c-number">1</span> True []
+<span class="c-number">2</span> True [set()]
+<span class="c-number">3</span> True [set()]</code></pre>
+<p>Python counts from 0, so its k[1] is the time; TLA+’s k[2] is the same element.</p>
+<p>This is what a <strong>timeout</strong> looks like in a spec: a guard on now. Before the time, the action isn’t enabled. From then on, it is. And “enabled” is all it is, exactly as in lesson 2: Forget may happen at tick 2, or tick 3, or never. That models “keys are kept for at least 24 hours”, which is all the bank’s documentation promises, and the weaker promise is the safer one to build on. A desk that is safe against every moment the bank might forget is safe against the moment it actually does.</p>
+<p class="pending">[diagram:timeout-guard: built on the lesson page]</p>
+<p>Send stamps the key with the time:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Send</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;claimed&quot;</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">IF</span> Known
+                <span class="c-keyword">THEN</span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>transfers, keys<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
+                <span class="c-keyword">ELSE</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> transfers<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = transfers + <span class="c-number">1</span>
+                     <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> keys<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = keys <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span> {<span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>Loan, now<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>}
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;sent&quot;</span>]
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>This is lesson 2’s Send with one change: the key it adds is the pair ⟨4471, now⟩, typed <code>&lt;&lt;Loan, now&gt;&gt;</code>, instead of plain 4471. The IF here doesn’t pick a value, as it did in lesson 2; it picks which of two lists of conditions the step must meet, the THEN list or the ELSE list. The ELSE list is a column of ∧ of its own, indented under ELSE: indentation is how TLA+ shows which lines belong together, and both of those lines belong to the ELSE. Read it: worker w holds the loan; if the bank knows the key, transfers and keys stay as they were, and otherwise there is one more transfer and the bank stores the key with the current time; w has sent; the clock, status, owner and crash flag stay. <strong>A Send pays only when the bank holds no key for the loan, and when it pays, the bank remembers the key along with the moment it paid.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">send</span>(now, transfers, keys):
+    <span class="c-keyword">if</span> <span class="c-builtin">any</span>(k[<span class="c-number">0</span>] == <span class="c-number">4471</span> <span class="c-keyword">for</span> k <span class="c-keyword">in</span> keys):
+        <span class="c-keyword">return</span> transfers, <span class="c-builtin">set</span>(keys)
+    <span class="c-keyword">return</span> transfers + <span class="c-number">1</span>, keys | {(<span class="c-number">4471</span>, now)}
+
+<span class="c-builtin">print</span>(<span class="c-call">send</span>(<span class="c-number">0</span>, <span class="c-number">0</span>, <span class="c-builtin">set</span>()))
+<span class="c-builtin">print</span>(<span class="c-call">send</span>(<span class="c-number">1</span>, <span class="c-number">1</span>, {(<span class="c-number">4471</span>, <span class="c-number">0</span>)}))
+<span class="c-builtin">print</span>(<span class="c-call">send</span>(<span class="c-number">2</span>, <span class="c-number">1</span>, <span class="c-builtin">set</span>()))</code></pre>
+<pre class="code" data-lang="text"><code>(<span class="c-number">1</span>, {(<span class="c-number">4471</span>, <span class="c-number">0</span>)})
+(<span class="c-number">1</span>, {(<span class="c-number">4471</span>, <span class="c-number">0</span>)})
+(<span class="c-number">2</span>, {(<span class="c-number">4471</span>, <span class="c-number">2</span>)})</code></pre>
+<p>The last line is Saturday evening: no key, so a second transfer. Then the clock and the bank join the desk’s next-state relation:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Next</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Tick
+        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∃</span><span class="tla-a">\E</span></span> k <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> keys : Forget(k)
+        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∃</span><span class="tla-a">\E</span></span> w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers : Work(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Crash(w)</code></pre></div>
+<p>Lesson 1 read a column of ∧ signs as a bulleted list where every line must hold. A column of ∨ signs, typed <code>\/</code>, is the same kind of list where at least one line must hold. So a step of Next is a Tick, or a Forget, or a worker’s step, and any one is enough. Work(w) is lesson 2’s list of a worker’s ordinary steps: Claim, Resume, Skip, Send, Mark. <strong>A step of the desk is a tick of the clock, or the bank forgetting one of its keys, or some worker working or crashing.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">clock_and_bank</span>(now, keys, max_time=<span class="c-number">3</span>, ttl=<span class="c-number">2</span>):
+    steps = [<span class="c-string">&quot;Tick&quot;</span>] <span class="c-keyword">if</span> now &lt; max_time <span class="c-keyword">else</span> []
+    <span class="c-keyword">for</span> k <span class="c-keyword">in</span> <span class="c-builtin">sorted</span>(keys):
+        <span class="c-keyword">if</span> now &gt;= k[<span class="c-number">1</span>] + ttl:
+            steps.<span class="c-call">append</span>(<span class="c-string">f&quot;</span><span class="c-string">Forget(</span>{k}<span class="c-string">)</span><span class="c-string">&quot;</span>)
+    <span class="c-keyword">return</span> steps
+
+<span class="c-keyword">for</span> now <span class="c-keyword">in</span> <span class="c-builtin">range</span>(<span class="c-number">4</span>):
+    <span class="c-builtin">print</span>(now, <span class="c-call">clock_and_bank</span>(now, {(<span class="c-number">4471</span>, <span class="c-number">0</span>)}))</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">0</span> [&#x27;Tick&#x27;]
+<span class="c-number">1</span> [&#x27;Tick&#x27;]
+<span class="c-number">2</span> [&#x27;Tick&#x27;, &#x27;<span class="c-function">Forget</span>((<span class="c-number">4471</span>, <span class="c-number">0</span>))&#x27;]
+<span class="c-number">3</span> [&#x27;<span class="c-function">Forget</span>((<span class="c-number">4471</span>, <span class="c-number">0</span>))&#x27;]</code></pre>
+<p>At tick 3 the clock has reached MaxTime and Tick is no longer enabled. This lesson checks only safety properties, NoDoublePayout now and one more later, so Spec is Init and always-Next, without lesson 2’s Fairness. We will come back to liveness near the end.</p>
+</section>
+
+<section id="tlc-finds-the-weekend">
+<h2>TLC finds the weekend</h2>
+<p>The configuration file now fills in the constants, one CONSTANTS line per value, before the SPECIFICATION and INVARIANT lines you know from lesson 1:</p>
+<pre class="code" data-lang="text"><code><span class="c-keyword">CONSTANTS</span> MaxTime = <span class="c-number">3</span>
+<span class="c-keyword">CONSTANTS</span> <span class="c-keyword">TTL</span> = <span class="c-number">2</span>
+<span class="c-keyword">SPECIFICATION</span> Spec
+<span class="c-keyword">INVARIANT</span> NoDoublePayout</code></pre>
+<p>And TLC, trimmed, with now and transfers pulled up beside each step:</p>
+<pre class="code" data-lang="text"><code>
+Error: Invariant NoDoublePayout <span class="c-keyword">is</span> violated.
+
+State <span class="c-number">1</span>: &lt;Initial predicate&gt;   now = <span class="c-number">0</span>   transfers = <span class="c-number">0</span>
+
+State <span class="c-number">2</span>: &lt;Claim ...&gt;           now = <span class="c-number">0</span>   transfers = <span class="c-number">0</span>
+
+State <span class="c-number">3</span>: &lt;Send ...&gt;            now = <span class="c-number">0</span>   transfers = <span class="c-number">1</span>
+
+State <span class="c-number">4</span>: &lt;Tick ...&gt;            now = <span class="c-number">1</span>   transfers = <span class="c-number">1</span>
+
+State <span class="c-number">5</span>: &lt;Tick ...&gt;            now = <span class="c-number">2</span>   transfers = <span class="c-number">1</span>
+
+State <span class="c-number">6</span>: &lt;Next ...&gt;            now = <span class="c-number">2</span>   transfers = <span class="c-number">1</span>
+
+State <span class="c-number">7</span>: &lt;Crash ...&gt;           now = <span class="c-number">2</span>   transfers = <span class="c-number">1</span>
+
+State <span class="c-number">8</span>: &lt;Resume ...&gt;          now = <span class="c-number">2</span>   transfers = <span class="c-number">1</span>
+
+State <span class="c-number">9</span>: &lt;Send ...&gt;            now = <span class="c-number">2</span>   transfers = <span class="c-number">2</span>
+<span class="c-number">332</span> states generated, <span class="c-number">201</span> distinct states found, ...</code></pre>
+<p>Read it from the top. Each State line numbers a state of the counterexample and names, in angle brackets, the action whose step produced it (TLC also prints where that action is in the file, trimmed here to “...”). State 1 has no step before it, so it says &lt;Initial predicate&gt;: it is a start state that Init allows. Nine states, so eight steps, the same eight as our table. Two details differ. The crash comes after the ticks instead of before them, which changes nothing, because a crash doesn’t touch the clock. And State 6 is labelled “Next” instead of “Forget”: this version of TLC named the line of Next that holds “there is a k in keys with Forget(k)”, and it does the same for the network’s steps later on. When a label doesn’t say which step it was, read the variables. Here the keys go from {⟨4471, 0⟩} to {}, and only Forget does that.</p>
+<p>The last line counts two things. “Generated” is every successor state TLC computed, repeats included; “distinct” is how many different states those were, the number that matters. TLC stopped at the first bad state, after 201 distinct states. Run it with the <code>-continue</code> flag and it explores everything: 238 reachable states.</p>
+<h3>A clock that stops too early</h3>
+<p>Now set MaxTime to 1 and run it again. Predict first: what changes?</p>
+<pre class="code" data-lang="text"><code>Model checking completed. No error has been found.
+<span class="c-number">86</span> states generated, <span class="c-number">62</span> distinct states found, ...</code></pre>
+<p>No error. The weekend needs the clock to reach tick 2, and this model’s clock stops on Saturday morning. Every state in it is truly safe; the model just doesn’t contain Saturday evening. <strong>TLC can only find a bug that fits inside the clock you gave it.</strong></p>
+<p>Here is how the state count grows as the clock gets longer, with TTL fixed at 2:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col">MaxTime</th><th scope="col">0</th><th scope="col">1</th><th scope="col">2</th><th scope="col">3</th><th scope="col">4</th><th scope="col">5</th><th scope="col">6</th></tr></thead><tbody><tr><td>states</td><td>23</td><td>62</td><td>139</td><td>238</td><td>365</td><td>514</td><td>685</td></tr><tr><td>paid twice?</td><td>no</td><td>no</td><td>yes</td><td>yes</td><td>yes</td><td>yes</td><td>yes</td></tr></tbody></table></div>
+<p class="pending">[diagram:clock-bound: built on the lesson page]</p>
+<p>Look at the first column. With MaxTime 0 the clock never moves, the bank never forgets, and the model is exactly lesson 2’s fixed desk: 23 states, the same 23 TLC reported there. A frozen clock is a world without time. The bug appears as soon as the clock can reach TTL, and from then on every longer clock finds it too. So here is a working habit: once a spec passes, run it again with a longer clock, and see whether the verdict changes.</p>
+</section>
+
+<section id="ask-before-you-resend">
+<h2>Ask before you resend</h2>
+<p>Who knows for certain whether the bakery was paid? Not worker A. Not the loans table. The bank, and it knows for longer than 24 hours: it forgets idempotency keys, but it never forgets a payment. Every transfer it ever made is on its statement, and it lets you look one up by reference.</p>
+<p>So change what a resumed worker does. Instead of sending again, it looks first. Resume now puts the worker in a new pc value, “looking”, and one new step reads the bank’s answer:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Lookup</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;looking&quot;</span>
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] =
+                    <span class="c-keyword">IF</span> transfers &gt; <span class="c-number">0</span> <span class="c-keyword">THEN</span> <span class="c-string">&quot;sent&quot;</span> <span class="c-keyword">ELSE</span> <span class="c-string">&quot;claimed&quot;</span>]
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, transfers,
+                             keys, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>This IF is the kind from lesson 2: it sits where a value goes, on the right of <code>=</code>, so it picks a value, “sent” or “claimed”, and that value becomes w’s new pc. Worker w is looking; afterwards, if the bank has made a transfer, w goes to “sent”, ready to mark the loan paid, and otherwise back to “claimed”, ready to send; nothing else changes. <strong>Lookup(w) is a step in which a resumed worker asks the bank whether the money moved, and skips the send if it did.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">lookup</span>(transfers):
+    <span class="c-keyword">return</span> <span class="c-string">&quot;sent&quot;</span> <span class="c-keyword">if</span> transfers &gt; <span class="c-number">0</span> <span class="c-keyword">else</span> <span class="c-string">&quot;claimed&quot;</span>
+
+<span class="c-builtin">print</span>(<span class="c-call">lookup</span>(<span class="c-number">1</span>), <span class="c-call">lookup</span>(<span class="c-number">0</span>))</code></pre>
+<pre class="code" data-lang="text"><code>sent claimed</code></pre>
+<p>TLC, MaxTime 3: no error, 228 distinct states. With MaxTime 6: no error, 591. The weekend is fixed, however long the clock runs.</p>
+<p>Now look hard at Lookup and ask what it assumes. In one atomic step, the worker reads the bank’s ledger and decides. Lesson 1 taught you to be suspicious of exactly this kind of step. A real worker can’t read the bank’s memory; it sends a question over the network, and an answer comes back later. Or doesn’t.</p>
+</section>
+
+<section id="messages-get-lost">
+<h2>Messages get lost</h2>
+<p>So far a Send went straight into the bank’s ledger. Real systems don’t work that way. Worker A puts a request on the network, and some time later the bank receives it. A <strong>message</strong> is a value one party puts in the network for another party to take out later. While it is out there, it is <strong>in flight</strong>, and the network may deliver it late or never. A message the network never delivers is <strong>lost</strong>.</p>
+<h3>Two worlds that look the same</h3>
+<p>Here is the second worked example, and it is the heart of the lesson. Friday, 17:00. Worker A sends the transfer request and waits for the bank’s reply, “ok”. Nothing comes back. Two very different things could have happened.</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">world 1: the request is lost</th><th scope="col">world 2: the reply is lost</th></tr></thead><tbody><tr><td>1</td><td>Claim(A)</td><td>Claim(A)</td></tr><tr><td>2</td><td>Send(A): request in flight</td><td>Send(A): request in flight</td></tr><tr><td>3</td><td>the network loses the request</td><td>the bank pays and replies “ok”</td></tr><tr><td>4</td><td>(nothing)</td><td>the network loses the “ok”</td></tr><tr><td>what A sees</td><td>waiting, no reply</td><td>waiting, no reply</td></tr><tr><td>transfers</td><td>0</td><td>1</td></tr></tbody></table></div>
+<p>Before reading on, put yourself in A’s place. Should you send again?</p>
+<p>In world 1, you must, or the bakery is never paid. In world 2, sending again is a second transfer, harmless only while the bank still holds key 4471. And from inside A, the two worlds are identical:</p>
+<pre class="code" data-lang="python"><code>lost_request = {<span class="c-string">&quot;pc of A&quot;</span>: <span class="c-string">&quot;waiting&quot;</span>, <span class="c-string">&quot;replies&quot;</span>: <span class="c-builtin">set</span>(),
+                <span class="c-string">&quot;transfers&quot;</span>: <span class="c-number">0</span>}
+lost_reply = {<span class="c-string">&quot;pc of A&quot;</span>: <span class="c-string">&quot;waiting&quot;</span>, <span class="c-string">&quot;replies&quot;</span>: <span class="c-builtin">set</span>(),
+              <span class="c-string">&quot;transfers&quot;</span>: <span class="c-number">1</span>}
+
+<span class="c-keyword">def</span> <span class="c-function">seen_by_a</span>(world):
+    <span class="c-keyword">return</span> world[<span class="c-string">&quot;pc of A&quot;</span>], world[<span class="c-string">&quot;replies&quot;</span>]
+
+<span class="c-builtin">print</span>(<span class="c-call">seen_by_a</span>(lost_request) == <span class="c-call">seen_by_a</span>(lost_reply))
+<span class="c-builtin">print</span>(lost_request[<span class="c-string">&quot;transfers&quot;</span>], lost_reply[<span class="c-string">&quot;transfers&quot;</span>])</code></pre>
+<pre class="code" data-lang="text"><code>True
+<span class="c-number">0</span> <span class="c-number">1</span></code></pre>
+<p>No amount of cleverness inside worker A can tell these apart, because the difference lives in the bank. That is the first thing message loss teaches: <strong>a worker that hears nothing doesn’t know whether its request arrived.</strong></p>
+<p class="pending">[diagram:two-worlds: built on the lesson page]</p>
+<h3>The network in the spec</h3>
+<p>The spec gets a new variable, net: the set of messages in flight, empty at the start. A message is a <strong>record</strong>, a value with named fields, like a small object. <code>[kind |-&gt; "pay", sent |-&gt; 0]</code> is a message whose kind is “pay”, sent at tick 0: each <code>|-&gt;</code>, typeset as the arrow ↦, pairs a field’s name with its value. And m.kind reads the kind field of a message m, like a property in TypeScript. Here is the new Send:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Send</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;claimed&quot;</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> net<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = net <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span> {[kind <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> <span class="c-string">&quot;pay&quot;</span>, sent <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> now]}
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;waiting&quot;</span>]
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, transfers, keys,
+                           crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Worker w holds the loan; afterwards, the network holds one more message, a payment request stamped with the current time; w is waiting; nothing else changes, and in particular no money moves. <strong>Send(w) puts a payment request in flight and leaves the worker waiting for a reply.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">send</span>(now, net):
+    <span class="c-keyword">return</span> net | {(<span class="c-string">&quot;pay&quot;</span>, now)}, <span class="c-string">&quot;waiting&quot;</span>
+
+<span class="c-builtin">print</span>(<span class="c-call">send</span>(<span class="c-number">0</span>, <span class="c-builtin">set</span>()))</code></pre>
+<pre class="code" data-lang="text"><code>({(&#x27;pay&#x27;, <span class="c-number">0</span>)}, &#x27;waiting&#x27;)</code></pre>
+<p>The money moves when the bank takes the request out of the network:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Deliver</span>(m) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> m.kind = <span class="c-string">&quot;pay&quot;</span>
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> net<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = (net \ {m}) <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span> {[kind <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> <span class="c-string">&quot;ok&quot;</span>]}
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">IF</span> Known
+                   <span class="c-keyword">THEN</span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>transfers, keys<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
+                   <span class="c-keyword">ELSE</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> transfers<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = transfers + <span class="c-number">1</span>
+                        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> keys<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = keys <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span> {<span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>Loan, now<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>}
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, pc, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Where does m come from? It is a message in the network, chosen by a “there is” in Next, just as Forget(k) gets its k: Next will gain a line reading <code>\E m \in net : Deliver(m) \/ Drop(m)</code>, “there is a message m in flight that the bank delivers or the network drops”. Drop comes next. Read Deliver(m) line by line: message m is a payment request; afterwards, m has left the network and an “ok” reply has joined it; the bank pays and stores the key unless it already knows the key, exactly as Send did before; no worker’s pc changes, because the workers haven’t heard anything yet. <strong>Deliver(m) is the bank receiving a payment request, paying it if the key is new, and putting a reply in flight.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">deliver</span>(m, now, net, transfers, keys):
+    net = (net - {m}) | {(<span class="c-string">&quot;ok&quot;</span>,)}
+    <span class="c-keyword">if</span> <span class="c-builtin">any</span>(k[<span class="c-number">0</span>] == <span class="c-number">4471</span> <span class="c-keyword">for</span> k <span class="c-keyword">in</span> keys):
+        <span class="c-keyword">return</span> net, transfers, keys
+    <span class="c-keyword">return</span> net, transfers + <span class="c-number">1</span>, keys | {(<span class="c-number">4471</span>, now)}
+
+m = (<span class="c-string">&quot;pay&quot;</span>, <span class="c-number">0</span>)
+<span class="c-builtin">print</span>(<span class="c-call">deliver</span>(m, <span class="c-number">0</span>, {m}, <span class="c-number">0</span>, <span class="c-builtin">set</span>()))
+<span class="c-builtin">print</span>(<span class="c-call">deliver</span>(m, <span class="c-number">0</span>, {m}, <span class="c-number">1</span>, {(<span class="c-number">4471</span>, <span class="c-number">0</span>)}))</code></pre>
+<pre class="code" data-lang="text"><code>({(&#x27;ok&#x27;,)}, <span class="c-number">1</span>, {(<span class="c-number">4471</span>, <span class="c-number">0</span>)})
+({(&#x27;ok&#x27;,)}, <span class="c-number">1</span>, {(<span class="c-number">4471</span>, <span class="c-number">0</span>)})</code></pre>
+<p>The second line is a repeat request landing on a known key: a reply, and no money. Two more actions finish the network:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Drop</span>(m) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> net<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = net \ {m}
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, pc, transfers, keys,
+                           crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
+
+<span class="c-function">Retry</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;waiting&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;claimed&quot;</span>]
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, net, transfers,
+                            keys, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Drop(m): afterwards, m is gone from the network, and nothing else changed; nobody receives it, nobody is told. Retry(w): w is waiting; afterwards it is back at “claimed”, ready to send again. <strong>Drop(m) is the network losing a message, and Retry(w) is a worker giving up on its reply and getting ready to resend.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">drop</span>(net):
+    <span class="c-keyword">for</span> m <span class="c-keyword">in</span> <span class="c-builtin">sorted</span>(net):
+        <span class="c-keyword">yield</span> net - {m}
+
+<span class="c-keyword">def</span> <span class="c-function">retry</span>(pc):
+    <span class="c-keyword">if</span> pc == <span class="c-string">&quot;waiting&quot;</span>:
+        <span class="c-keyword">yield</span> <span class="c-string">&quot;claimed&quot;</span>
+
+<span class="c-builtin">print</span>(<span class="c-builtin">list</span>(<span class="c-call">drop</span>({(<span class="c-string">&quot;pay&quot;</span>, <span class="c-number">0</span>), (<span class="c-string">&quot;ok&quot;</span>,)})))
+<span class="c-builtin">print</span>(<span class="c-builtin">list</span>(<span class="c-call">retry</span>(<span class="c-string">&quot;waiting&quot;</span>)), <span class="c-builtin">list</span>(<span class="c-call">retry</span>(<span class="c-string">&quot;sent&quot;</span>)))</code></pre>
+<pre class="code" data-lang="text"><code>[{(&#x27;pay&#x27;, <span class="c-number">0</span>)}, {(&#x27;ok&#x27;,)}]
+[&#x27;claimed&#x27;] []</code></pre>
+<p>Notice that Retry has no guard on now. The worker’s timeout fires after some wait, five seconds or five hours, and the spec allows any of them. The last piece, GotOk(w), lets the owner of the loan take an “ok” from the network and move to “sent”, after which Mark works as before.</p>
+<h3>A retry with a key</h3>
+<p>First, a bank that never forgets within the model: TTL 9, MaxTime 3. TLC: no error, 4,496 distinct states. Lost requests, lost replies, retries in any order, and the key absorbs every duplicate. Lesson 2’s fix was right for as long as the bank remembers.</p>
+<p>Now TTL 2. Predict: will the counterexample need a lost message?</p>
+<p>In the net column below, pay@0 is a payment request sent at tick 0, and ok is the bank’s reply.</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">now</th><th scope="col">pc of A</th><th scope="col">net</th><th scope="col">keys</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>0</td><td>idle</td><td>{}</td><td>{}</td><td>0</td></tr><tr><td>1</td><td>Claim(A)</td><td>0</td><td>claimed</td><td>{}</td><td>{}</td><td>0</td></tr><tr><td>2</td><td>Send(A)</td><td>0</td><td>waiting</td><td>{pay@0}</td><td>{}</td><td>0</td></tr><tr><td>3</td><td>Deliver</td><td>0</td><td>waiting</td><td>{ok}</td><td>{(4471, 0)}</td><td>1</td></tr><tr><td>4</td><td>Tick</td><td>1</td><td>waiting</td><td>{ok}</td><td>{(4471, 0)}</td><td>1</td></tr><tr><td>5</td><td>Tick</td><td>2</td><td>waiting</td><td>{ok}</td><td>{(4471, 0)}</td><td>1</td></tr><tr><td>6</td><td>Forget</td><td>2</td><td>waiting</td><td>{ok}</td><td>{}</td><td>1</td></tr><tr><td>7</td><td>Retry(A)</td><td>2</td><td>claimed</td><td>{ok}</td><td>{}</td><td>1</td></tr><tr><td>8</td><td>Send(A)</td><td>2</td><td>waiting</td><td>{ok, pay@2}</td><td>{}</td><td>1</td></tr><tr><td>9</td><td>Deliver</td><td>2</td><td>waiting</td><td>{ok}</td><td>{(4471, 2)}</td><td>2</td></tr></tbody></table></div>
+<p>It doesn’t. There is no Drop anywhere in it. The “ok” sat in the network for a whole day while worker A timed out, retried, and resent to a bank that had forgotten. Nothing was lost. It was only late. (In row 9, the second “ok” merges with the first: net is a set, and two equal messages in a set are one.) TLC finds this behavior in 9 steps; the whole model has 7,252 states.</p>
+<p>That is the second thing message loss teaches, and it is the one people resist: <strong>a timeout doesn’t mean the request failed. It means you stopped waiting.</strong> From inside the worker, late and lost look the same.</p>
+</section>
+
+<section id="ask-over-the-network">
+<h2>Ask over the network</h2>
+<p>So bring back the idea that fixed the weekend: don’t resend blindly, ask the bank. But ask the way a real worker asks, with messages. A waiting worker no longer retries. Instead, AskBank(w) puts a question in flight, <code>[kind |-&gt; "ask"]</code>, and moves w to a new pc value, “asking”. The bank answers the question:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Answer</span>(m) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> m.kind = <span class="c-string">&quot;ask&quot;</span>
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> net<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = (net \ {m}) <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span>
+                  {<span class="c-keyword">IF</span> transfers &gt; <span class="c-number">0</span> <span class="c-keyword">THEN</span> [kind <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> <span class="c-string">&quot;found&quot;</span>]
+                                    <span class="c-keyword">ELSE</span> [kind <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> <span class="c-string">&quot;absent&quot;</span>]}
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, pc, transfers,
+                             keys, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>As with Deliver, m is a message in flight, picked by a “there is” in Next. The IF here sits inside the set braces, where a value goes, so it picks a value: the one reply that goes into the network. Message m is a question; afterwards, the question has left the network, and a reply has joined it: “found” if the bank has made a transfer, “absent” if it hasn’t; nothing else changes. <strong>Answer(m) is the bank looking up loan 4471 in its ledger and putting the result in flight.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">answer</span>(net, transfers):
+    reply = (<span class="c-string">&quot;found&quot;</span>,) <span class="c-keyword">if</span> transfers &gt; <span class="c-number">0</span> <span class="c-keyword">else</span> (<span class="c-string">&quot;absent&quot;</span>,)
+    <span class="c-keyword">return</span> (net - {(<span class="c-string">&quot;ask&quot;</span>,)}) | {reply}
+
+<span class="c-builtin">print</span>(<span class="c-builtin">sorted</span>(<span class="c-call">answer</span>({(<span class="c-string">&quot;ask&quot;</span>,), (<span class="c-string">&quot;pay&quot;</span>, <span class="c-number">0</span>)}, <span class="c-number">0</span>)))
+<span class="c-builtin">print</span>(<span class="c-builtin">sorted</span>(<span class="c-call">answer</span>({(<span class="c-string">&quot;ask&quot;</span>,), (<span class="c-string">&quot;ok&quot;</span>,)}, <span class="c-number">1</span>)))</code></pre>
+<pre class="code" data-lang="text"><code>[(&#x27;absent&#x27;,), (&#x27;pay&#x27;, <span class="c-number">0</span>)]
+[(&#x27;found&#x27;,), (&#x27;ok&#x27;,)]</code></pre>
+<p>Look at the first line before going further. The bank says “absent”, and it is telling the truth, while a payment request sits in the same network, not yet delivered.</p>
+<p>On the worker’s side, GotOk(w) now accepts “found” as well as “ok”, and a new step, GotAbsent(w), lets an asking worker take an “absent” and go back to “claimed”, to send again. Asking can repeat: a worker still waiting for its answer may ask again, in case the question was lost.</p>
+<p>Predict: is this safe?</p>
+<p>TLC says no, in 11 steps: Claim(A), Send(A), AskBank(A), Answer, Deliver, Tick, Tick, Forget, GotAbsent(A), Send(A), Deliver. In words: A sends, and asks almost at once. The bank answers the question before the payment request arrives: absent. Then the request arrives and the bank pays. A whole day goes by, and the key goes with it. Then A reads the answer, absent, and sends again. (The bank’s “ok” for the first request is in the network too, but the network delivers in any order, and A happens to read the “absent” first.)</p>
+<p class="pending">[diagram:stale-answer: built on the lesson page]</p>
+<p><strong>The answer was true when the bank wrote it and false when worker A read it.</strong> An answer describes the bank at the moment it was written, and a request in flight can change the bank after that moment. “Absent” really means “not yet”. It can only mean “never” if nothing that could still pay is in flight.</p>
+<p>And here is the hard part: worker A can’t pull its request back out of the network. Once it’s sent, it is out of A’s hands. Only the receiver can make a request expire.</p>
+</section>
+
+<section id="the-fix-a-deadline-on-every-request">
+<h2>The fix: a deadline on every request</h2>
+<p>Here is the fix, in three rules. Each one shuts a door you have seen opened.</p>
+<ol><li><strong>A window for resending.</strong> When worker A claims the loan, it sets a <strong>deadline</strong>: now plus a constant Window, which is one tick here, 12 hours. Until the deadline, A may send and resend freely, every request carrying the loan’s key. The window must be shorter than the bank’s memory.</li><li><strong>Requests that expire.</strong> Every payment request carries its deadline, and the bank refuses a request that arrives after it: no money, no reply. (Our fictional bank’s API accepts a “valid until” time on a transfer. If yours doesn’t, this rule is the thing to ask your bank for.)</li><li><strong>Reconcile after the deadline.</strong> Once the deadline has passed, A never resends blindly. It asks the bank, and it believes “absent” only from an answer written after the deadline. Then it starts a new window, with a new deadline, and sends again.</li></ol>
+<p>Why does that work? Take the story’s numbers. A claims at tick 0, so the deadline is tick 1. Rule 2 means every payment of this window lands at tick 1 or earlier. The key it stores is stamped no earlier than tick 0, the claim, so the bank can’t forget it before tick 2. Every request of the window that reaches the bank in time finds the key, so at most one of them pays. After tick 1, no request of the window can pay at all, so an “absent” written after tick 1 is final: rule 3 can trust it.</p>
+<pre class="code" data-lang="python"><code>TTL = <span class="c-number">2</span>
+
+<span class="c-keyword">for</span> window <span class="c-keyword">in</span> (<span class="c-number">1</span>, <span class="c-number">2</span>):
+    claimed_at = <span class="c-number">0</span>
+    last_payment = claimed_at + window
+    first_forget = claimed_at + TTL
+    <span class="c-builtin">print</span>(window, last_payment, first_forget,
+          last_payment &lt; first_forget)</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">1</span> <span class="c-number">1</span> <span class="c-number">2</span> True
+<span class="c-number">2</span> <span class="c-number">2</span> <span class="c-number">2</span> False</code></pre>
+<p>With a window of two ticks, the last moment a request may still pay is the first moment the bank may forget. Same tick, either order. Keep that second line in mind; TLC will turn it into a counterexample shortly.</p>
+<p class="pending">[diagram:deadline: built on the lesson page]</p>
+<h3>The spec</h3>
+<p>The desk gains one variable, deadline, set when a worker claims the loan:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Claim</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;idle&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status = <span class="c-string">&quot;approved&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = <span class="c-string">&quot;claimed&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> owner<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = w
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> deadline<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = now + Window
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;claimed&quot;</span>]
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, net, transfers, keys, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
+
+<span class="c-function">Send</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;claimed&quot;</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> now <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≤</span><span class="tla-a">&lt;=</span></span> deadline
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> net<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = net <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span>
+                {[kind <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> <span class="c-string">&quot;pay&quot;</span>, by <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> deadline]}
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;waiting&quot;</span>]
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, deadline,
+                           transfers, keys, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Claim is lesson 2’s claim, which also records the owner, with one more line: afterwards, the deadline is now plus Window. Send has a new guard, now ≤ deadline, “now is at most the deadline”, and its request carries a field by, the deadline. <strong>Claim(w) starts a window that ends Window ticks from now, and Send(w) may put a request in flight only inside the window, stamped with the moment it expires.</strong> Retry comes back, since rule 1 allows resending inside the window, and gets the same guard, now ≤ deadline. A <strong>deadline</strong> is a guard on now that switches an action off, where a timeout switched one on.</p>
+<pre class="code" data-lang="python"><code>WINDOW = <span class="c-number">1</span>
+
+<span class="c-keyword">def</span> <span class="c-function">claim</span>(now):
+    <span class="c-keyword">return</span> now + WINDOW
+
+<span class="c-keyword">def</span> <span class="c-function">send</span>(now, deadline, net):
+    <span class="c-keyword">if</span> now &lt;= deadline:
+        <span class="c-keyword">yield</span> net | {(<span class="c-string">&quot;pay&quot;</span>, deadline)}
+
+deadline = <span class="c-call">claim</span>(<span class="c-number">0</span>)
+<span class="c-keyword">for</span> now <span class="c-keyword">in</span> <span class="c-builtin">range</span>(<span class="c-number">3</span>):
+    <span class="c-builtin">print</span>(now, <span class="c-builtin">list</span>(<span class="c-call">send</span>(now, deadline, <span class="c-builtin">set</span>())))</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">0</span> [{(&#x27;pay&#x27;, <span class="c-number">1</span>)}]
+<span class="c-number">1</span> [{(&#x27;pay&#x27;, <span class="c-number">1</span>)}]
+<span class="c-number">2</span> []</code></pre>
+<p>The bank enforces rule 2:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Deliver</span>(m) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> m.kind = <span class="c-string">&quot;pay&quot;</span>
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">IF</span> now &gt; m.by
+                   <span class="c-keyword">THEN</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> net<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = net \ {m}
+                        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>transfers, keys<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
+                   <span class="c-keyword">ELSE</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> net<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = (net \ {m}) <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span>
+                                {[kind <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> <span class="c-string">&quot;ok&quot;</span>]}
+                        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">IF</span> Known
+                             <span class="c-keyword">THEN</span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>transfers, keys<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
+                             <span class="c-keyword">ELSE</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> transfers<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = transfers + <span class="c-number">1</span>
+                                  <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> keys<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = keys <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span>
+                                               {<span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>Loan, now<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>}
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, deadline, pc,
+                              crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Message m is a payment request. If now is past its by field, the request leaves the network and nothing else happens: no money, no key, no reply. Otherwise, it is the Deliver you already know. <strong>Deliver(m) refuses a request that arrives after its deadline, and treats one that arrives in time exactly as before.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">deliver</span>(m, now, net, transfers, keys):
+    net = net - {m}
+    <span class="c-keyword">if</span> now &gt; m[<span class="c-number">1</span>]:
+        <span class="c-keyword">return</span> net, transfers, keys
+    net = net | {(<span class="c-string">&quot;ok&quot;</span>,)}
+    <span class="c-keyword">if</span> <span class="c-builtin">any</span>(k[<span class="c-number">0</span>] == <span class="c-number">4471</span> <span class="c-keyword">for</span> k <span class="c-keyword">in</span> keys):
+        <span class="c-keyword">return</span> net, transfers, keys
+    <span class="c-keyword">return</span> net, transfers + <span class="c-number">1</span>, keys | {(<span class="c-number">4471</span>, now)}
+
+m = (<span class="c-string">&quot;pay&quot;</span>, <span class="c-number">1</span>)
+<span class="c-builtin">print</span>(<span class="c-call">deliver</span>(m, <span class="c-number">1</span>, {m}, <span class="c-number">0</span>, <span class="c-builtin">set</span>()))
+<span class="c-builtin">print</span>(<span class="c-call">deliver</span>(m, <span class="c-number">2</span>, {m}, <span class="c-number">0</span>, <span class="c-builtin">set</span>()))</code></pre>
+<pre class="code" data-lang="text"><code>({(&#x27;ok&#x27;,)}, <span class="c-number">1</span>, {(<span class="c-number">4471</span>, <span class="c-number">1</span>)})
+(set(), <span class="c-number">0</span>, set())</code></pre>
+<p>Rule 3 has two halves. AskBank(w) is now enabled only when now &gt; deadline, so a worker asks only after its window, and it is enabled from “claimed” as well as from “waiting”, for a worker whose window closed before it sent. Resume(w) now puts a restarted worker in “waiting”, as if it had just sent, so once its window has closed its only move is to ask. And the bank stamps every “absent” with the time it wrote it, a field at, which the worker checks:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">GotAbsent</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> owner = w
+                <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;asking&quot;</span>
+                <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∃</span><span class="tla-a">\E</span></span> m <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> net :
+                     <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> m.kind = <span class="c-string">&quot;absent&quot;</span>
+                     <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> m.at &gt; deadline
+                     <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> net<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = net \ {m}
+                <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> deadline<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = now + Window
+                <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;claimed&quot;</span>]
+                <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>now, status, owner, transfers,
+                                keys, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Worker w owns the loan and is asking; there is an “absent” in the network that was written after w’s deadline, and w takes it out; afterwards, a new window starts, and w is ready to send again. <strong>GotAbsent(w) believes “absent” only from an answer written after the window closed, and then opens a new window.</strong></p>
+<pre class="code" data-lang="python"><code>WINDOW = <span class="c-number">1</span>
+
+<span class="c-keyword">def</span> <span class="c-function">got_absent</span>(now, deadline, net):
+    <span class="c-keyword">for</span> m <span class="c-keyword">in</span> <span class="c-builtin">sorted</span>(net):
+        <span class="c-keyword">if</span> m[<span class="c-number">0</span>] == <span class="c-string">&quot;absent&quot;</span> <span class="c-keyword">and</span> m[<span class="c-number">1</span>] &gt; deadline:
+            <span class="c-keyword">yield</span> net - {m}, now + WINDOW
+
+net = {(<span class="c-string">&quot;absent&quot;</span>, <span class="c-number">2</span>), (<span class="c-string">&quot;absent&quot;</span>, <span class="c-number">4</span>)}
+<span class="c-builtin">print</span>(<span class="c-builtin">list</span>(<span class="c-call">got_absent</span>(<span class="c-number">4</span>, <span class="c-number">3</span>, net)))</code></pre>
+<pre class="code" data-lang="text"><code>[({(&#x27;absent&#x27;, <span class="c-number">2</span>)}, <span class="c-number">5</span>)]</code></pre>
+<p>The worker’s deadline is tick 3. Of the two answers in flight, it accepts only the one written at tick 4, opens a window that ends at tick 5, and leaves the tick-2 answer where it is. GotOk(w) has no such check: “found” and “ok” are never wrong, because a payment, once made, stays made.</p>
+<h3>Checking that the desk can always move</h3>
+<p>A worker that may only ask after its deadline, and only believe certain answers, might talk itself into a corner where it can do nothing at all. Without fairness, we can’t ask TLC whether the loan is eventually paid, but we can ask a safety question that catches the corner:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">NoDeadEnd</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> status = <span class="c-string">&quot;paid&quot;</span>
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∃</span><span class="tla-a">\E</span></span> w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers : <span class="c-keyword">ENABLED</span> Work(w)</code></pre></div>
+<p>Remember from lesson 2 that ENABLED in front of an action means “a step of this action can be taken in this state”. So: either the loan is paid, or there is a worker that has some work it can do. <strong>In every reachable state, the loan is paid or some worker can still take a step of work.</strong></p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">no_dead_end</span>(status, enabled_work):
+    <span class="c-keyword">return</span> status == <span class="c-string">&quot;paid&quot;</span> <span class="c-keyword">or</span> <span class="c-builtin">any</span>(enabled_work.<span class="c-call">values</span>())
+
+<span class="c-builtin">print</span>(<span class="c-call">no_dead_end</span>(<span class="c-string">&quot;claimed&quot;</span>, {<span class="c-string">&quot;A&quot;</span>: <span class="c-keyword">False</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-keyword">False</span>}))
+<span class="c-builtin">print</span>(<span class="c-call">no_dead_end</span>(<span class="c-string">&quot;claimed&quot;</span>, {<span class="c-string">&quot;A&quot;</span>: <span class="c-keyword">True</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-keyword">False</span>}))
+<span class="c-builtin">print</span>(<span class="c-call">no_dead_end</span>(<span class="c-string">&quot;paid&quot;</span>, {<span class="c-string">&quot;A&quot;</span>: <span class="c-keyword">False</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-keyword">False</span>}))</code></pre>
+<pre class="code" data-lang="text"><code>False
+True
+True</code></pre>
+<p>It is weaker than EventuallyPaid: it says the desk is never stuck, not that it gets anywhere. Proving that it gets somewhere would also need promises about the network, such as “a request sent again and again is eventually delivered”, and we keep those for later.</p>
+<h3>What TLC says</h3>
+<p>The configuration: MaxTime 4, TTL 2, Window 1, both invariants. The clock now runs for 48 hours.</p>
+<pre class="code" data-lang="text"><code>Model checking completed. No error has been found.
+<span class="c-number">163549</span> states generated, <span class="c-number">28021</span> distinct states found, ...</code></pre>
+<p>No double payout and no dead end, in any of 28,021 reachable states. With three workers, 54,305 states, no error. Friday’s crash, the lost reply, the late reply, the weekend: all in there, all safe.</p>
+<p>Replay Friday on the fixed desk. Worker A claims at tick 0, so its window closes at tick 1, Saturday 05:00. It sends, the bank pays, and A crashes before it can mark the loan paid. On Monday, A resumes into “waiting”, and its window closed two days ago. It may not resend. It asks. The bank, which has long forgotten the key but never the payment, answers “found”, and A marks the loan paid. One transfer.</p>
+<p>Now break it, to see each rule earn its place.</p>
+<p><strong>Window 2.</strong> That is the second line of the window arithmetic. TLC: double payout in 9 steps. A sends, the bank pays at tick 0, two ticks pass, the bank forgets, A’s timeout fires at tick 2 (still inside its window), it resends, and the request lands at tick 2, on time and on an empty key set. The window must be strictly shorter than the bank’s memory.</p>
+<p><strong>No refusal at the bank.</strong> Keep the window, but let Deliver pay late requests. TLC: double payout in 9 steps. A sends and the bank pays at tick 0. At tick 1, still inside its window, A retries and resends. That second request sits in the network until tick 2, after the key is forgotten, and the bank pays it. Worker A obeyed its deadline perfectly; its request didn’t. This is why rule 2 belongs to the receiver.</p>
+<p><strong>Deadline, but never ask.</strong> Drop AskBank, so a worker past its deadline can only wait. TLC: NoDeadEnd is violated in 3 steps. A claims, and two ticks pass before it sends anything: a slow worker. Its window has closed, so it may not send, and it has no other move. Neither does B, which leaves claimed loans alone. A lost reply ends in the same place a little later. Safe, and stuck: lesson 2’s stranded loan, back again.</p>
+<p><strong>Trust any “absent”.</strong> Remove the line m.at &gt; deadline; call this desk FixStale. Predict: what does TLC say?</p>
+<p>With MaxTime 3, no error, 8,288 states: exactly the 8,288 the real fix has with MaxTime 3, so at 36 hours the missing check makes no difference at all. With MaxTime 4, a double payout in 17 steps:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col">ticks</th><th scope="col">what happens</th></tr></thead><tbody><tr><td>0</td><td>A claims; its window ends at tick 1</td></tr><tr><td>2</td><td>A asks; the bank answers “absent”, written at tick 2</td></tr><tr><td>2</td><td>A asks again; then it takes the first “absent” and starts a new window, ending at tick 3</td></tr><tr><td>2</td><td>the bank answers the second question: another “absent”, written at tick 2, now in flight</td></tr><tr><td>2</td><td>A sends; the bank pays and stores key 4471 at tick 2</td></tr><tr><td>4</td><td>the window has closed, the key is forgotten; A asks again</td></tr><tr><td>4</td><td>A takes the old tick-2 “absent”, believes it, and sends; the bank pays</td></tr></tbody></table></div>
+<p class="pending">[diagram:fresh-answer: built on the lesson page]</p>
+<p>That old answer was written during the second window, while a request of that window could still pay. The rule “after the deadline” means the deadline of the window you are in, and the check m.at &gt; deadline is how the worker knows. It took a clock of 48 hours to show it, because the story needs two windows and a forgotten key. <strong>A clock that stops too early can hide a bug, and this one hid it at 36 hours.</strong></p>
+</section>
+
+<section id="build-it">
+<h2>Build it</h2>
+<p>Build the clock desk in Python, the way you built lesson 2’s desk. A state is a tuple (now, status, owner, pc, transfers, keys, crashed), with keys a frozenset of pairs (4471, time). Write next_steps(state, max_time, lookup=False) with Tick, Forget, Claim, Resume, Skip, Send, Mark and Crash as in this lesson’s spec, TTL 2 and one crash per run. With lookup=True, Resume goes to “looking” and a Lookup step follows. Then write reachable(init, max_time, lookup=False). With the start state below, these must pass:</p>
+<pre class="code" data-lang="python"><code>init = (<span class="c-number">0</span>, <span class="c-string">&quot;approved&quot;</span>, <span class="c-string">&quot;nobody&quot;</span>, (<span class="c-string">&quot;idle&quot;</span>, <span class="c-string">&quot;idle&quot;</span>), <span class="c-number">0</span>,
+        <span class="c-builtin">frozenset</span>(), <span class="c-keyword">False</span>)
+short = <span class="c-call">reachable</span>(init, <span class="c-number">1</span>)
+weekend = <span class="c-call">reachable</span>(init, <span class="c-number">3</span>)
+looked = <span class="c-call">reachable</span>(init, <span class="c-number">3</span>, lookup=<span class="c-keyword">True</span>)
+<span class="c-keyword">assert</span> <span class="c-builtin">len</span>(short) == <span class="c-number">62</span> <span class="c-keyword">and</span> <span class="c-builtin">max</span>(s[<span class="c-number">4</span>] <span class="c-keyword">for</span> s <span class="c-keyword">in</span> short) == <span class="c-number">1</span>
+<span class="c-keyword">assert</span> <span class="c-builtin">len</span>(weekend) == <span class="c-number">238</span> <span class="c-keyword">and</span> <span class="c-builtin">max</span>(s[<span class="c-number">4</span>] <span class="c-keyword">for</span> s <span class="c-keyword">in</span> weekend) == <span class="c-number">2</span>
+<span class="c-keyword">assert</span> <span class="c-builtin">len</span>(looked) == <span class="c-number">228</span> <span class="c-keyword">and</span> <span class="c-builtin">max</span>(s[<span class="c-number">4</span>] <span class="c-keyword">for</span> s <span class="c-keyword">in</span> looked) == <span class="c-number">1</span></code></pre>
+<p>The three numbers are TLC’s: a clock too short to see the weekend, the weekend itself, and the lookup that fixes it on a perfect network.</p>
+</section>
+
+<section id="fix-the-bug">
+<h2>Fix the bug</h2>
+<p>In the lab below, the network loses and delays messages, the clock runs, and the bank forgets keys after 24 hours. Your panel: what a waiting worker does (resend on timeout, or ask the bank), a deadline with a window of 12 or 24 hours (the bank refuses requests that arrive after it), whether the worker trusts only answers written after its deadline, how long the clock runs (12, 36 or 48 hours), and two or three workers. Run the checker after each change. It shows two lamps, NoDoublePayout and NoDeadEnd, and draws the first bad behavior it finds as a timeline.</p>
+<p>The desk is fixed when both lamps are green with the clock at 48 hours, with two workers and with three. A shorter clock is not an answer: the bank’s weekend happens whether your model runs long enough or not.</p>
+<p class="pending">[lab-act2: built on the lesson page]</p>
+</section>
+
+<section id="what-people-get-wrong">
+<h2>What people get wrong</h2>
+<p><strong>“The spec’s clock is the server’s clock.”</strong> The spec’s now is true time, read by an observer who sees everything. A real worker checks its deadline against its own clock, and the bank counts its 24 hours on another. Our model assumes the two agree. In production they drift, so leave a wide margin: a window of minutes against a memory of a day, not 12 hours against 24.</p>
+<p><strong>“A timeout means the request failed.”</strong> It means the worker stopped waiting. In the lossy desk’s counterexample, nothing was lost at all: the reply was late. Code that treats a timeout as a failure and resends is betting that late and lost are the same thing.</p>
+<p><strong>“It passed, so it’s right.”</strong> It passed for the clock you gave it. FixStale (the fixed desk without the m.at &gt; deadline check, so its worker trusts any “absent”) passes with a 36-hour clock and pays twice with a 48-hour one. Rerun with a longer clock, and with another worker, until the verdict stops changing. Lesson 8 asks how far that habit can carry you.</p>
+</section>
+
+<section id="recap-and-the-next-bug">
+<h2>Recap and the next bug</h2>
+<p>Time in a spec is an ordinary variable, <strong>now</strong>, counting <strong>ticks</strong>, and the passing of time is an ordinary action, <strong>Tick</strong>. A <strong>timeout</strong> is a guard on now that switches an action on (the bank may forget a key once it is TTL ticks old), and a <strong>deadline</strong> is one that switches an action off (a worker may send only inside its window). A <strong>constant</strong> such as MaxTime or TTL is filled in by the configuration file, and <strong>MaxTime</strong> keeps the clock finite so TLC can finish, at the price of hiding any bug that needs more time. A <strong>message</strong> is in flight until it is delivered or <strong>lost</strong>, and a worker that hears nothing can’t tell a lost request from a lost or late reply. The fix makes uncertainty harmless with three rules: resend only inside a window shorter than the bank’s memory, let the bank refuse requests that arrive after their deadline, and after the deadline ask the bank, believing only an answer written after it.</p>
+<p>The bakery was paid twice because worker A’s outage outlasted the bank’s 24 hours by 40. Now it can’t be: every request either lands while the key is remembered or is refused.</p>
+<p>But look at the numbers. The clock desk had 238 states. The fixed desk with a 48-hour clock has 28,021, and with three workers, 54,305. Give the clock one more tick, 60 hours, and TLC generates 601,694 states to find 89,734 distinct ones. Finance has asked for the florist’s loan to go through the same desk, and for workers that retry more than once. Each worker, each loan, each tick and each message in flight multiplies the states. Next lesson: how do you keep the checker finishing when workers, loans and retries multiply?</p>
+</section>
+
+<section id="concept-check">
+<h2>Concept check</h2>
+<p>Write your answers down before you move on.</p>
+<ol><li>The bank changes its policy: keys are now kept for 72 hours (TTL 6 ticks). The clock desk from “Time is just a variable”, with MaxTime 3, passes. Is the weekend bug gone? What MaxTime would you check with, and why?</li><li>Lookup fixed the weekend in all 228 states. Name the one assumption hidden in Lookup that a real network breaks, and say which counterexample in this lesson shows it breaking.</li><li>In the fixed desk, GotOk(w) accepts any “found” or “ok”, whenever it was written, while GotAbsent(w) accepts only an “absent” written after the deadline. Why the difference?</li></ol>
+</section>
+
+</div>
+</html>

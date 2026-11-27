@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson text (draft): The Ledger That Does Not Add Up</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../lesson.css">
+<link rel="stylesheet" href="../katex/katex.min.css">
+<style>
+[hidden] { display: none !important; }
+pre.code { margin: 0; max-width: 100%; color: var(--code-text); background: var(--code-bg); border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-code); line-height: var(--leading-code); }
+.display-math { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: var(--space-1) 0; }
+.katex { font-size: var(--text-math); color: var(--ink); }
+.display-math .katex-display { margin: 0; }
+.display-math .katex-display > .katex { font-size: var(--text-math-display); }
+:not(.katex-mathml) > math { font-family: var(--font-math); font-size: var(--text-math); }
+.rule-box { max-width: 100%; }
+table.worked { font-family: var(--font-mono); font-size: var(--text-table); font-variant-numeric: tabular-nums; }
+table.worked td { white-space: nowrap; }
+table.worked th { white-space: normal; vertical-align: bottom; line-height: var(--leading-heading); }
+table.worked td:first-child, table.worked th:first-child { font-family: var(--font-ui); white-space: normal; color: var(--ink-soft); width: 1%; }
+
+.lab h3 { font-size: var(--text-h3); }
+.lab .readout { min-height: 5em; align-content: start; }
+.lab .note { font-size: var(--text-caption); color: var(--ink-soft); }
+.k-ask { display: grid; gap: var(--space-2); }
+.k-ask + .k-ask { margin-top: var(--space-3); }
+.k-ask .k-q { font-weight: var(--weight-bold); }
+.k-ask button.k-wrong { text-decoration: line-through; border-color: var(--rule); color: var(--ink-soft); }
+.k-ask button.k-right { background: var(--input-soft); border-color: var(--input); opacity: 1; }
+.k-ask .k-feedback { min-height: 1.6em; }
+.k-ask .k-feedback.k-bad { color: var(--accent-ink); }
+.k-ask .k-feedback:focus { outline: none; }
+.k-meter { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-1) var(--space-3); align-items: center; font-size: var(--text-caption); }
+.k-meter .bar { height: var(--space-3); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); overflow: hidden; background: var(--paper-2); }
+.k-meter .fill { height: 100%; width: 0; background: var(--accent); }
+.k-meter output { font-family: var(--font-mono); text-align: right; min-width: 5.5em; padding-right: var(--space-1); }
+.k-meter .scale { grid-column: 2; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--text-fig); color: var(--ink-soft); }
+.k-now { font-size: var(--text-caption); color: var(--ink-soft); }
+button.k-toggle[aria-pressed="true"]::before { content: "\2713\00a0"; }
+.k-working, .k-more { border-left: var(--line-mark) solid var(--rule); padding-left: var(--space-4); }
+.k-working { display: grid; gap: var(--space-2); }
+.k-working-note { color: var(--ink-soft); font-size: var(--text-ui); }
+.k-working-open { justify-self: start; }
+.k-working-body, .k-more-body { display: grid; gap: var(--space-block); }
+.k-working > *, .k-working-body > *, .k-more-body > * { min-width: 0; }
+.k-more-body { margin-top: var(--space-block); }
+.k-working-body:focus { outline: none; }
+.k-more > summary { cursor: pointer; font-family: var(--font-ui); font-weight: var(--weight-medium); color: var(--input); width: fit-content; }
+.k-still-text { display: none; }
+@media (prefers-reduced-motion: reduce) { .k-motion-text { display: none; } .k-still-text { display: inline; } }
+@media (max-width: 520px) { .k-meter { grid-template-columns: 1fr auto; } .k-meter > span:first-child { grid-column: 1 / -1; } .k-meter .bar { grid-column: 1; grid-row: 2; } .k-meter output { grid-column: 2; grid-row: 2; } .k-meter .scale { grid-column: 1; grid-row: 3; } }
+p .katex, li .katex, td .katex { white-space: normal; }
+p .katex-display, li .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+pre.code .c-keyword { color: var(--code-keyword); font-weight: var(--weight-medium); }
+pre.code .c-string { color: var(--code-string); }
+pre.code .c-number { color: var(--code-number); }
+pre.code .c-function { color: var(--code-function); font-weight: var(--weight-medium); }
+pre.code .c-call { color: var(--code-call); }
+pre.code .c-builtin { color: var(--code-builtin); }
+pre.code .c-comment { color: var(--code-comment); font-style: italic; }
+.tla-block { position: relative; }
+.tla-switch { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); font-family: var(--font-ui); font-size: var(--text-small); color: var(--ink-soft); margin-bottom: var(--space-1); cursor: pointer; }
+.tla-switch input { accent-color: var(--input); }
+pre.code .tla-sym { display: inline-block; width: calc(var(--w) * 1ch); text-align: center; color: var(--code-keyword); }
+pre.code .tla-sym[data-align="end"] { text-align: end; }
+pre.code .tla-sym[data-align="start"] { text-align: start; }
+pre.code .tla-prime { color: var(--accent); font-weight: var(--weight-medium); }
+pre.code .tla-a { display: none; }
+pre.code .c-rule { color: var(--code-comment); }
+.tla-sub sub, .prose sub { font-size: var(--text-micro); }
+.tla-block:has(.tla-switch input:checked) .tla-sym { width: auto; }
+.tla-block:has(.tla-switch input:checked) .tla-g { display: none; }
+.tla-block:has(.tla-switch input:checked) .tla-a { display: inline; }
+pre.code .tla-rule .tla-g { display: inline-flex; width: 100%; }
+pre.code .tla-module { display: flex; align-items: center; gap: var(--space-2); width: 100%; }
+pre.code .tla-module::before, pre.code .tla-module::after { content: ""; flex: 1; border-top: var(--line-hair) solid var(--code-comment); }
+pre.code .tla-end { display: block; width: 100%; height: var(--space-1); border-top: var(--line-hair) solid var(--code-comment); border-bottom: var(--line-hair) solid var(--code-comment); }
+.tla-block:has(.tla-switch input:checked) .tla-rule .tla-g { display: none; }
+.table { color: var(--ink); background: linear-gradient(to right, var(--paper) 30%, transparent) left / var(--space-8) 100% no-repeat local, linear-gradient(to left, var(--paper) 30%, transparent) right / var(--space-8) 100% no-repeat local, radial-gradient(farthest-side at 0 50%, var(--rule), transparent) left / var(--space-3) 100% no-repeat scroll, radial-gradient(farthest-side at 100% 50%, var(--rule), transparent) right / var(--space-3) 100% no-repeat scroll; }
+table.worked.k-symbols td { white-space: normal; }
+table.worked.k-symbols td code { white-space: nowrap; }
+table.worked.k-symbols td:first-child { font-family: var(--font-mono); font-size: var(--text-h3); color: var(--code-keyword); }
+@media (max-width: 520px) { table.worked.k-symbols td code { white-space: normal; } }
+
+.pending { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }
+</style>
+<div class="wrap">
+<nav class="crumbs" aria-label="Course"><a href="../index.html">The Payout Desk</a><span aria-hidden="true">/</span><span>Lesson 6</span><span aria-hidden="true">/</span><span>Lesson text (draft)</span></nav>
+<header><h1>The Ledger That Does Not Add Up</h1><p class="links">Lesson text (draft) · <a href="1-sheet.html">Teacher&#x27;s sheet</a></p></header>
+<section id="50-000-that-is-nowhere">
+<h2>€50,000 that is nowhere</h2>
+<p>The bakery on the harbour has its money. Loan 4471 was paid out once, with the loan’s id as the bank’s idempotency key, exactly as lesson 2 built it. Since then you have given the spec a clock, kept the checker small enough to finish, and written the worker as a program. The payout desk has been quiet for weeks.</p>
+<p>Then it is month-end, and finance runs the reconciliation.</p>
+<p>Linden keeps its books in two places. The <strong>treasury ledger</strong> is a table in the payout desk’s own database: it holds this month’s lending pot, €200,000, and every payout is a debit against it. The <strong>loan ledger</strong> belongs to the loans team. It is a separate service with its own database, and it records, for each loan, how much money has gone out to the borrower. Every euro that leaves the treasury should show up in exactly one loan account. Reconciliation is the check that it does: add the treasury balance to everything in the loan accounts, and you should get the pot back.</p>
+<p>This month you don’t. The treasury ledger shows a debit of €50,000 for loan 4471. The loan ledger shows nothing for loan 4471 at all. As far as Linden’s books are concerned, €50,000 has left one ledger and arrived in no other. The bakery has the money in the bank; Linden’s books have lost track of it.</p>
+<p>You find the worker’s log line, “debited treasury for loan 4471”, and right after it, a deploy. The worker writes the payout down in two steps, one per system:</p>
+<pre class="code" data-lang="ts"><code>async function book(loan: Loan) {
+  await treasury.debit(loan.id, loan.amount);
+  await loanLedger.credit(loan.id, loan.amount);
+}</code></pre>
+<p>The deploy landed between the two lines.</p>
+<p class="pending">[diagram:two-ledgers: built on the lesson page]</p>
+<p>A colleague reads over your shoulder and shrugs. “Swap the lines. Credit the loan ledger first. If we crash, at least nothing is missing.” Hold that thought. By the end of this lesson the checker will have shown you what that swap does, and you will have built a design in which a crash anywhere leaves the books adding up. The question is this one: <strong>how do you move money between two ledgers so that neither ever shows it twice or not at all?</strong></p>
+</section>
+
+<section id="where-is-the-money">
+<h2>Where is the money?</h2>
+<p>Let’s track the money by hand. Two loans go out this month: loan 4471, €50,000 to the bakery, and loan 4472, €30,000 to the florist who needs a second van. The pot starts at €200,000 in the treasury, and both loan accounts start at zero.</p>
+<p>Each payout is two <strong>writes</strong>: a debit, which takes the amount off the treasury, and a credit, which adds it to the loan’s account. The last column adds up all three numbers. Before you look at it, ask yourself: what should that column say in every row?</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">treasury</th><th scope="col">4471</th><th scope="col">4472</th><th scope="col">total</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>200,000</td><td>0</td><td>0</td><td>200,000</td></tr><tr><td>1</td><td>debit 4471</td><td>150,000</td><td>0</td><td>0</td><td>150,000</td></tr><tr><td>2</td><td>credit 4471</td><td>150,000</td><td>50,000</td><td>0</td><td>200,000</td></tr><tr><td>3</td><td>debit 4472</td><td>120,000</td><td>50,000</td><td>0</td><td>170,000</td></tr><tr><td>4</td><td>credit 4472</td><td>120,000</td><td>50,000</td><td>30,000</td><td>200,000</td></tr></tbody></table></div>
+<p>You might have said €200,000 everywhere. It isn’t. Rows 1 and 3 are short, by the loan being moved. Between the debit and the credit, the money has left one ledger and not yet arrived in the other. It is “in the worker’s hands”, which is a polite way of saying it is in no ledger at all. That dip is normal. It lasts a few milliseconds, and the next write fills it.</p>
+<p>Now replay this month, with the deploy:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">treasury</th><th scope="col">4471</th><th scope="col">4472</th><th scope="col">total</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>200,000</td><td>0</td><td>0</td><td>200,000</td></tr><tr><td>1</td><td>debit 4471</td><td>150,000</td><td>0</td><td>0</td><td>150,000</td></tr><tr><td>2</td><td>crash</td><td>150,000</td><td>0</td><td>0</td><td>150,000</td></tr><tr><td>3</td><td>debit 4471</td><td>100,000</td><td>0</td><td>0</td><td>100,000</td></tr><tr><td>4</td><td>credit 4471</td><td>100,000</td><td>50,000</td><td>0</td><td>150,000</td></tr></tbody></table></div>
+<p>Row 2 is month-end’s finding: the dip, frozen. The crashed worker forgot it was halfway through, so nobody is coming to fill the hole. Rows 3 and 4 are what happens when the restarted worker finds loan 4471 still waiting and starts it again from the top, the way lesson 2’s workers resumed their claims. It debits a second time, credits once, and finishes. Every job is done, and the books are €50,000 short for good.</p>
+<p>Notice where the bug lives. Not in any single write: each one moves the right amount the right way. It lives in the <em>gap</em> between two writes to two systems, and in what a crash does to that gap.</p>
+<p class="pending">[lab: built on the lesson page]</p>
+</section>
+
+<section id="a-conservation-invariant">
+<h2>A conservation invariant</h2>
+<p>The rule you have been checking by eye has a name. Money is never created or destroyed by moving it, only moved, so the total across every place it can be stays the same. A property of that shape, “this sum never changes”, is a <strong>conservation invariant</strong>. Physics has them for energy. Accountants have one for every ledger they have ever closed. Ours says: <strong>the treasury plus every loan account always adds up to the pot.</strong></p>
+<p>It is an invariant like NoDoublePayout from lesson 1: a statement about one state that should be true in every reachable state. What is new is the sum. The loan accounts are not one variable but one number per loan, so before we can write the invariant down, we need a way to add up a function.</p>
+<h3>Adding up a function</h3>
+<p>Remember lesson 1’s pc: a function from workers to their program counters, written <code>[w \in Workers |-&gt; "idle"]</code>. The loan accounts are the same kind of thing, a function from loan ids to amounts. Call it credit. In this month’s crash, after row 4, credit takes 4471 to 50,000 and 4472 to 0. We want one number: the sum of credit over all loans, 50,000.</p>
+<p>Python has <code>sum(credit.values())</code>. The standard modules that ship with TLC export no such operator (Bags, the standard module for multisets, has one, but keeps it private to itself), so we write one. The idea is the one you would use by hand: if there are no loans, the sum is zero; otherwise, pick any loan, take its amount, and add the sum of all the others.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code>RECURSIVE SumOver(_, _)
+<span class="c-function">SumOver</span>(S, f) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span>
+  <span class="c-keyword">IF</span> S = {} <span class="c-keyword">THEN</span> <span class="c-number">0</span>
+  <span class="c-keyword">ELSE</span> <span class="c-keyword">LET</span> x <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="c-keyword">CHOOSE</span> y <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> S : <span class="c-keyword">TRUE</span>
+       <span class="c-keyword">IN</span>  f[x] + SumOver(S \ {x}, f)</code></pre></div>
+<p>That is the first operator in this course that calls itself, so let’s read every piece:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col">typeset</th><th scope="col">you type</th><th scope="col">say it</th><th scope="col">in Python</th></tr></thead><tbody><tr><td>RECURSIVE</td><td><code>RECURSIVE Op(_, _)</code></td><td>“Op may call itself; it takes two arguments”</td><td>(no declaration needed)</td></tr><tr><td>{ }</td><td><code>{}</code></td><td>“the empty set”</td><td><code>set()</code></td></tr><tr><td>IF … THEN … ELSE</td><td><code>IF c THEN a ELSE b</code></td><td>“a if c, otherwise b”</td><td><code>a if c else b</code></td></tr><tr><td>LET … IN</td><td><code>LET x == e IN body</code></td><td>“let x be e in body”</td><td>a local variable</td></tr><tr><td>CHOOSE</td><td><code>CHOOSE y \in S : P</code></td><td>“some y in S for which P holds”</td><td><code>next(y for y in S if P)</code></td></tr><tr><td>\</td><td><code>S \ {x}</code></td><td>“S without x”</td><td><code>S - {x}</code></td></tr><tr><td>≠</td><td><code>#</code></td><td>“is not equal to”</td><td><code>!=</code></td></tr></tbody></table></div>
+<p>The first line declares that SumOver is recursive, with two arguments; TLC needs that declaration before the definition, because the definition mentions SumOver itself. Then: if S is the empty set, the answer is zero. Otherwise, let x be some element of S. CHOOSE with the condition TRUE picks <em>any</em> element, but always the same one for the same set, so SumOver is a proper function and not a coin toss. The answer is f at x, plus SumOver of S without x. <strong>SumOver(S, f) is the sum of f’s values over the set S, worked out one element at a time.</strong></p>
+<p class="pending">[diagram:sum-over: built on the lesson page]</p>
+<p>Push the story through it. SumOver({4471, 4472}, credit) picks, say, 4471, and gives 50,000 plus SumOver({4472}, credit). That picks 4472 and gives 30,000 plus SumOver({}, credit), which is 0. Unwound: 50,000 + 30,000 + 0 = 80,000. In Python, with <code>min</code> standing in for CHOOSE (any fixed rule for picking works):</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">sum_over</span>(s, f):
+    <span class="c-keyword">if</span> <span class="c-keyword">not</span> s:
+        <span class="c-keyword">return</span> <span class="c-number">0</span>
+    x = <span class="c-builtin">min</span>(s)
+    <span class="c-keyword">return</span> f[x] + <span class="c-call">sum_over</span>(s - {x}, f)
+
+credit = {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}
+<span class="c-builtin">print</span>(<span class="c-call">sum_over</span>({<span class="c-number">4471</span>, <span class="c-number">4472</span>}, credit))
+<span class="c-builtin">print</span>(<span class="c-call">sum_over</span>(<span class="c-builtin">set</span>(), credit))</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">80000</span>
+<span class="c-number">0</span></code></pre>
+<p>You may know that TLA+’s Community Modules offer ready-made folds over functions. They don’t ship inside the tla2tools jar this course uses, so we write the five lines ourselves, and the checker runs them.</p>
+<h3>The invariant</h3>
+<p>Now the sentence becomes a formula. The treasury is a variable, fund. Loans and Amount are fixed, and Pot is the €200,000:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Loans</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> {<span class="c-number">4471</span>, <span class="c-number">4472</span>}
+<span class="c-function">Amount</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> [l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Loans <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">↦</span><span class="tla-a">|-&gt;</span></span> <span class="c-keyword">IF</span> l = <span class="c-number">4471</span> <span class="c-keyword">THEN</span> <span class="c-number">50000</span> <span class="c-keyword">ELSE</span> <span class="c-number">30000</span>]
+<span class="c-function">Pot</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="c-number">200000</span>
+
+<span class="c-function">Credited</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> SumOver(Loans, credit)
+<span class="c-function">Conserved</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> fund + Credited = Pot</code></pre></div>
+<p>Amount is a function from each loan to its amount: 50,000 for 4471, and 30,000 for the other. Credited is the sum of every loan account. <strong>Conserved says the treasury plus everything credited equals the pot.</strong> In row 2 of the clean table, 150,000 + 50,000 = 200,000, and Conserved holds. In row 2 of the crash table, 150,000 + 0 is not 200,000, and it fails.</p>
+<pre class="code" data-lang="python"><code>POT = <span class="c-number">200_000</span>
+
+<span class="c-keyword">def</span> <span class="c-function">conserved</span>(fund, credit):
+    <span class="c-keyword">return</span> fund + <span class="c-builtin">sum</span>(credit.<span class="c-call">values</span>()) == POT
+
+<span class="c-builtin">print</span>(<span class="c-call">conserved</span>(<span class="c-number">120_000</span>, {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}))
+<span class="c-builtin">print</span>(<span class="c-call">conserved</span>(<span class="c-number">150_000</span>, {<span class="c-number">4471</span>: <span class="c-number">0</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}))</code></pre>
+<pre class="code" data-lang="text"><code>True
+False</code></pre>
+<p class="pending">[diagram:conservation: built on the lesson page]</p>
+</section>
+
+<section id="two-writes-written-down">
+<h2>Two writes, written down</h2>
+<p>The worker’s two writes become two actions. Each loan has its own transfer job, and pc now maps each <em>loan</em> to how far its job has got: todo, debited, or done. Here is debit first, the code that ran this month:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Debit</span>(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[l] = <span class="c-string">&quot;todo&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> fund<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = fund - Amount[l]
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![l] = <span class="c-string">&quot;debited&quot;</span>]
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>credit, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
+
+<span class="c-function">Credit</span>(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span>
+  <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[l] = <span class="c-string">&quot;debited&quot;</span>
+  <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> credit<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [credit <span class="c-keyword">EXCEPT</span> ![l] = credit[l] + Amount[l]]
+  <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![l] = <span class="c-string">&quot;done&quot;</span>]
+  <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>fund, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>A reminder from lesson 1: <code>[pc EXCEPT ![l] = "debited"]</code> is pc with one entry changed, and <code>![l]</code> names the entry at l.</p>
+<p>Debit reads: loan l’s job hasn’t started; afterwards the treasury is lower by l’s amount, the job is at debited, and the loan accounts and the crash flag are unchanged. <strong>A Debit step takes one loan’s amount off the treasury and nothing else.</strong> Credit reads: l’s job has debited; afterwards l’s account holds what it held before <em>plus</em> the amount, the job is done, and the treasury is unchanged. <strong>A Credit step adds one loan’s amount to its account and nothing else.</strong> Look closely at “plus”. The loan ledger appends a credit every time it is asked, exactly like the code’s <code>loanLedger.credit</code>. Remember that; it will matter.</p>
+<pre class="code" data-lang="python"><code>AMOUNT = {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}
+
+<span class="c-keyword">def</span> <span class="c-function">debit_step</span>(fund, credit, l):
+    <span class="c-keyword">return</span> fund - AMOUNT[l], credit
+
+<span class="c-keyword">def</span> <span class="c-function">credit_step</span>(fund, credit, l):
+    <span class="c-keyword">return</span> fund, {**credit, l: credit[l] + AMOUNT[l]}
+
+state = (<span class="c-number">200_000</span>, {<span class="c-number">4471</span>: <span class="c-number">0</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>})
+<span class="c-keyword">for</span> step <span class="c-keyword">in</span> (debit_step, credit_step, credit_step):
+    state = <span class="c-call">step</span>(*state, <span class="c-number">4471</span>)
+    <span class="c-builtin">print</span>(state, state[<span class="c-number">0</span>] + <span class="c-builtin">sum</span>(state[<span class="c-number">1</span>].<span class="c-call">values</span>()))</code></pre>
+<pre class="code" data-lang="text"><code>(<span class="c-number">150000</span>, {<span class="c-number">4471</span>: <span class="c-number">0</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}) <span class="c-number">150000</span>
+(<span class="c-number">150000</span>, {<span class="c-number">4471</span>: <span class="c-number">50000</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}) <span class="c-number">200000</span>
+(<span class="c-number">150000</span>, {<span class="c-number">4471</span>: <span class="c-number">100000</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}) <span class="c-number">250000</span></code></pre>
+<p>The last line asks the loan ledger to credit 4471 twice, and it obliges.</p>
+<p>Before the crash, check the desk without one. Next is “some loan takes a Debit or a Credit step”, and the cfg asks for Conserved. Predict: does it hold?</p>
+<p>TLC says no, after one step: Debit(4471), with the treasury at 150,000 and no credit anywhere. Of course. That is row 1 of the clean table, the normal dip. Conserved as written demands something no two-write design can give: the sum stays exact <em>between</em> the writes. It is the wrong invariant for this desk, and the checker just told us so in one line.</p>
+<p>What finance actually checks is the books when no transfer is in the middle of happening. Call that <strong>at rest</strong>: every job is either todo or done.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">AtRest</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∀</span><span class="tla-a">\A</span></span> l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Loans : pc[l] <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> {<span class="c-string">&quot;todo&quot;</span>, <span class="c-string">&quot;done&quot;</span>}
+<span class="c-function">ConservedAtRest</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> AtRest <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">⇒</span><span class="tla-a">=&gt;</span></span> Conserved</code></pre></div>
+<p>The upside-down A is “for every”, from lesson 2. The double arrow is “implies”: A implies B is false only when A is true and B is false. <strong>ConservedAtRest says that whenever no job is between its two writes, the books add up.</strong> In a state mid-transfer, AtRest is false, so the implication is true whatever the sum is. In Python, “A implies B” is <code>not A or B</code>:</p>
+<pre class="code" data-lang="python"><code>POT = <span class="c-number">200_000</span>
+
+<span class="c-keyword">def</span> <span class="c-function">conserved_at_rest</span>(fund, credit, pc):
+    at_rest = <span class="c-builtin">all</span>(p <span class="c-keyword">in</span> (<span class="c-string">&quot;todo&quot;</span>, <span class="c-string">&quot;done&quot;</span>) <span class="c-keyword">for</span> p <span class="c-keyword">in</span> pc.<span class="c-call">values</span>())
+    <span class="c-keyword">return</span> <span class="c-keyword">not</span> at_rest <span class="c-keyword">or</span> fund + <span class="c-builtin">sum</span>(credit.<span class="c-call">values</span>()) == POT
+
+credit = {<span class="c-number">4471</span>: <span class="c-number">0</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}
+<span class="c-builtin">print</span>(<span class="c-call">conserved_at_rest</span>(<span class="c-number">150_000</span>, credit,
+                        {<span class="c-number">4471</span>: <span class="c-string">&quot;debited&quot;</span>, <span class="c-number">4472</span>: <span class="c-string">&quot;todo&quot;</span>}))
+<span class="c-builtin">print</span>(<span class="c-call">conserved_at_rest</span>(<span class="c-number">150_000</span>, credit,
+                        {<span class="c-number">4471</span>: <span class="c-string">&quot;todo&quot;</span>, <span class="c-number">4472</span>: <span class="c-string">&quot;todo&quot;</span>}))</code></pre>
+<pre class="code" data-lang="text"><code>True
+False</code></pre>
+<p>Same treasury, same empty accounts. The first state is mid-transfer, the dip is allowed. The second is at rest, and it is month-end’s finding.</p>
+<p>Without crashes, TLC reports no error for ConservedAtRest, in 9 distinct states. Nine is easy to count: each of the two jobs is todo, debited or done, independently, and 3 × 3 = 9.</p>
+</section>
+
+<section id="the-crash-between-two-writes">
+<h2>The crash between two writes</h2>
+<p>Now the deploy. The Crash action is lesson 2’s, adapted to a job: once per run, a job that has done its first write forgets it, and goes back to todo.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Crash</span>(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:1"><span class="tla-g">¬</span><span class="tla-a">~</span></span>crashed
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[l] = <span class="c-string">&quot;debited&quot;</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![l] = <span class="c-string">&quot;todo&quot;</span>]
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> crashed<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = <span class="c-keyword">TRUE</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>fund, credit<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>No crash has happened yet; l’s job has debited; afterwards it is back at todo, as if it had never started; the crash has now happened; the ledgers keep whatever was written to them. <strong>Crash(l) is a step in which a job forgets its first write while both ledgers remember it.</strong> Lesson 2 had the same asymmetry: the process forgets, the world doesn’t. Next becomes “some loan takes a Debit, a Credit or a Crash step”.</p>
+<p>Here is TLC, trimmed to the variables that matter:</p>
+<pre class="code" data-lang="text"><code>
+Error: Invariant ConservedAtRest <span class="c-keyword">is</span> violated.
+
+State <span class="c-number">1</span>: &lt;Initial predicate&gt;
+/\ credit = (<span class="c-number">4471</span> :&gt; <span class="c-number">0</span> @@ <span class="c-number">4472</span> :&gt; <span class="c-number">0</span>)
+/\ fund = <span class="c-number">200000</span>
+/\ pc = (<span class="c-number">4471</span> :&gt; &quot;todo&quot; @@ <span class="c-number">4472</span> :&gt; &quot;todo&quot;)
+
+State <span class="c-number">2</span>: &lt;Debit ...&gt;
+/\ credit = (<span class="c-number">4471</span> :&gt; <span class="c-number">0</span> @@ <span class="c-number">4472</span> :&gt; <span class="c-number">0</span>)
+/\ fund = <span class="c-number">150000</span>
+/\ pc = (<span class="c-number">4471</span> :&gt; &quot;debited&quot; @@ <span class="c-number">4472</span> :&gt; &quot;todo&quot;)
+
+State <span class="c-number">3</span>: &lt;Crash ...&gt;
+/\ credit = (<span class="c-number">4471</span> :&gt; <span class="c-number">0</span> @@ <span class="c-number">4472</span> :&gt; <span class="c-number">0</span>)
+/\ fund = <span class="c-number">150000</span>
+/\ pc = (<span class="c-number">4471</span> :&gt; &quot;todo&quot; @@ <span class="c-number">4472</span> :&gt; &quot;todo&quot;)</code></pre>
+<p>First, the new notation. <code>4471 :&gt; 0</code> is how TLC prints “4471 maps to 0”, and <code>@@</code> glues two such pieces into one function. So <code>(4471 :&gt; 0 @@ 4472 :&gt; 0)</code> is the credit function with both accounts at zero.</p>
+<p>Now line by line. State 1 is the start: €200,000 in the treasury, nothing credited, both jobs todo. State 2: Debit(4471), the treasury drops to 150,000, and 4471’s job is mid-transfer, so ConservedAtRest still holds. State 3: Crash(4471). The treasury still says 150,000 and the account still says 0, but the job is back at todo, so the desk is at rest, and 150,000 + 0 is not 200,000. Two steps. That is month-end, exactly.</p>
+<p>With <code>-continue</code>, which tells TLC to keep going after a violation, it explores all 27 distinct states and reports the invariant broken in 8 of them. Twelve of the 27 are at rest; two thirds of those are wrong.</p>
+<h3>Where was the money?</h3>
+<p>Here is a fair objection. Between Debit and Credit the €50,000 wasn’t really nowhere. The worker knew it owed a credit. What if we count that?</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">InFlightMem</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span>
+  SumOver({l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Loans : pc[l] = <span class="c-string">&quot;debited&quot;</span>}, Amount)
+<span class="c-function">ConservedMem</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> fund + InFlightMem + Credited = Pot</code></pre></div>
+<p>The braces with a colon build a set: “the loans l in Loans such that l’s job is at debited”. InFlightMem sums their amounts. <strong>ConservedMem says the treasury, plus what the workers are carrying in memory, plus what is credited, equals the pot.</strong> Without crashes it holds in all 9 states, in the middle of transfers too. With the crash, TLC breaks it with the same two steps. Of course it does: the crash is the step that erases the memory. The money in flight was real, but the only record of it lived in a process, and processes are exactly the things that crash. Lesson 2 taught that about who sent a transfer; here it is about where the money is.</p>
+</section>
+
+<section id="flip-the-order">
+<h2>Flip the order</h2>
+<p>Back to your colleague’s idea: credit first, then debit. The spec swaps the two actions. Credit now needs todo and leaves the job at credited; Debit needs credited and finishes; Crash forgets a job at credited. You tried this order in the lab above. Before reading on, recall what you saw: did flipping fix it, or only change it?</p>
+<p>TLC, again in two steps: Credit(4471), then Crash(4471). At rest, the treasury still holds €200,000 and the bakery’s account holds €50,000, so the books show €250,000. The same €50,000 is in both ledgers at once.</p>
+<p>Follow it one step further. The restarted worker finds 4471 at todo and starts again, with a credit:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">treasury</th><th scope="col">4471</th><th scope="col">4472</th><th scope="col">total</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>200,000</td><td>0</td><td>0</td><td>200,000</td></tr><tr><td>1</td><td>credit 4471</td><td>200,000</td><td>50,000</td><td>0</td><td>250,000</td></tr><tr><td>2</td><td>crash</td><td>200,000</td><td>50,000</td><td>0</td><td>250,000</td></tr><tr><td>3</td><td>credit 4471</td><td>200,000</td><td>100,000</td><td>0</td><td>300,000</td></tr><tr><td>4</td><td>debit 4471</td><td>150,000</td><td>100,000</td><td>0</td><td>250,000</td></tr></tbody></table></div>
+<p>The bakery’s loan account says it received €100,000 for a €50,000 loan. Next month the bakery gets a repayment schedule for twice what it borrowed. That is the other half of this lesson’s question: shown twice.</p>
+<p class="pending">[diagram:crash-window: built on the lesson page]</p>
+<p>So both orders fail, and they fail in mirror image. Debit first, a crash makes money vanish: it shows in no ledger. Credit first, a crash makes money appear: it shows in two. TLC finds both in two steps, out of 27 states, broken in 8 each. Swapping the lines doesn’t close the gap. It decides which way you fall into it.</p>
+<p>Can lesson 2’s trick help? Suppose the loan ledger takes the loan’s id as a key and keeps one credit per loan, so a second credit for 4471 changes nothing. With credit first, the retry in row 3 becomes harmless, and the TLC run with that keyed Credit agrees: every finished run adds up. But at rest, right after a crash, the books are still off the pot (€250,000 when the crash hits 4471, €230,000 when it hits 4472): 4 of the 23 states break it. With debit first, the key does nothing at all, because the step that repeats is the debit. The key makes a repeated <em>write</em> harmless. It doesn’t close the gap between two writes.</p>
+</section>
+
+<section id="the-model-checker-as-code">
+<h2>The model checker as code</h2>
+<p>Here is the whole search in Python, for both orders at once. The state is a tuple: the treasury, the two loan accounts, the two jobs’ pc, and the crash flag. The three if blocks are Debit or Credit (whichever is first), the other one, and Crash.</p>
+<pre class="code" data-lang="python"><code>AMOUNT, POT = (<span class="c-number">50_000</span>, <span class="c-number">30_000</span>), <span class="c-number">200_000</span>
+
+<span class="c-keyword">def</span> <span class="c-function">steps</span>(s, first, second, mid):
+    fund, credit, pc, crashed = s
+    <span class="c-keyword">for</span> i, a <span class="c-keyword">in</span> <span class="c-builtin">enumerate</span>(AMOUNT):
+        <span class="c-keyword">def</span> <span class="c-function">put</span>(t, v):
+            <span class="c-keyword">return</span> t[:i] + (v,) + t[i + <span class="c-number">1</span>:]
+        <span class="c-keyword">def</span> <span class="c-function">write</span>(kind, f, c):
+            <span class="c-keyword">if</span> kind == <span class="c-string">&quot;debit&quot;</span>:
+                <span class="c-keyword">return</span> f - a, c
+            <span class="c-keyword">return</span> f, <span class="c-call">put</span>(c, c[i] + a)
+        <span class="c-keyword">if</span> pc[i] == <span class="c-string">&quot;todo&quot;</span>:
+            f, c = <span class="c-call">write</span>(first, fund, credit)
+            <span class="c-keyword">yield</span> f, c, <span class="c-call">put</span>(pc, mid), crashed
+        <span class="c-keyword">if</span> pc[i] == mid:
+            f, c = <span class="c-call">write</span>(second, fund, credit)
+            <span class="c-keyword">yield</span> f, c, <span class="c-call">put</span>(pc, <span class="c-string">&quot;done&quot;</span>), crashed
+        <span class="c-keyword">if</span> pc[i] == mid <span class="c-keyword">and</span> <span class="c-keyword">not</span> crashed:
+            <span class="c-keyword">yield</span> fund, credit, <span class="c-call">put</span>(pc, <span class="c-string">&quot;todo&quot;</span>), <span class="c-keyword">True</span></code></pre>
+<p>Then collect every reachable state, keep the ones at rest, and see how far each is from the pot:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">check</span>(*order):
+    init = (POT, (<span class="c-number">0</span>, <span class="c-number">0</span>), (<span class="c-string">&quot;todo&quot;</span>, <span class="c-string">&quot;todo&quot;</span>), <span class="c-keyword">False</span>)
+    seen, todo = {init}, [init]
+    <span class="c-keyword">while</span> todo:
+        <span class="c-keyword">for</span> t <span class="c-keyword">in</span> <span class="c-call">steps</span>(todo.<span class="c-call">pop</span>(), *order):
+            <span class="c-keyword">if</span> t <span class="c-keyword">not</span> <span class="c-keyword">in</span> seen:
+                seen.<span class="c-call">add</span>(t)
+                todo.<span class="c-call">append</span>(t)
+    rest = [s <span class="c-keyword">for</span> s <span class="c-keyword">in</span> seen
+            <span class="c-keyword">if</span> <span class="c-builtin">all</span>(p <span class="c-keyword">in</span> (<span class="c-string">&quot;todo&quot;</span>, <span class="c-string">&quot;done&quot;</span>) <span class="c-keyword">for</span> p <span class="c-keyword">in</span> s[<span class="c-number">2</span>])]
+    off = [s[<span class="c-number">0</span>] + <span class="c-builtin">sum</span>(s[<span class="c-number">1</span>]) - POT <span class="c-keyword">for</span> s <span class="c-keyword">in</span> rest]
+    n = <span class="c-builtin">sum</span>(x != <span class="c-number">0</span> <span class="c-keyword">for</span> x <span class="c-keyword">in</span> off)
+    <span class="c-builtin">print</span>(order[<span class="c-number">0</span>], <span class="c-string">&quot;first:&quot;</span>, <span class="c-builtin">len</span>(seen), <span class="c-string">&quot;states,&quot;</span>, n, <span class="c-string">&quot;of&quot;</span>,
+          <span class="c-builtin">len</span>(rest), <span class="c-string">&quot;at rest off by&quot;</span>, <span class="c-builtin">sorted</span>(<span class="c-builtin">set</span>(off) - {<span class="c-number">0</span>}))
+
+<span class="c-call">check</span>(<span class="c-string">&quot;debit&quot;</span>, <span class="c-string">&quot;credit&quot;</span>, <span class="c-string">&quot;debited&quot;</span>)
+<span class="c-call">check</span>(<span class="c-string">&quot;credit&quot;</span>, <span class="c-string">&quot;debit&quot;</span>, <span class="c-string">&quot;credited&quot;</span>)</code></pre>
+<pre class="code" data-lang="text"><code>debit first: <span class="c-number">27</span> states, <span class="c-number">8</span> of <span class="c-number">12</span> at rest off by [-<span class="c-number">50000</span>, -<span class="c-number">30000</span>]
+credit first: <span class="c-number">27</span> states, <span class="c-number">8</span> of <span class="c-number">12</span> at rest off by [<span class="c-number">30000</span>, <span class="c-number">50000</span>]</code></pre>
+<p>The same 27 states TLC found, the same 8 violations. And look at the signs. Debit first is only ever short; credit first is only ever over. The order picks the direction of the error, never its absence.</p>
+</section>
+
+<section id="why-not-make-it-one-step">
+<h2>Why not make it one step?</h2>
+<p>Lesson 1 fixed the double payout by making check-and-claim one atomic step. Why not do it again and make the debit and the credit one step?</p>
+<p>On paper, nothing stops you:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Transfer</span>(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[l] = <span class="c-string">&quot;todo&quot;</span>
+               <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> fund<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = fund - Amount[l]
+               <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> credit<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [credit <span class="c-keyword">EXCEPT</span> ![l] = Amount[l]]
+               <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![l] = <span class="c-string">&quot;done&quot;</span>]</code></pre></div>
+<p><strong>Transfer(l) is a step that moves one loan’s amount from the treasury to its account, with no moment in between.</strong> It sets the account to the amount rather than adding it; with one step per loan and nothing ever retried, setting and adding give the same number. TLC checks Conserved, the strict one, with no “at rest” excuse, and finds no error in all 4 states.</p>
+<pre class="code" data-lang="python"><code>AMOUNT = {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}
+
+<span class="c-keyword">def</span> <span class="c-function">transfer</span>(fund, credit, l):
+    <span class="c-keyword">return</span> fund - AMOUNT[l], {**credit, l: AMOUNT[l]}
+
+state = (<span class="c-number">200_000</span>, {<span class="c-number">4471</span>: <span class="c-number">0</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>})
+<span class="c-keyword">for</span> l <span class="c-keyword">in</span> (<span class="c-number">4471</span>, <span class="c-number">4472</span>):
+    state = <span class="c-call">transfer</span>(*state, l)
+    <span class="c-builtin">print</span>(state, state[<span class="c-number">0</span>] + <span class="c-builtin">sum</span>(state[<span class="c-number">1</span>].<span class="c-call">values</span>()))</code></pre>
+<pre class="code" data-lang="text"><code>(<span class="c-number">150000</span>, {<span class="c-number">4471</span>: <span class="c-number">50000</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}) <span class="c-number">200000</span>
+(<span class="c-number">120000</span>, {<span class="c-number">4471</span>: <span class="c-number">50000</span>, <span class="c-number">4472</span>: <span class="c-number">30000</span>}) <span class="c-number">200000</span></code></pre>
+<p>And that is the trap. TLA+ will let you write any step you like. The spec is only worth something if the system really has that step. Lesson 1’s fix was real because one database ran the conditional update as one transaction. Here, the treasury lives in your database and the loan ledger lives behind someone else’s API. No single transaction spans both.</p>
+<p>There is a classic protocol that tries: <strong>two-phase commit</strong>. A coordinator asks every system to <em>prepare</em>, which means promising it can commit and holding its locks until told; if every system says yes, the coordinator tells them all to commit. It works, at a price. Both systems must speak the protocol, and the loans team’s HTTP service doesn’t. Locks are held across network round trips. And if the coordinator crashes after the prepares and before the commit, the prepared systems can’t decide on their own: they wait, locks held, until it returns. Distributed atomicity isn’t free. Most teams don’t pay for it, and ours can’t.</p>
+<p class="pending">[diagram:two-phase: built on the lesson page]</p>
+<p>So we can’t make two systems take one step. Here is the turn: we don’t need to. We need one step that <em>records the debit and the debt together</em>, in the one system we control.</p>
+</section>
+
+<section id="the-transactional-outbox">
+<h2>The transactional outbox</h2>
+<p>Look at what went wrong in both orders. The fact “€50,000 is on its way to loan 4471” lived only in a worker’s memory. A crash erased it, and with it the only evidence that a second write was owed.</p>
+<p>So write that fact down, durably, in the same place and the same instant as the debit. Add a table to the payout database, called the <strong>outbox</strong>: one row per credit the loan ledger still owes, keyed by loan id. Paying out a loan becomes one local transaction: mark the loan paid, debit the treasury, and insert the outbox row. One database, one transaction, one step. Either all three happen or none do.</p>
+<pre class="code" data-lang="ts"><code>await db.transaction(async (tx) =&gt; {
+  await tx.setStatus(loan.id, &quot;paid&quot;);
+  await tx.debitTreasury(loan.id, loan.amount);
+  await tx.insertOutbox(loan.id, loan.amount);
+});</code></pre>
+<p>A separate process, the <strong>relay</strong>, reads the outbox, asks the loan ledger to credit each row, and deletes the row once the credit is confirmed:</p>
+<pre class="code" data-lang="ts"><code><span class="c-keyword">for</span> (const row of await db.outboxRows()) {
+  await loanLedger.credit(row.loanId, row.amount);
+  await db.deleteOutbox(row.loanId);
+}</code></pre>
+<p>The relay can crash too. If it crashes after the credit and before the delete, the row is still there, and when it restarts it delivers that row again. So the relay delivers every row <strong>at least once</strong>: never zero times, sometimes twice. That is half a guarantee, and the other half lives in the loan ledger. It must apply each credit once, however many times it is asked. Lesson 2 called the tool for this an idempotency key; here the key is the loan id, and the loan ledger keeps one credit per loan:</p>
+<pre class="code" data-lang="sql"><code><span class="c-keyword">INSERT</span> <span class="c-keyword">INTO</span> credits (loan_id, amount) <span class="c-keyword">VALUES</span> ($<span class="c-number">1</span>, $<span class="c-number">2</span>)
+<span class="c-keyword">ON</span> <span class="c-keyword">CONFLICT</span> (loan_id) <span class="c-keyword">DO</span> <span class="c-keyword">NOTHING</span>;</code></pre>
+<p>Read the second line as: if a row with this loan_id already exists, the insert does nothing. The first credit for 4471 lands; every later one bounces off it.</p>
+<p class="pending">[diagram:outbox: built on the lesson page]</p>
+<p>Run month-end’s numbers through it. After the payout of 4471: treasury €150,000, outbox row “4471, €50,000”, loan account 0. Where is the money? Not in a worker’s head. It is in the outbox, a table you can query. 150,000 in the treasury plus 50,000 owed in the outbox plus 0 credited is 200,000. After the relay credits it: 150,000 + 50,000 credited = 200,000, and the row, now delivered, no longer counts as owed. The books add up in <em>every</em> state, not only at rest.</p>
+<h3>The outbox as a spec</h3>
+<p>The spec gains a loan status, the outbox as a set of loan ids, and held, the rows the relay has delivered and is about to delete, which it holds only in memory. Init starts the treasury at the pot, every account at 0, every status at approved, and the outbox and held empty. A word on names, since the lab below uses all of them: a loan’s status goes from approved to paid; the debit-first desk’s jobs went todo, debited, done; and when we later split Pay into two transactions, the worker’s pc goes idle, debited, idle again, through a Debit action, an Enqueue action that writes the outbox row, and CrashWorker, the deploy between them. One transaction, one action:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Pay</span>(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status[l] = <span class="c-string">&quot;approved&quot;</span>
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [status <span class="c-keyword">EXCEPT</span> ![l] = <span class="c-string">&quot;paid&quot;</span>]
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> fund<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = fund - Amount[l]
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> outbox<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = outbox <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span> {l}
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>credit, held, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Loan l is approved; afterwards it is paid, the treasury is lower by its amount, and the outbox has gained l. The union, from lesson 2, adds an element to a set. <strong>Pay(l) is one step that debits the treasury and records the debt, together.</strong></p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Deliver</span>(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> outbox
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> l <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∉</span><span class="tla-a">\notin</span></span> held
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> credit<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [credit <span class="c-keyword">EXCEPT</span> ![l] = Amount[l]]
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> held<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = held <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span> {l}
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>fund, status, outbox, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Here ∉, typed <code>\notin</code>, is “is not in”. Loan l has an outbox row and the relay isn’t already holding it; afterwards l’s account <em>is</em> the amount, and the relay holds l. Compare it with the Credit action from the debit-first desk. There, the account became its old value <em>plus</em> the amount. Here it becomes the amount, full stop: writing it a second time writes the same value. That one change is the keyed credit, the <code>ON CONFLICT DO NOTHING</code>. <strong>Deliver(l) is a step in which the relay credits loan l’s account with its amount, once per loan however often it runs.</strong></p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Ack</span>(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> held
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> outbox<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = outbox \ {l}
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> held<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = held \ {l}
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>fund, credit, status, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>
+
+<span class="c-function">CrashRelay</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:1"><span class="tla-g">¬</span><span class="tla-a">~</span></span>crashed
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> held <span class="tla-sym tla-op" data-align="center" style="--w:1"><span class="tla-g">≠</span><span class="tla-a">#</span></span> {}
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> held<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = {}
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> crashed<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = <span class="c-keyword">TRUE</span>
+              <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>fund, credit, status, outbox<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Ack is the delete: the relay holds l; afterwards the row is gone and the relay holds it no longer. <strong>Ack(l) deletes a delivered row.</strong> CrashRelay is the deploy, once per run: the relay is holding something; afterwards it holds nothing, and the outbox, the ledgers and the statuses keep what was written. <strong>CrashRelay is a step in which the relay forgets which rows it delivered, while every table remembers.</strong> Because the rows stay, Deliver is enabled for them again. That is at least once, written as a spec.</p>
+<p>Here are all four, in Python, played through the relay’s worst moment, once with the plain credit and once with the keyed one:</p>
+<pre class="code" data-lang="python"><code>AMOUNT = {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}
+
+<span class="c-keyword">def</span> <span class="c-function">pay</span>(s, l):
+    fund, credit, outbox, held = s
+    <span class="c-keyword">return</span> fund - AMOUNT[l], credit, outbox | {l}, held
+
+<span class="c-keyword">def</span> <span class="c-function">deliver</span>(s, l, keyed):
+    fund, credit, outbox, held = s
+    new = AMOUNT[l] <span class="c-keyword">if</span> keyed <span class="c-keyword">else</span> credit[l] + AMOUNT[l]
+    <span class="c-keyword">return</span> fund, {**credit, l: new}, outbox, held | {l}
+
+<span class="c-keyword">def</span> <span class="c-function">ack</span>(s, l):
+    fund, credit, outbox, held = s
+    <span class="c-keyword">return</span> fund, credit, outbox - {l}, held - {l}
+
+<span class="c-keyword">def</span> <span class="c-function">crash_relay</span>(s):
+    <span class="c-keyword">return</span> s[<span class="c-number">0</span>], s[<span class="c-number">1</span>], s[<span class="c-number">2</span>], <span class="c-builtin">set</span>()
+
+<span class="c-keyword">for</span> keyed <span class="c-keyword">in</span> (<span class="c-keyword">False</span>, <span class="c-keyword">True</span>):
+    s = (<span class="c-number">200_000</span>, {<span class="c-number">4471</span>: <span class="c-number">0</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}, <span class="c-builtin">set</span>(), <span class="c-builtin">set</span>())
+    s = <span class="c-call">pay</span>(s, <span class="c-number">4471</span>)
+    s = <span class="c-call">deliver</span>(s, <span class="c-number">4471</span>, keyed)
+    s = <span class="c-call">crash_relay</span>(s)
+    s = <span class="c-call">ack</span>(<span class="c-call">deliver</span>(s, <span class="c-number">4471</span>, keyed), <span class="c-number">4471</span>)
+    <span class="c-builtin">print</span>(<span class="c-string">&quot;keyed&quot;</span> <span class="c-keyword">if</span> keyed <span class="c-keyword">else</span> <span class="c-string">&quot;plain&quot;</span>, s)</code></pre>
+<pre class="code" data-lang="text"><code>plain (<span class="c-number">150000</span>, {<span class="c-number">4471</span>: <span class="c-number">100000</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}, set(), set())
+keyed (<span class="c-number">150000</span>, {<span class="c-number">4471</span>: <span class="c-number">50000</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}, set(), set())</code></pre>
+<p>Same steps, same crash, same redelivery. The plain credit gives the bakery €100,000; the keyed one, €50,000.</p>
+<h3>Counting the money in the outbox</h3>
+<p>The outbox is a new spec, so it defines its own Conserved, the same idea with a third term: what the outbox still owes.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">InFlight</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> SumOver({l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> outbox : credit[l] = <span class="c-number">0</span>}, Amount)
+<span class="c-function">Conserved</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> fund + InFlight + Credited = Pot</code></pre></div>
+<p>InFlight is the sum of the amounts of outbox rows whose credit hasn’t landed yet. A row that has been delivered but not yet deleted is left out, because its money is already counted in Credited; counting it twice is exactly the bug we are hunting. <strong>Conserved says the treasury, plus what the outbox still owes, plus what is credited, equals the pot, in every state.</strong> No “at rest” this time. Every term lives in a durable table, so no crash can make one vanish.</p>
+<pre class="code" data-lang="python"><code>AMOUNT, POT = {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}, <span class="c-number">200_000</span>
+
+<span class="c-keyword">def</span> <span class="c-function">in_flight</span>(outbox, credit):
+    <span class="c-keyword">return</span> <span class="c-builtin">sum</span>(AMOUNT[l] <span class="c-keyword">for</span> l <span class="c-keyword">in</span> outbox <span class="c-keyword">if</span> credit[l] == <span class="c-number">0</span>)
+
+<span class="c-keyword">def</span> <span class="c-function">conserved</span>(fund, outbox, credit):
+    flying = <span class="c-call">in_flight</span>(outbox, credit)
+    total = fund + flying + <span class="c-builtin">sum</span>(credit.<span class="c-call">values</span>())
+    <span class="c-keyword">return</span> total, total == POT
+
+<span class="c-builtin">print</span>(<span class="c-call">conserved</span>(<span class="c-number">150_000</span>, {<span class="c-number">4471</span>}, {<span class="c-number">4471</span>: <span class="c-number">0</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}))
+<span class="c-builtin">print</span>(<span class="c-call">conserved</span>(<span class="c-number">150_000</span>, {<span class="c-number">4471</span>}, {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}))
+<span class="c-builtin">print</span>(<span class="c-call">conserved</span>(<span class="c-number">150_000</span>, <span class="c-builtin">set</span>(), {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}))
+<span class="c-builtin">print</span>(<span class="c-call">conserved</span>(<span class="c-number">150_000</span>, {<span class="c-number">4471</span>}, {<span class="c-number">4471</span>: <span class="c-number">100_000</span>, <span class="c-number">4472</span>: <span class="c-number">0</span>}))</code></pre>
+<pre class="code" data-lang="text"><code>(<span class="c-number">200000</span>, True)
+(<span class="c-number">200000</span>, True)
+(<span class="c-number">200000</span>, True)
+(<span class="c-number">250000</span>, False)</code></pre>
+<p>Paid and owed; delivered and not yet deleted; deleted. All three add up. The fourth line is the plain credit after a redelivery: €250,000, money shown twice.</p>
+<h3>And the money eventually arrives</h3>
+<p>An invariant alone would be satisfied by a relay that never runs: the money would sit in the outbox forever, counted, and the bakery’s account would stay at zero. Lesson 2 taught you to spot that: a safe desk that does nothing. So we also ask for liveness:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">AllSettled</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span>
+  <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">◇</span><span class="tla-a">&lt;&gt;</span></span>(outbox = {} <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∀</span><span class="tla-a">\A</span></span> l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Loans : credit[l] = Amount[l])</code></pre></div>
+<p>The diamond is lesson 2’s “eventually”. Inside it: the outbox is empty, and every loan’s account holds exactly its amount. <strong>AllSettled says that eventually every row is delivered and deleted, and every loan is credited exactly its amount.</strong> “Exactly”, so a doubled credit fails it too.</p>
+<pre class="code" data-lang="python"><code>AMOUNT = {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}
+
+<span class="c-keyword">def</span> <span class="c-function">settled</span>(outbox, credit):
+    <span class="c-keyword">return</span> <span class="c-keyword">not</span> outbox <span class="c-keyword">and</span> <span class="c-builtin">all</span>(credit[l] == AMOUNT[l]
+                              <span class="c-keyword">for</span> l <span class="c-keyword">in</span> AMOUNT)
+
+<span class="c-builtin">print</span>(<span class="c-call">settled</span>({<span class="c-number">4471</span>}, {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}))
+<span class="c-builtin">print</span>(<span class="c-call">settled</span>(<span class="c-builtin">set</span>(), {<span class="c-number">4471</span>: <span class="c-number">50_000</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}))
+<span class="c-builtin">print</span>(<span class="c-call">settled</span>(<span class="c-builtin">set</span>(), {<span class="c-number">4471</span>: <span class="c-number">0</span>, <span class="c-number">4472</span>: <span class="c-number">30_000</span>}))</code></pre>
+<pre class="code" data-lang="text"><code>False
+True
+False</code></pre>
+<p>Fairness is lesson 2’s, word for word: promise it for the work, never for the crash.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Work</span>(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Pay(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Deliver(l) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Ack(l)
+<span class="c-function">Next</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> (<span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∃</span><span class="tla-a">\E</span></span> l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Loans : Work(l)) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> CrashRelay
+<span class="c-function">Fairness</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∀</span><span class="tla-a">\A</span></span> l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Loans : WF_vars(Work(l))
+<span class="c-function">Spec</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Init <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">□</span><span class="tla-a">[]</span></span>[Next]<span class="tla-sub"><span class="tla-g"><sub>vars</sub></span><span class="tla-a">_vars</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> Fairness</code></pre></div>
+<p><strong>For every loan, if some work on it stays enabled, that work eventually happens: it gets paid, delivered and deleted.</strong> In the real world that is a promise about your platform: the relay is kept running, and restarted when it dies.</p>
+</section>
+
+<section id="what-the-checker-says">
+<h2>What the checker says</h2>
+<p>The cfg asks for both kinds of property:</p>
+<pre class="code" data-lang="text"><code><span class="c-keyword">SPECIFICATION</span> Spec
+<span class="c-keyword">INVARIANT</span> Conserved
+<span class="c-keyword">PROPERTY</span> AllSettled</code></pre>
+<p>You can already work out runs 1 and 2 from the Python above. Predict runs 3 and 4 before you read on: do they pass?</p>
+<ol><li>The outbox, keyed credit, relay crash on.</li><li>The same, with the plain credit.</li><li>The debit and the outbox row in two separate transactions, with a crash allowed between them.</li><li>The first, with three loans.</li></ol>
+<p>Here is what TLC says.</p>
+<ol><li><strong>The outbox with the keyed credit</strong>: “Model checking completed. No error has been found.” 64 states generated, 37 distinct, depth 9. Conserved holds in all 37, and every fair behavior settles.</li><li><strong>The plain credit</strong>: Conserved is violated in four steps: Pay(4471), Deliver(4471), CrashRelay, Deliver(4471). State 5 shows <code>credit = (4471 :&gt; 100000 @@ 4472 :&gt; 0)</code> and the outbox still holding 4471: 150,000 + 0 + 100,000 = 250,000. At least once, without the key, is sometimes twice.</li><li><strong>Two transactions</strong>: Debit (with the status) in one, the outbox row in another. TLC breaks it in two steps, Debit(4471) then a worker crash, and we are back at month-end: €150,000 in the treasury, no row, no credit. In this spec each loan’s worker goes from idle to debited and back to idle: Debit commits the debit and the status, Enqueue writes the outbox row in a second transaction, and CrashWorker is the deploy between them. The liveness run prints a lasso, lesson 2’s counterexample that ends in a loop, here a final “Stuttering”, which means nothing ever changes again: 4471 is delivered, 4472 is debited and never credited, 62 distinct states in all. Moving the second write into an outbox doesn’t help unless it commits <em>with</em> the first.</li><li><strong>Three loans</strong> (4473 adds €20,000 for the repair shop, swapped in by the cfg as lesson 2 swapped in a third worker): no error, 458 states generated, 181 distinct, depth 12.</li></ol>
+<p>Notice who does what, just as in lesson 2. The one-transaction outbox gives safety against the gap: the debit never exists without its debt. The relay with fairness gives liveness: every debt is eventually delivered. The key makes at least once harmless. Take away any one of the three and TLC has a counterexample ready.</p>
+<p class="pending">[diagram:at-least-once: built on the lesson page]</p>
+<p><strong>Build it.</strong> Extend the Python checker to the outbox. The state is the treasury, the two accounts, the two statuses, the outbox, held, and the crash flag. Write one step each for Pay, Deliver (keyed or plain, by a flag), Ack and CrashRelay, tagging CrashRelay as a crash and the others as work. Search breadth-first, recording each state’s depth. Let bad be the reachable states where the total isn’t 200,000, stuck the unsettled states with no work step enabled, and first_bad the smallest depth of a bad state. With the keyed credit, then the plain one:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">assert</span> <span class="c-builtin">len</span>(states) == <span class="c-number">37</span> <span class="c-keyword">and</span> <span class="c-keyword">not</span> bad <span class="c-keyword">and</span> <span class="c-keyword">not</span> stuck
+<span class="c-keyword">assert</span> <span class="c-builtin">len</span>(states) == <span class="c-number">49</span> <span class="c-keyword">and</span> first_bad == <span class="c-number">4</span></code></pre>
+</section>
+
+<section id="fix-the-bug">
+<h2>Fix the bug</h2>
+<p>In the lab below, both crashes are always on: one deploy per run, which may hit the worker or the relay. Your panel picks a design: two writes with debit first, two writes with credit first, an outbox written in a separate transaction, or an outbox written in the same transaction as the debit. A switch makes the loan ledger’s credit keyed by loan id, and you can run with two loans or three. The checker shows the states it explored and two lamps: the books add up (at rest, for designs where a worker can sit between two writes; in every state, for the outbox written in one transaction), and every loan eventually settles, which for every design means each loan’s account ends at exactly its amount, with nothing left owed. It draws whatever counterexample it finds.</p>
+<p>The desk is fixed when both lamps are green with two loans, and stay green with three. Turning the deploy off is not an answer. Month-end comes whether you model it or not.</p>
+<p class="pending">[lab-act2: built on the lesson page]</p>
+</section>
+
+<section id="what-people-get-wrong">
+<h2>What people get wrong</h2>
+<p><strong>“Just get the order right.”</strong> There is no right order across two systems. Debit first loses money in a crash; credit first doubles it. The order only chooses which way the books are wrong.</p>
+<p><strong>“Exactly-once delivery.”</strong> Over a network, a sender that doesn’t hear back can’t tell a lost request from a lost reply, so it either retries, risking twice, or doesn’t, risking never. What you can build is at least once from the sender plus a receiver that applies each request once. The effect is exactly once; the delivery isn’t.</p>
+<p><strong>“The outbox is a message queue.”</strong> You could relay the rows through a queue, but the queue isn’t the point. The point is that the debt is recorded in the same transaction as the debit. An outbox written in a separate transaction is just two writes again, and TLC breaks it in two steps.</p>
+<p><strong>“Delete the row first, so we never deliver twice.”</strong> That turns at least once into at most once. A relay that deletes, then crashes before the credit, has thrown away the only record of the debt.</p>
+</section>
+
+<section id="recap-and-the-next-bug">
+<h2>Recap and the next bug</h2>
+<p>A <strong>conservation invariant</strong> says a sum never changes: here, the treasury plus every loan account equals the pot. Summing over a function takes a <strong>recursive operator</strong>, SumOver, which TLC runs. Two <strong>writes</strong> to two systems leave a gap, and a <strong>crash</strong> in that gap breaks the sum: debit first makes money vanish, credit first makes it appear twice. <strong>Two-phase commit</strong> could close the gap, at the cost of locks, blocking and a protocol both sides must speak. The <strong>transactional outbox</strong> sidesteps it: the debit and an outbox row commit in one local transaction, a <strong>relay</strong> delivers each row <strong>at least once</strong>, and a credit keyed by loan id makes the repeats harmless. TLC checks both halves: Conserved in all 37 states, and AllSettled under fairness.</p>
+<p>At the next month-end, the books add up to the euro.</p>
+<p>Then the payout desk itself changes. Approved loans will no longer wait in a table to be claimed: each one becomes a message on a queue, and a worker that receives it holds a lease on it. A pilot goes out first. For the full rollout the team writes nine pages: a queue, claims, leases, keys, crashes.</p>
+<p>The architecture review is chaired by Maren. She reads the nine pages, walks to the whiteboard, and writes the whole desk in one line: <strong>PayOnce</strong>, each approved loan goes to paid exactly once, in one step. “Everything else is how,” she says. Next lesson takes her question: how do you show the real queue-and-claim design does what the one-line spec promises?</p>
+</section>
+
+<section id="concept-check">
+<h2>Concept check</h2>
+<p>Write your answers down before you move on.</p>
+<ol><li>With no crash at all, TLC breaks Conserved in one step on the debit-first desk. Is that a bug in the desk? Why does the debit-first desk need “at rest” in its invariant while the outbox’s Conserved needs no such guard?</li><li>A state of the outbox desk: treasury €120,000, the outbox holds 4471 and 4472, 4471’s account holds €50,000, and 4472’s holds 0. Work out InFlight, Credited and the total. Why does InFlight leave out 4471 although its row is still in the outbox? Now remove the key, let the relay crash and deliver 4471 again: what is the total?</li><li>A colleague proposes that the relay delete each outbox row <em>before</em> calling the loan ledger, “so we never deliver twice”. Which property breaks, and what does the shortest counterexample look like?</li></ol>
+</section>
+
+</div>
+</html>

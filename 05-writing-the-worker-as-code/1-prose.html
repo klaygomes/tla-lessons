@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson text (draft): Writing the Worker as Code</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../lesson.css">
+<link rel="stylesheet" href="../katex/katex.min.css">
+<style>
+[hidden] { display: none !important; }
+pre.code { margin: 0; max-width: 100%; color: var(--code-text); background: var(--code-bg); border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-code); line-height: var(--leading-code); }
+.display-math { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: var(--space-1) 0; }
+.katex { font-size: var(--text-math); color: var(--ink); }
+.display-math .katex-display { margin: 0; }
+.display-math .katex-display > .katex { font-size: var(--text-math-display); }
+:not(.katex-mathml) > math { font-family: var(--font-math); font-size: var(--text-math); }
+.rule-box { max-width: 100%; }
+table.worked { font-family: var(--font-mono); font-size: var(--text-table); font-variant-numeric: tabular-nums; }
+table.worked td { white-space: nowrap; }
+table.worked th { white-space: normal; vertical-align: bottom; line-height: var(--leading-heading); }
+table.worked td:first-child, table.worked th:first-child { font-family: var(--font-ui); white-space: normal; color: var(--ink-soft); width: 1%; }
+
+.lab h3 { font-size: var(--text-h3); }
+.lab .readout { min-height: 5em; align-content: start; }
+.lab .note { font-size: var(--text-caption); color: var(--ink-soft); }
+.k-ask { display: grid; gap: var(--space-2); }
+.k-ask + .k-ask { margin-top: var(--space-3); }
+.k-ask .k-q { font-weight: var(--weight-bold); }
+.k-ask button.k-wrong { text-decoration: line-through; border-color: var(--rule); color: var(--ink-soft); }
+.k-ask button.k-right { background: var(--input-soft); border-color: var(--input); opacity: 1; }
+.k-ask .k-feedback { min-height: 1.6em; }
+.k-ask .k-feedback.k-bad { color: var(--accent-ink); }
+.k-ask .k-feedback:focus { outline: none; }
+.k-meter { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-1) var(--space-3); align-items: center; font-size: var(--text-caption); }
+.k-meter .bar { height: var(--space-3); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); overflow: hidden; background: var(--paper-2); }
+.k-meter .fill { height: 100%; width: 0; background: var(--accent); }
+.k-meter output { font-family: var(--font-mono); text-align: right; min-width: 5.5em; padding-right: var(--space-1); }
+.k-meter .scale { grid-column: 2; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--text-fig); color: var(--ink-soft); }
+.k-now { font-size: var(--text-caption); color: var(--ink-soft); }
+button.k-toggle[aria-pressed="true"]::before { content: "\2713\00a0"; }
+.k-working, .k-more { border-left: var(--line-mark) solid var(--rule); padding-left: var(--space-4); }
+.k-working { display: grid; gap: var(--space-2); }
+.k-working-note { color: var(--ink-soft); font-size: var(--text-ui); }
+.k-working-open { justify-self: start; }
+.k-working-body, .k-more-body { display: grid; gap: var(--space-block); }
+.k-working > *, .k-working-body > *, .k-more-body > * { min-width: 0; }
+.k-more-body { margin-top: var(--space-block); }
+.k-working-body:focus { outline: none; }
+.k-more > summary { cursor: pointer; font-family: var(--font-ui); font-weight: var(--weight-medium); color: var(--input); width: fit-content; }
+.k-still-text { display: none; }
+@media (prefers-reduced-motion: reduce) { .k-motion-text { display: none; } .k-still-text { display: inline; } }
+@media (max-width: 520px) { .k-meter { grid-template-columns: 1fr auto; } .k-meter > span:first-child { grid-column: 1 / -1; } .k-meter .bar { grid-column: 1; grid-row: 2; } .k-meter output { grid-column: 2; grid-row: 2; } .k-meter .scale { grid-column: 1; grid-row: 3; } }
+p .katex, li .katex, td .katex { white-space: normal; }
+p .katex-display, li .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+pre.code .c-keyword { color: var(--code-keyword); font-weight: var(--weight-medium); }
+pre.code .c-string { color: var(--code-string); }
+pre.code .c-number { color: var(--code-number); }
+pre.code .c-function { color: var(--code-function); font-weight: var(--weight-medium); }
+pre.code .c-call { color: var(--code-call); }
+pre.code .c-builtin { color: var(--code-builtin); }
+pre.code .c-comment { color: var(--code-comment); font-style: italic; }
+.tla-block { position: relative; }
+.tla-switch { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); font-family: var(--font-ui); font-size: var(--text-small); color: var(--ink-soft); margin-bottom: var(--space-1); cursor: pointer; }
+.tla-switch input { accent-color: var(--input); }
+pre.code .tla-sym { display: inline-block; width: calc(var(--w) * 1ch); text-align: center; color: var(--code-keyword); }
+pre.code .tla-sym[data-align="end"] { text-align: end; }
+pre.code .tla-sym[data-align="start"] { text-align: start; }
+pre.code .tla-prime { color: var(--accent); font-weight: var(--weight-medium); }
+pre.code .tla-a { display: none; }
+pre.code .c-rule { color: var(--code-comment); }
+.tla-sub sub, .prose sub { font-size: var(--text-micro); }
+.tla-block:has(.tla-switch input:checked) .tla-sym { width: auto; }
+.tla-block:has(.tla-switch input:checked) .tla-g { display: none; }
+.tla-block:has(.tla-switch input:checked) .tla-a { display: inline; }
+pre.code .tla-rule .tla-g { display: inline-flex; width: 100%; }
+pre.code .tla-module { display: flex; align-items: center; gap: var(--space-2); width: 100%; }
+pre.code .tla-module::before, pre.code .tla-module::after { content: ""; flex: 1; border-top: var(--line-hair) solid var(--code-comment); }
+pre.code .tla-end { display: block; width: 100%; height: var(--space-1); border-top: var(--line-hair) solid var(--code-comment); border-bottom: var(--line-hair) solid var(--code-comment); }
+.tla-block:has(.tla-switch input:checked) .tla-rule .tla-g { display: none; }
+.table { color: var(--ink); background: linear-gradient(to right, var(--paper) 30%, transparent) left / var(--space-8) 100% no-repeat local, linear-gradient(to left, var(--paper) 30%, transparent) right / var(--space-8) 100% no-repeat local, radial-gradient(farthest-side at 0 50%, var(--rule), transparent) left / var(--space-3) 100% no-repeat scroll, radial-gradient(farthest-side at 100% 50%, var(--rule), transparent) right / var(--space-3) 100% no-repeat scroll; }
+table.worked.k-symbols td { white-space: normal; }
+table.worked.k-symbols td code { white-space: nowrap; }
+table.worked.k-symbols td:first-child { font-family: var(--font-mono); font-size: var(--text-h3); color: var(--code-keyword); }
+@media (max-width: 520px) { table.worked.k-symbols td code { white-space: normal; } }
+
+.pending { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }
+</style>
+<div class="wrap">
+<nav class="crumbs" aria-label="Course"><a href="../index.html">The Payout Desk</a><span aria-hidden="true">/</span><span>Lesson 5</span><span aria-hidden="true">/</span><span>Lesson text (draft)</span></nav>
+<header><h1>Writing the Worker as Code</h1><p class="links">Lesson text (draft) · <a href="1-sheet.html">Teacher&#x27;s sheet</a></p></header>
+<section id="the-spec-that-passed">
+<h2>The spec that passed</h2>
+<p>Noor joined the payout desk on a Monday, and by Wednesday she had read every spec in the repository. Her verdict was polite and firm: “I believe these are right. I just can’t read them.”</p>
+<p>She had a point. Every action in the desk spec is a block of lines joined by “and”, and every one of them ends with a list of the variables it does <em>not</em> touch. The worker’s program counter is spelled out by hand, so you have to keep in your head that “claimed” comes after “idle” and before “sent”. The TypeScript reads top to bottom like a story. The spec reads like a tax form for the same story.</p>
+<p>So Noor did what a good engineer does with code that is hard to read. She rewrote it. TLA+ comes with a second language for exactly this, called <strong>PlusCal</strong>: you write the worker as a small program, with assignments, ifs and loops, and a tool translates it into the TLA+ you already know. Noor rewrote the worker’s claim in PlusCal, ran the checker, and got the line everybody loves: no error has been found.</p>
+<p>In the same week, she tidied the TypeScript. The old worker claimed a loan with one conditional update, the SQL statement from lesson 1. Noor moved the desk onto the team’s new data layer, which loads a row as an object and saves it back:</p>
+<pre class="code" data-lang="ts"><code>const loan = await loans.find(loanId);
+<span class="c-keyword">if</span> (loan.status !== &quot;approved&quot;) <span class="c-keyword">return</span>;
+loan.status = &quot;claimed&quot;;
+await loans.save(loan);</code></pre>
+<p>Cleaner, she thought, and the spec said the claim was safe. Code review agreed. It shipped.</p>
+<p>Three weeks later, finance sent a short message. The bank’s monthly statement has a column that counts requests the bank refused to pay because their idempotency key had already been paid. Since lesson 2, that column held a handful a month: a worker that crashed after sending, came back, and sent again. This month it held dozens, for loans where nobody had crashed at all.</p>
+<p>Nobody was paid twice. The key from lesson 2 caught every one of them. But each of those refused requests was a second worker that had claimed a loan another worker had already claimed, and sent its money. Lesson 1’s race was back in production, and the only thing between it and the bakery was the bank’s memory, which lesson 3 taught you not to lean on.</p>
+<p class="pending">[diagram:two-calls: built on the lesson page]</p>
+<p>And the checker had passed. This lesson is about why. By the end you will be able to write a worker in PlusCal, read the TLA+ it turns into, say exactly what counts as one step, and catch the lie in Noor’s spec before it ships.</p>
+</section>
+
+<section id="pluscal-one-line-at-a-time">
+<h2>PlusCal, one line at a time</h2>
+<p>Here is Noor’s spec. Before you read the explanation, look at it as code. It should feel familiar.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="tla-rule"><span class="tla-g"><span class="tla-module"><span class="c-keyword">MODULE</span> OneLabel</span></span><span class="tla-a">---- MODULE OneLabel ----</span></span>
+<span class="c-keyword">EXTENDS</span> Naturals
+
+<span class="c-function">Workers</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> {<span class="c-string">&quot;A&quot;</span>, <span class="c-string">&quot;B&quot;</span>}
+
+<span class="c-comment">(* --algorithm OneLabel {
+  variables status = &quot;approved&quot;, transfers = 0;
+
+  process (w \in Workers) {
+    claim: if (status = &quot;approved&quot;) {
+             status := &quot;claimed&quot;;
+    send:    transfers := transfers + 1;
+    mark:    status := &quot;paid&quot;
+           }
+  }
+} *)</span>
+
+<span class="c-function">NoDoublePayout</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> transfers <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≤</span><span class="tla-a">&lt;=</span></span> <span class="c-number">1</span>
+<span class="tla-rule"><span class="tla-g"><span class="tla-end"></span></span><span class="tla-a">====</span></span></code></pre></div>
+<p>The model is lesson 1’s fixed desk: one loan, its status, and transfers, which counts every request the bank receives for the loan. Lesson 2’s idempotency key is left out on purpose. The key is a safety net. We want to know whether the claim is right on its own.</p>
+<p>The first lines are lesson 1’s: the module’s name, then <code>EXTENDS Naturals</code>, which loads TLA+’s standard module of natural numbers, where <code>+</code> and <code>&lt;=</code> are defined. The program lives inside a comment, between <code>(<em></code> and <code></em>)</code>, so the TLA+ tools ignore it until it has been translated. The word <strong>algorithm</strong>, written <code>--algorithm</code>, opens it and gives it a name. Curly braces group statements, as in TypeScript, and a semicolon separates one statement from the next.</p>
+<p><code>variables</code> declares the shared state and its starting values. Here the equals sign means “starts as”: status starts approved, transfers starts at zero. These are the variables every worker can see.</p>
+<p><code>process (w \in Workers)</code> says: run one copy of this code for every element of Workers. A <strong>process</strong> is one running copy, and here there are two, A and B. Inside the code a process can refer to its own name, which PlusCal calls <code>self</code>. The <code>w</code> is just a name for the family of processes. You type <code>\in</code>; the listings on this page typeset it as ∈, as they typeset <code>/\</code> as ∧, and the “Show ASCII” switch above each listing shows what you type.</p>
+<p>Then the body. The <code>:=</code> is assignment, as in Pascal: “status becomes claimed”. The <code>if</code> is an if. And then there are the words at the start of some lines, <code>claim:</code>, <code>send:</code> and <code>mark:</code>. Those are <strong>labels</strong>, and they are the whole point of this lesson.</p>
+<p>A label marks where a step begins. <strong>Everything from one label to the next label runs as one step</strong>, with no other process acting in the middle. So for each worker this program has exactly three steps:</p>
+<ol><li><code>claim</code>: look at the status, and if it is approved, set it to claimed. One step.</li><li><code>send</code>: add one transfer. One step.</li><li><code>mark</code>: set the status to paid. One step.</li></ol>
+<p>When a worker reaches the end of its code, it is finished, and PlusCal gives it the label <code>Done</code>.</p>
+<p class="pending">[diagram:labels: built on the lesson page]</p>
+<p>Read the whole program aloud once: <strong>each worker, in one step, claims the loan if it is approved; then in a second step sends the money; then in a third marks the loan paid.</strong> That is lesson 1’s fixed desk, the one with the atomic Claim, written as a program.</p>
+<p>Here are the three labels as Python functions. Each one takes the shared state and returns the new state and the label the worker goes to next. A worker’s position is just the name of its next label.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">claim</span>(status, transfers):
+    <span class="c-keyword">if</span> status == <span class="c-string">&quot;approved&quot;</span>:
+        <span class="c-keyword">return</span> <span class="c-string">&quot;claimed&quot;</span>, transfers, <span class="c-string">&quot;send&quot;</span>
+    <span class="c-keyword">return</span> status, transfers, <span class="c-string">&quot;Done&quot;</span>
+
+<span class="c-keyword">def</span> <span class="c-function">send</span>(status, transfers):
+    <span class="c-keyword">return</span> status, transfers + <span class="c-number">1</span>, <span class="c-string">&quot;mark&quot;</span>
+
+<span class="c-keyword">def</span> <span class="c-function">mark</span>(status, transfers):
+    <span class="c-keyword">return</span> <span class="c-string">&quot;paid&quot;</span>, transfers, <span class="c-string">&quot;Done&quot;</span>
+
+NOOR = {<span class="c-string">&quot;claim&quot;</span>: claim, <span class="c-string">&quot;send&quot;</span>: send, <span class="c-string">&quot;mark&quot;</span>: mark}
+
+status, transfers = <span class="c-string">&quot;approved&quot;</span>, <span class="c-number">0</span>
+pc = {<span class="c-string">&quot;A&quot;</span>: <span class="c-string">&quot;claim&quot;</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-string">&quot;claim&quot;</span>}
+<span class="c-keyword">for</span> w <span class="c-keyword">in</span> <span class="c-string">&quot;ABAA&quot;</span>:
+    status, transfers, pc[w] = NOOR[pc[w]](status, transfers)
+    <span class="c-builtin">print</span>(w, status, transfers, pc)</code></pre>
+<pre class="code" data-lang="text"><code>A claimed <span class="c-number">0</span> {&#x27;A&#x27;: &#x27;send&#x27;, &#x27;B&#x27;: &#x27;claim&#x27;}
+B claimed <span class="c-number">0</span> {&#x27;A&#x27;: &#x27;send&#x27;, &#x27;B&#x27;: &#x27;Done&#x27;}
+A claimed <span class="c-number">1</span> {&#x27;A&#x27;: &#x27;mark&#x27;, &#x27;B&#x27;: &#x27;Done&#x27;}
+A paid <span class="c-number">1</span> {&#x27;A&#x27;: &#x27;Done&#x27;, &#x27;B&#x27;: &#x27;Done&#x27;}</code></pre>
+<p>One function call per step. That is the mental model to keep: <strong>a label is a function, and a step is one call of it.</strong> Whatever is inside the function happens all at once.</p>
+</section>
+
+<section id="one-behavior-label-by-label">
+<h2>One behavior, label by label</h2>
+<p>The dictionary <code>pc</code> in that snippet should look familiar: it is lesson 1’s program counter. In PlusCal you never write it. The labels are its values. Let’s run one behavior by hand and watch it.</p>
+<p>Both workers start at <code>claim</code>. A goes first and finds the loan approved. Then B goes. Predict before you look: what does B find, and where does B go? In the table, claim(A) means worker A, the process whose <code>self</code> is A, taking its claim step.</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>approved</td><td>claim</td><td>claim</td><td>0</td></tr><tr><td>1</td><td>claim(A)</td><td>claimed</td><td>send</td><td>claim</td><td>0</td></tr><tr><td>2</td><td>claim(B)</td><td>claimed</td><td>send</td><td>Done</td><td>0</td></tr><tr><td>3</td><td>send(A)</td><td>claimed</td><td>mark</td><td>Done</td><td>1</td></tr><tr><td>4</td><td>mark(A)</td><td>paid</td><td>Done</td><td>Done</td><td>1</td></tr></tbody></table></div>
+<p>B finds “claimed” and is finished in a single step, because its <code>if</code> fails and there is nothing after it. That is the same table the snippet printed. There is no row where B has looked but not yet written, because looking and writing are inside one label. No such row can exist.</p>
+<p>How many reachable states does Noor’s spec have with two workers? With three? PlusCal chose the program counter’s values for you, so will the counts match lesson 1’s atomic Claim desk, or did the translation add states of its own? Make a guess, then let the computer count. Here is lesson 1’s breadth-first search, rewritten to run any program written as a dictionary of labels. Every worker starts at the program’s first label, and a worker whose label is not in the dictionary, such as <code>Done</code>, has no step left. It continues the snippet above.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">from</span> collections <span class="c-keyword">import</span> deque
+
+<span class="c-keyword">def</span> <span class="c-function">explore</span>(prog, workers=<span class="c-string">&quot;AB&quot;</span>):
+    first = <span class="c-builtin">next</span>(<span class="c-builtin">iter</span>(prog))
+    start = (<span class="c-string">&quot;approved&quot;</span>, <span class="c-number">0</span>, (first,) * <span class="c-builtin">len</span>(workers))
+    parent, queue = {start: <span class="c-keyword">None</span>}, <span class="c-call">deque</span>([start])
+    <span class="c-keyword">while</span> queue:
+        state = queue.<span class="c-call">popleft</span>()
+        status, transfers, pc = state
+        <span class="c-keyword">if</span> transfers &gt; <span class="c-number">1</span>:
+            path = []
+            <span class="c-keyword">while</span> state:
+                path.<span class="c-call">append</span>(state)
+                state = parent[state]
+            <span class="c-keyword">return</span> path[::-<span class="c-number">1</span>]
+        <span class="c-keyword">for</span> i, at <span class="c-keyword">in</span> <span class="c-builtin">enumerate</span>(pc):
+            <span class="c-keyword">if</span> at <span class="c-keyword">in</span> prog:
+                s, t, to = prog[at](status, transfers)
+                after = (s, t, pc[:i] + (to,) + pc[i + <span class="c-number">1</span>:])
+                <span class="c-keyword">if</span> after <span class="c-keyword">not</span> <span class="c-keyword">in</span> parent:
+                    parent[after] = state
+                    queue.<span class="c-call">append</span>(after)
+    <span class="c-keyword">return</span> <span class="c-builtin">len</span>(parent)
+
+<span class="c-builtin">print</span>(<span class="c-call">explore</span>(NOOR), <span class="c-call">explore</span>(NOOR, <span class="c-string">&quot;ABC&quot;</span>))</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">12</span> <span class="c-number">32</span></code></pre>
+<p>When no state has two transfers, <code>explore</code> returns how many states it saw; when one does, it returns the path to it. Twelve and thirty-two, the same counts lesson 1’s lab showed for the atomic Claim desk, where a worker that finds the loan taken skips it and finishes, as B does here. (Lesson 2’s 8 states came from a desk where that worker keeps polling instead.) And TLC agrees: on Noor’s translated spec it reports “No error has been found”, 12 distinct states with two workers and 32 with three.</p>
+<p>So the spec is fine. It describes a safe desk. Hold that thought, because it is exactly half true.</p>
+</section>
+
+<section id="what-the-translator-writes">
+<h2>What the translator writes</h2>
+<p>TLC doesn’t read PlusCal. Before it can check anything, a tool called the <strong>translator</strong> turns the algorithm into an ordinary TLA+ spec. It ships in the same jar as TLC: <code>-cp tla2tools.jar</code> tells Java to load that jar, and <code>pcal.trans</code> names the translator inside it, where lesson 1’s command named <code>tlc2.TLC</code>.</p>
+<pre class="code" data-lang="bash"><code>java -cp tla2tools.jar pcal.trans OneLabel.tla</code></pre>
+<p>The translator writes its output into the same file, below the comment, between two marker lines, <code>\* BEGIN TRANSLATION</code> and <code>\* END TRANSLATION</code> (in TLA+, <code>\*</code> starts a comment that runs to the end of the line). Run it again after every edit to the algorithm. Here is the part it wrote for the <code>claim</code> label:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">claim</span>(self) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[self] = <span class="c-string">&quot;claim&quot;</span>
+               <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">IF</span> status = <span class="c-string">&quot;approved&quot;</span>
+                     <span class="c-keyword">THEN</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = <span class="c-string">&quot;claimed&quot;</span>
+                          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![self] = <span class="c-string">&quot;send&quot;</span>]
+                     <span class="c-keyword">ELSE</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![self] = <span class="c-string">&quot;Done&quot;</span>]
+                          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> status
+               <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> transfers</code></pre></div>
+<p>That is an action, exactly like the ones you wrote by hand in lessons 1 and 2, one per label, named after the label. Read it line by line. The first line is the guard: process self is at label claim. Then IF, THEN and ELSE, which choose between two lists of “and”: if the status is approved, then afterwards the status is claimed and self’s pc is send; otherwise self’s pc is Done and the status stays as it was. Either way, the transfers stay as they were. The translator also invented the variable <code>pc</code> for you, a function from each process to the label it will run next, and wrote the UNCHANGED lists that Noor found so tiring.</p>
+<p><strong>claim(self) is a step in which a worker at the claim label, in one move, reads the status and, if it was approved, writes claimed and moves on to send, and otherwise finishes.</strong> The read and the write are lines of the same formula, so they happen in the same step.</p>
+<p>As Python, with the guard turned into “return None when the step can’t happen”:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">claim_action</span>(state, me):
+    status, transfers, pc = state
+    <span class="c-keyword">if</span> pc[me] != <span class="c-string">&quot;claim&quot;</span>:
+        <span class="c-keyword">return</span> <span class="c-keyword">None</span>
+    <span class="c-keyword">if</span> status == <span class="c-string">&quot;approved&quot;</span>:
+        <span class="c-keyword">return</span> <span class="c-string">&quot;claimed&quot;</span>, transfers, {**pc, me: <span class="c-string">&quot;send&quot;</span>}
+    <span class="c-keyword">return</span> status, transfers, {**pc, me: <span class="c-string">&quot;Done&quot;</span>}
+
+start = (<span class="c-string">&quot;approved&quot;</span>, <span class="c-number">0</span>, {<span class="c-string">&quot;A&quot;</span>: <span class="c-string">&quot;claim&quot;</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-string">&quot;claim&quot;</span>})
+after = <span class="c-call">claim_action</span>(start, <span class="c-string">&quot;A&quot;</span>)
+<span class="c-builtin">print</span>(*after)
+<span class="c-builtin">print</span>(<span class="c-call">claim_action</span>(after, <span class="c-string">&quot;A&quot;</span>))
+<span class="c-builtin">print</span>(*<span class="c-call">claim_action</span>(after, <span class="c-string">&quot;B&quot;</span>))</code></pre>
+<pre class="code" data-lang="text"><code>claimed <span class="c-number">0</span> {&#x27;A&#x27;: &#x27;send&#x27;, &#x27;B&#x27;: &#x27;claim&#x27;}
+None
+claimed <span class="c-number">0</span> {&#x27;A&#x27;: &#x27;send&#x27;, &#x27;B&#x27;: &#x27;Done&#x27;}</code></pre>
+<p>A has already left the claim label, so <code>claim(A)</code> can’t happen a second time. B can, and finds the loan claimed.</p>
+<p>Below the label actions, the translator wrote the glue:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">w</span>(self) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> claim(self) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> send(self) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> mark(self)
+
+<span class="c-function">Terminating</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∀</span><span class="tla-a">\A</span></span> self <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> ProcSet: pc[self] = <span class="c-string">&quot;Done&quot;</span>
+               <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> vars
+
+<span class="c-function">Next</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> (<span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∃</span><span class="tla-a">\E</span></span> self <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers: w(self))
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Terminating
+
+<span class="c-function">Spec</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Init <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">□</span><span class="tla-a">[]</span></span>[Next]<span class="tla-sub"><span class="tla-g"><sub>vars</sub></span><span class="tla-a">_vars</span></span>
+
+<span class="c-function">Termination</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">◇</span><span class="tla-a">&lt;&gt;</span></span>(<span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∀</span><span class="tla-a">\A</span></span> self <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> ProcSet: pc[self] = <span class="c-string">&quot;Done&quot;</span>)</code></pre></div>
+<p><code>w(self)</code> is named after the process: a step of process self is a step of one of its labels, so the three actions are joined by “or”. <code>ProcSet</code> is the set of all processes, here just Workers, and <code>vars</code> is the tuple of all the variables, pc included, as in lesson 1. Now picture both workers at Done. No label is left to run, so no worker step is possible, and TLC reports a state with no possible next step as a <strong>deadlock</strong>; that is why lesson 1 ran TLC with <code>-deadlock</code>. Terminating says that every process is at Done and nothing changes, which turns that do-nothing step into a Next step, so a finished desk is not a deadlock. Next says a step is some worker’s step, or that do-nothing ending. Spec is lesson 1’s shape: start in Init, and every step is a Next step or a stuttering step. <strong>Termination is a liveness property that the translator writes for free: eventually, every process is at Done.</strong> The diamond is lesson 2’s “eventually”, and the upside-down A is “for every”. The translator only defines Termination. TLC checks it only if you list it on a PROPERTY line.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">terminated</span>(pc):
+    <span class="c-keyword">return</span> <span class="c-builtin">all</span>(at == <span class="c-string">&quot;Done&quot;</span> <span class="c-keyword">for</span> at <span class="c-keyword">in</span> pc.<span class="c-call">values</span>())
+
+behavior = [{<span class="c-string">&quot;A&quot;</span>: <span class="c-string">&quot;claim&quot;</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-string">&quot;claim&quot;</span>},
+            {<span class="c-string">&quot;A&quot;</span>: <span class="c-string">&quot;send&quot;</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-string">&quot;claim&quot;</span>},
+            {<span class="c-string">&quot;A&quot;</span>: <span class="c-string">&quot;send&quot;</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-string">&quot;Done&quot;</span>},
+            {<span class="c-string">&quot;A&quot;</span>: <span class="c-string">&quot;mark&quot;</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-string">&quot;Done&quot;</span>},
+            {<span class="c-string">&quot;A&quot;</span>: <span class="c-string">&quot;Done&quot;</span>, <span class="c-string">&quot;B&quot;</span>: <span class="c-string">&quot;Done&quot;</span>}]
+<span class="c-builtin">print</span>([<span class="c-call">terminated</span>(pc) <span class="c-keyword">for</span> pc <span class="c-keyword">in</span> behavior])
+<span class="c-builtin">print</span>(<span class="c-string">&quot;Termination:&quot;</span>, <span class="c-builtin">any</span>(<span class="c-builtin">map</span>(terminated, behavior)))</code></pre>
+<pre class="code" data-lang="text"><code>[False, False, False, False, True]
+
+Termination: True</code></pre>
+<p>The table from the last section, as a list of program counters: all Done only in the last state, and that is enough for “eventually”.</p>
+<p class="pending">[diagram:translation: built on the lesson page]</p>
+<p>So far PlusCal has been a pure convenience. It wrote the pc, the UNCHANGED lists and the “or” of the actions, and it got them right. Now look again at the one thing it did <em>not</em> decide for you. The translator turned each label into one step. Who decided where the labels go?</p>
+<p>Noor did.</p>
+</section>
+
+<section id="two-calls-one-label">
+<h2>Two calls, one label</h2>
+<p>Look at Noor’s TypeScript again. <code>loans.find</code> is one round trip to the database. <code>loans.save</code> is another. Between them, the worker holds a copy of the row in memory, and the real row can change under it. That is exactly lesson 1’s check-then-act: two steps, with a gap where the other worker can move.</p>
+<p>Noor’s spec puts both inside the single label <code>claim</code>. In the spec they are one step. In the code they are two. The spec is a correct description of a desk, just not of the desk she shipped.</p>
+<p>The honest version gives the code’s two calls two labels. The read goes under <code>check</code>, the write under <code>claim</code>:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code>  process (w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers) {
+    check: if (status = <span class="c-string">&quot;approved&quot;</span>) {
+    claim:   status := <span class="c-string">&quot;claimed&quot;</span>;
+    send:    transfers := transfers + <span class="c-number">1</span>;
+    mark:    status := <span class="c-string">&quot;paid&quot;</span>
+           }
+  }</code></pre></div>
+<p>The only difference is one word, <code>check:</code>, at the top. Read it in steps: at check, a worker reads the status and, if approved, moves on to claim, and otherwise finishes; at claim, it writes claimed, <em>without looking again</em>, because <code>loans.save</code> doesn’t look again. <strong>Each worker reads the loan in one step and writes it in a later one, and the other worker can act in between.</strong> That is the code’s shape, line for line.</p>
+<p>Before you run it: will TLC find a double payout, and how many steps long will the shortest one be? Lesson 1’s naive desk needed four steps, a Check and a Send per worker. This one has an extra label per worker.</p>
+<p>In Python, <code>check</code> is a new label and the old <code>claim</code> loses its if. Continuing the snippets above:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">check</span>(status, transfers):
+    <span class="c-keyword">if</span> status == <span class="c-string">&quot;approved&quot;</span>:
+        <span class="c-keyword">return</span> status, transfers, <span class="c-string">&quot;claim&quot;</span>
+    <span class="c-keyword">return</span> status, transfers, <span class="c-string">&quot;Done&quot;</span>
+
+<span class="c-keyword">def</span> <span class="c-function">write_claim</span>(status, transfers):
+    <span class="c-keyword">return</span> <span class="c-string">&quot;claimed&quot;</span>, transfers, <span class="c-string">&quot;send&quot;</span>
+
+HONEST = {<span class="c-string">&quot;check&quot;</span>: check, <span class="c-string">&quot;claim&quot;</span>: write_claim,
+          <span class="c-string">&quot;send&quot;</span>: send, <span class="c-string">&quot;mark&quot;</span>: mark}
+<span class="c-keyword">for</span> state <span class="c-keyword">in</span> <span class="c-call">explore</span>(HONEST):
+    <span class="c-builtin">print</span>(state)</code></pre>
+<pre class="code" data-lang="text"><code>(&#x27;approved&#x27;, <span class="c-number">0</span>, (&#x27;check&#x27;, &#x27;check&#x27;))
+(&#x27;approved&#x27;, <span class="c-number">0</span>, (&#x27;claim&#x27;, &#x27;check&#x27;))
+(&#x27;approved&#x27;, <span class="c-number">0</span>, (&#x27;claim&#x27;, &#x27;claim&#x27;))
+(&#x27;claimed&#x27;, <span class="c-number">0</span>, (&#x27;send&#x27;, &#x27;claim&#x27;))
+(&#x27;claimed&#x27;, <span class="c-number">1</span>, (&#x27;mark&#x27;, &#x27;claim&#x27;))
+(&#x27;claimed&#x27;, <span class="c-number">1</span>, (&#x27;mark&#x27;, &#x27;send&#x27;))
+(&#x27;claimed&#x27;, <span class="c-number">2</span>, (&#x27;mark&#x27;, &#x27;mark&#x27;))</code></pre>
+<p>Two transfers, in six steps. Read the second column of program counters: A checks, B checks, and now both are waiting at <code>claim</code> with “approved” in their heads. A writes claimed and sends. B writes claimed too, over a row that already says claimed, and sends. The data layer’s save didn’t complain, because nothing told it to.</p>
+<p>Here is TLC on the translated honest spec, trimmed: each position note is cut short, and each state’s <code>pc</code> is pulled up beside it, written as the label each worker runs next. On a narrow screen, scroll the block sideways to see worker B.</p>
+<pre class="code" data-lang="text"><code>
+Error: Invariant NoDoublePayout <span class="c-keyword">is</span> violated.
+
+State <span class="c-number">1</span>: &lt;Initial predicate&gt;      A: check   B: check
+
+State <span class="c-number">2</span>: &lt;check line <span class="c-number">29</span>, ...&gt;     A: claim   B: check
+
+State <span class="c-number">3</span>: &lt;check line <span class="c-number">29</span>, ...&gt;     A: claim   B: claim
+
+State <span class="c-number">4</span>: &lt;claim line <span class="c-number">35</span>, ...&gt;     A: send    B: claim
+
+State <span class="c-number">5</span>: &lt;send line <span class="c-number">40</span>, ...&gt;      A: mark    B: claim
+
+State <span class="c-number">6</span>: &lt;claim line <span class="c-number">35</span>, ...&gt;     A: mark    B: send
+
+State <span class="c-number">7</span>: &lt;send line <span class="c-number">40</span>, ...&gt;      A: mark    B: mark</code></pre>
+<p>Line by line. The first line names the broken invariant. Each “State” line is one state of the counterexample, and the word in angle brackets is the action that produced it. State 1 has no action before it, so TLC writes <code>&lt;Initial predicate&gt;</code>: a state allowed by Init. Look at the other words: check, claim, send. <strong>TLC names each step after the label that took it</strong>, because the translator named each action after its label. You never wrote an action called check, and TLC still reports it, pointing at the line of the generated TLA+ where it lives. Then the program counters. In state 7 the transfers reach 2. Below the trace, cut here, TLC also prints the bookkeeping of lesson 1’s breadth-first search: how many states it generated, how many of them were distinct, and how many were still waiting on its queue when it met the bad one and stopped.</p>
+<p>Six steps, the same shape the Python found, state for state. With <code>-continue</code>, the flag from lesson 1 that tells TLC to keep exploring after an error, it visits all 34 reachable states. With three workers it still finds the same six steps: as lesson 1 showed, extra workers make more states, not shorter bugs.</p>
+<p>So the same five lines of PlusCal, give or take one label, describe two different desks: one where looking and claiming are a single step, and one where they are two. TLC checked the first and said, truthfully, that it was safe. The code was the second.</p>
+</section>
+
+<section id="where-do-the-labels-go">
+<h2>Where do the labels go?</h2>
+<p>Before the rule, play with it. In the lab below you get Noor’s program with a cut line you can switch on or off in each of three gaps: between check and claim, between claim and send, and between send and mark. Every switch is a label. Each combination is a different spec, so a different desk.</p>
+<p>Two questions to answer with the lab. Which placements does TLC call safe? And are any of them refused outright?</p>
+<p class="pending">[lab: built on the lesson page]</p>
+</section>
+
+<section id="the-rule-one-label-per-real-interaction">
+<h2>The rule: one label per real interaction</h2>
+<p>Here is what the lab shows, with two workers. In the first column, “check | claim” means a cut line between check and claim. Every number comes from TLC:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col">labels (cut lines)</th><th scope="col">steps per worker</th><th scope="col">translator</th><th scope="col">TLC</th></tr></thead><tbody><tr><td>none</td><td>1</td><td>refuses</td><td></td></tr><tr><td>send | mark only</td><td>2</td><td>translates</td><td>no error, 8 states</td></tr><tr><td>claim | send only</td><td>2</td><td>translates</td><td>no error, 8 states</td></tr><tr><td>claim | send and send | mark (Noor)</td><td>3</td><td>translates</td><td>no error, 12 states</td></tr><tr><td>check | claim only</td><td>2</td><td>refuses</td><td></td></tr><tr><td>check | claim and send | mark</td><td>3</td><td>translates</td><td>paid twice in 4 steps</td></tr><tr><td>check | claim and claim | send</td><td>3</td><td>translates</td><td>paid twice in 6 steps</td></tr><tr><td>all three</td><td>4</td><td>translates</td><td>paid twice in 6 steps</td></tr></tbody></table></div>
+<p>Two patterns jump out. First: every placement that keeps check and claim in one label passes, and every placement that cuts between them fails. Safety lives or dies on that one cut line. Second: two placements don’t translate at all. Both try to set the status to claimed and then, later in the same label, to paid. The translator stops with “Missing label”.</p>
+<p>Why? Because a label is one step, and one step is one TLA+ action, and in an action <code>status'</code> is the status <em>after</em> the step. It has one value. “Claimed, and then paid, within one step” would be a state that no one, not even the other worker, could ever observe. PlusCal refuses to let you write a step whose middle you seem to care about. The fix is a label between the two assignments, which is exactly what the error message asks for. (The translator has a few rules of this kind. A <code>while</code> loop, for instance, must start at a label.)</p>
+<p>Now the part that no tool will do for you. The table tells you which placements are safe. It cannot tell you which placement is <em>true</em>. Only the code knows that.</p>
+<p>So here is the rule, and it is the heart of this lesson:</p>
+<p class="rule-box"><strong>One label per real interaction with shared state.</strong></p>
+<p>A <strong>real interaction</strong> is one call that reads or changes something another process can see: a database query, a request to the bank, a message on a queue. Each one is a separate moment in the real world, and other workers can act between any two of them, so each one gets its own label. Work that only touches the worker’s own memory, like an if on a value it already read or a sum, doesn’t need a label of its own; it rides along with the interaction before or after it.</p>
+<p class="pending">[diagram:interactions: built on the lesson page]</p>
+<p>A rough guide for TypeScript: nearly every <code>await</code> on a database, a bank or a queue is a label. Count them in Noor’s new code. <code>loans.find</code> is one, <code>loans.save</code> is another, then the transfer, then marking it paid: four labels, all three cut lines on. The bottom row of the table, paid twice in six steps.</p>
+<p>Now count them in the code lesson 1 shipped:</p>
+<pre class="code" data-lang="sql"><code><span class="c-keyword">UPDATE</span> loans
+<span class="c-keyword">SET</span> status = &#x27;claimed&#x27;
+<span class="c-keyword">WHERE</span> id = $<span class="c-number">1</span> <span class="c-keyword">AND</span> status = &#x27;approved&#x27;</code></pre>
+<p>That is one statement, one round trip, and the database runs the check and the write as a single step. One interaction, so one label for check and claim together, and Noor’s original spec is the <em>honest</em> model of that code. Same text, two different programs, one of them true.</p>
+<p>So the spec wasn’t wrong. The code moved out from under it. That suggests a habit: write the call each label stands for right next to it. PlusCal allows ordinary TLA+ comments inside the algorithm:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code>  process (w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers) {
+    claim: <span class="c-comment">\* UPDATE loans ... WHERE status = &#x27;approved&#x27;</span>
+           if (status = <span class="c-string">&quot;approved&quot;</span>) {
+             status := <span class="c-string">&quot;claimed&quot;</span>;
+    send:    <span class="c-comment">\* bank.transfer(account, amount, key)</span>
+             transfers := transfers + <span class="c-number">1</span>;
+    mark:    <span class="c-comment">\* UPDATE loans SET status = &#x27;paid&#x27;</span>
+             status := <span class="c-string">&quot;paid&quot;</span>
+           }
+  }</code></pre></div>
+<p>Read it as before: three labels, each naming the one real call it stands for, and the claim label’s comment says the check and the write are the same SQL statement. <strong>The worker claims with one conditional update, then calls the bank, then marks the loan paid: three real interactions, three labels.</strong> Now a reviewer who sees the TypeScript change from one statement to <code>find</code> and <code>save</code> has a line in the spec that is visibly false.</p>
+<p>The same idea in Python is a table from labels to calls, with a check that each label has exactly one:</p>
+<pre class="code" data-lang="python"><code>spec = {<span class="c-string">&quot;claim&quot;</span>: [<span class="c-string">&quot;UPDATE ... WHERE status = &#x27;approved&#x27;&quot;</span>],
+        <span class="c-string">&quot;send&quot;</span>: [<span class="c-string">&quot;bank.transfer&quot;</span>],
+        <span class="c-string">&quot;mark&quot;</span>: [<span class="c-string">&quot;UPDATE ... SET status = &#x27;paid&#x27;&quot;</span>]}
+noor = {<span class="c-string">&quot;claim&quot;</span>: [<span class="c-string">&quot;loans.find&quot;</span>, <span class="c-string">&quot;loans.save&quot;</span>],
+        <span class="c-string">&quot;send&quot;</span>: [<span class="c-string">&quot;bank.transfer&quot;</span>],
+        <span class="c-string">&quot;mark&quot;</span>: [<span class="c-string">&quot;db.setStatus&quot;</span>]}
+<span class="c-keyword">for</span> name, labels <span class="c-keyword">in</span> ((<span class="c-string">&quot;lesson 1&quot;</span>, spec), (<span class="c-string">&quot;Noor&quot;</span>, noor)):
+    bad = [l <span class="c-keyword">for</span> l, calls <span class="c-keyword">in</span> labels.<span class="c-call">items</span>() <span class="c-keyword">if</span> <span class="c-builtin">len</span>(calls) != <span class="c-number">1</span>]
+    <span class="c-builtin">print</span>(name, <span class="c-string">&quot;labels hiding a gap:&quot;</span>, bad)</code></pre>
+<pre class="code" data-lang="text"><code>lesson <span class="c-number">1</span> labels hiding a gap: []
+
+Noor labels hiding a gap: [&#x27;claim&#x27;]</code></pre>
+<p><strong>Build it.</strong> The lab’s cut lines are easy to mimic in Python, because removing a label means running two label functions inside one call. Write <code>merge(first, second, second_label)</code>, which returns a new label function: it runs <code>first</code>, and if <code>first</code> went on to <code>second_label</code>, it runs <code>second</code> on the result in the same call. Then build the placements from the table out of the labels in “Two calls, one label” (<code>check</code>, <code>write_claim</code>, <code>send</code>, <code>mark</code>) and check them with <code>explore</code>. Call them by their cut lines: <code>ONE</code> is Noor’s spec, check and claim merged; <code>P101</code>, with cut lines only between check and claim and between send and mark, merges <code>write_claim</code> and <code>send</code>; <code>P001</code>, with only the last cut line, merges check, claim and send.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">assert</span> <span class="c-call">explore</span>(ONE) == <span class="c-number">12</span> <span class="c-keyword">and</span> <span class="c-call">explore</span>(ONE, <span class="c-string">&quot;ABC&quot;</span>) == <span class="c-number">32</span>
+<span class="c-keyword">assert</span> <span class="c-builtin">len</span>(<span class="c-call">explore</span>(P101)) - <span class="c-number">1</span> == <span class="c-number">4</span>
+<span class="c-keyword">assert</span> <span class="c-call">explore</span>(P001) == <span class="c-number">8</span></code></pre>
+<p>Notice what Python lets you do that PlusCal doesn’t: merge claim all the way through mark. The functions compose without complaint. The translator’s “Missing label” is a rule about steps, not about code.</p>
+</section>
+
+<section id="the-whole-desk-in-pluscal">
+<h2>The whole desk in PlusCal</h2>
+<p>A detour before the fix. A real worker needs a few more statements and a word about fairness, and each of them changes what one step is, so they belong in the same toolbox as labels. Noor’s bug comes back at “Fix the bug”. Her rewrite was meant to make the desk readable, so let’s finish the job. Here is lesson 2’s fixed desk, the one with Resume, the idempotency key and one crash per run, as a PlusCal worker. Loan is 4471, as in lesson 2, and <code>\notin</code>, typeset ∉, is “is not in”. Ignore the word <code>fair</code> for now; it gets its own section. Three new statements appear; read the code first and guess what each does.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code>  variables status = <span class="c-string">&quot;approved&quot;</span>, owner = <span class="c-string">&quot;nobody&quot;</span>,
+            transfers = <span class="c-number">0</span>, keys = {}, crashed = <span class="c-keyword">FALSE</span>;
+
+  fair process (w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers) {
+    poll:
+      either { await status = <span class="c-string">&quot;approved&quot;</span>;
+               status := <span class="c-string">&quot;claimed&quot;</span>;
+               owner := self }
+      or     { await status = <span class="c-string">&quot;claimed&quot;</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> owner = self }
+      or     { await status = <span class="c-string">&quot;paid&quot;</span>;
+               goto Done };
+    send:
+      either { if (Loan <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∉</span><span class="tla-a">\notin</span></span> keys) {
+                 transfers := transfers + <span class="c-number">1</span> };
+               keys := keys <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span> {Loan} }
+      or     { await <span class="tla-sym tla-op" data-align="center" style="--w:1"><span class="tla-g">¬</span><span class="tla-a">~</span></span>crashed;
+               crashed := <span class="c-keyword">TRUE</span>;
+               goto poll };
+    mark:
+      either { status := <span class="c-string">&quot;paid&quot;</span> }
+      or     { await <span class="tla-sym tla-op" data-align="center" style="--w:1"><span class="tla-g">¬</span><span class="tla-a">~</span></span>crashed;
+               crashed := <span class="c-keyword">TRUE</span>;
+               goto poll }
+  }</code></pre></div>
+<p><strong>await</strong> is a guard. <code>await status = "approved"</code> means this step can only happen in a state where the status is approved; until then, the worker waits at its label. In the translation it becomes one more line of the “and”, with no prime, exactly like the first lines of lesson 1’s Check. An await anywhere inside a label holds back the <em>whole</em> step, even the assignments written above it, because the whole label is one formula.</p>
+<p><strong>either … or</strong> is a choice. The step takes exactly one of the branches, any one whose awaits are true, and the model checker tries every one of them. In the translation it becomes an “or”. At <code>poll</code> the three branches are lesson 2’s three ways to find work: claim an approved loan, resume a loan claimed in your own name, or give up on a loan that is paid. At <code>send</code> and <code>mark</code>, the second branch is the crash: instead of doing its work, the worker forgets everything and jumps back to <code>poll</code>.</p>
+<p><strong>goto</strong> jumps to a label. <code>goto Done</code> finishes the worker; <code>goto poll</code> sends it back to the top. A goto ends the step, so whatever comes after it belongs to a later one. A branch without a goto runs on to the next label, so claiming and resuming both lead to <code>send</code>.</p>
+<p>Read the whole worker aloud: <strong>at poll, in one step, a worker claims an approved loan, or resumes its own claim, or finishes if the loan is paid; at send, it either asks the bank, which pays only if it has not seen the key, or crashes once; at mark, it either marks the loan paid or crashes once.</strong> Three labels: one per real interaction, poll with the database, send with the bank, mark with the database.</p>
+<p>Here is poll in Python. Each branch whose await holds is one possible step:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">poll</span>(status, owner, me):
+    branches = []
+    <span class="c-keyword">if</span> status == <span class="c-string">&quot;approved&quot;</span>:
+        branches.<span class="c-call">append</span>((<span class="c-string">&quot;claim it&quot;</span>, <span class="c-string">&quot;send&quot;</span>))
+    <span class="c-keyword">if</span> status == <span class="c-string">&quot;claimed&quot;</span> <span class="c-keyword">and</span> owner == me:
+        branches.<span class="c-call">append</span>((<span class="c-string">&quot;resume it&quot;</span>, <span class="c-string">&quot;send&quot;</span>))
+    <span class="c-keyword">if</span> status == <span class="c-string">&quot;paid&quot;</span>:
+        branches.<span class="c-call">append</span>((<span class="c-string">&quot;finish&quot;</span>, <span class="c-string">&quot;Done&quot;</span>))
+    <span class="c-keyword">return</span> branches
+
+<span class="c-builtin">print</span>(<span class="c-call">poll</span>(<span class="c-string">&quot;approved&quot;</span>, <span class="c-string">&quot;nobody&quot;</span>, <span class="c-string">&quot;A&quot;</span>))
+<span class="c-builtin">print</span>(<span class="c-call">poll</span>(<span class="c-string">&quot;claimed&quot;</span>, <span class="c-string">&quot;A&quot;</span>, <span class="c-string">&quot;A&quot;</span>))
+<span class="c-builtin">print</span>(<span class="c-call">poll</span>(<span class="c-string">&quot;claimed&quot;</span>, <span class="c-string">&quot;A&quot;</span>, <span class="c-string">&quot;B&quot;</span>))</code></pre>
+<pre class="code" data-lang="text"><code>[(&#x27;claim it&#x27;, &#x27;send&#x27;)]
+[(&#x27;resume it&#x27;, &#x27;send&#x27;)]
+[]</code></pre>
+<p>The empty list is the await at work: B, looking at a loan claimed by A, has no step it can take at poll. It waits.</p>
+<p class="pending">[diagram:poll: built on the lesson page]</p>
+<p>Predict before reading on. Lesson 2’s hand-written version of this desk had 23 reachable states with two workers and 46 with three. The PlusCal version names its program counters differently, poll, send, mark and Done, and models the crash as a branch instead of a separate action. Same counts or different?</p>
+<p>TLC on the translation: no error, 23 distinct states, and with three workers, 46. Exactly lesson 2’s numbers. Different names, same situations. That is a good sign that the translation is what you meant, and a cheap test worth running whenever you rewrite a spec: if the counts move, find out why before you trust either version.</p>
+<h3>Picking a loan with with</h3>
+<p>There is one more statement you will want, for the moment there is more than one loan. Here is a worker on a desk with two, 4471 and 4472, that takes whichever approved loan it likes:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code>    claim:
+      with (l <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> {x <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Loans : status[x] = <span class="c-string">&quot;approved&quot;</span>}) {
+        status[l] := <span class="c-string">&quot;claimed&quot;</span>;
+        mine := l };</code></pre></div>
+<p><strong>with</strong> picks one element of a set and names it for the rest of the block. On this desk <code>status</code> holds one entry per loan, so <code>status[x]</code> is loan x’s status. The set here is written with set-builder braces: the loans x such that x’s status is approved. <code>status[l] := "claimed"</code> changes loan l’s entry and leaves the other loan’s alone, which the translator writes with lesson 1’s EXCEPT. Like either, with is a choice, and the model checker tries every element. In the translation it becomes “there exists an l in that set such that …”, the ∃ from lesson 1’s Next. <code>mine</code> is a <strong>process variable</strong>: declared under the process with <code>variable mine = 0;</code>, it is private to each worker, like a local variable in a function, and the translator turns it into a function from processes to values, so every worker has its own. <strong>In one step, the worker chooses any approved loan, claims it, and remembers which one it took.</strong></p>
+<pre class="code" data-lang="python"><code>status = {<span class="c-number">4471</span>: <span class="c-string">&quot;claimed&quot;</span>, <span class="c-number">4472</span>: <span class="c-string">&quot;approved&quot;</span>}
+choices = [l <span class="c-keyword">for</span> l <span class="c-keyword">in</span> status <span class="c-keyword">if</span> status[l] == <span class="c-string">&quot;approved&quot;</span>]
+<span class="c-builtin">print</span>(choices)
+status[<span class="c-number">4472</span>] = <span class="c-string">&quot;paid&quot;</span>
+<span class="c-builtin">print</span>([l <span class="c-keyword">for</span> l <span class="c-keyword">in</span> status <span class="c-keyword">if</span> status[l] == <span class="c-string">&quot;approved&quot;</span>])</code></pre>
+<pre class="code" data-lang="text"><code>[<span class="c-number">4472</span>]
+[]</code></pre>
+<p>When the set is empty, there is nothing to pick, and the step can’t happen at all, like an await that is false. A desk whose workers loop back with <code>goto claim</code> after each loan ends with every worker waiting at an empty choice. No worker is at Done, so Terminating can’t help, and TLC calls that a deadlock unless you run it with <code>-deadlock</code>: without it, this two-loan desk stops with “Deadlock reached”; with it, no error in 43 states, 91 with three workers.</p>
+<p>The claim label does the choosing and the claiming in one step, which is honest only if the code does both in one statement. Splitting them is the same mistake as Noor’s, with a set instead of one loan.</p>
+</section>
+
+<section id="fairness-in-one-word">
+<h2>Fairness, in one word</h2>
+<p>Look at the first word of the desk’s process: <code>fair</code>. Lesson 2 taught you that a spec without fairness allows the desk to stop at any moment, and that weak fairness is the promise that an action which stays enabled eventually happens. In PlusCal you write that promise as one word in front of the process.</p>
+<p>Here is what the translator writes for <code>fair process</code>:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Spec</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> Init <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">□</span><span class="tla-a">[]</span></span>[Next]<span class="tla-sub"><span class="tla-g"><sub>vars</sub></span><span class="tla-a">_vars</span></span>
+        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∀</span><span class="tla-a">\A</span></span> self <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers : WF_vars(w(self))</code></pre></div>
+<p>Lesson 2’s Spec, with lesson 2’s fairness line. WF_vars is weak fairness, and w(self) is the “or” of all the worker’s labels. <strong>For every worker, if that worker can keep taking some step, it eventually takes one.</strong></p>
+<p>Drop the word, write just <code>process</code>, and the fairness line disappears. TLC on that version, with EventuallyPaid as a property, prints a lasso. In this run worker B claims, crashes at send, resumes its own claim, sends with the key, and then:</p>
+<pre class="code" data-lang="text"><code>
+State <span class="c-number">5</span>: &lt;send line <span class="c-number">61</span>, ...&gt;   pc = [A |-&gt; &quot;poll&quot;, B |-&gt; &quot;mark&quot;]
+
+State <span class="c-number">6</span>: Stuttering</code></pre>
+<p><code>[A |-&gt; "poll", B |-&gt; "mark"]</code> is a function written out: A maps to poll, B maps to mark. This is lesson 2’s desk that just stops. B is at mark, mark is enabled, and nothing forces B to take it. Which worker TLC picks for the lasso can change from one run to the next; the shape doesn’t.</p>
+<pre class="code" data-lang="python"><code>loop = [(<span class="c-string">&quot;B at mark&quot;</span>, <span class="c-string">&quot;stuttering&quot;</span>)]
+enabled = <span class="c-builtin">all</span>(at == <span class="c-string">&quot;B at mark&quot;</span> <span class="c-keyword">for</span> at, _ <span class="c-keyword">in</span> loop)
+taken = <span class="c-builtin">any</span>(step == <span class="c-string">&quot;mark(B)&quot;</span> <span class="c-keyword">for</span> _, step <span class="c-keyword">in</span> loop)
+<span class="c-builtin">print</span>(<span class="c-string">&quot;mark enabled in every loop state:&quot;</span>, enabled)
+<span class="c-builtin">print</span>(<span class="c-string">&quot;mark taken in the loop:&quot;</span>, taken)
+<span class="c-builtin">print</span>(<span class="c-string">&quot;weak fairness forbids the loop:&quot;</span>, enabled <span class="c-keyword">and</span> <span class="c-keyword">not</span> taken)</code></pre>
+<pre class="code" data-lang="text"><code>mark enabled <span class="c-keyword">in</span> every loop state: True
+mark taken <span class="c-keyword">in</span> the loop: False
+weak fairness forbids the loop: True</code></pre>
+<p>The lasso is one state repeated, mark is enabled in all of it and never taken, which is exactly what weak fairness rules out. Put <code>fair</code> back and TLC passes all three properties on all 23 states: NoDoublePayout, EventuallyPaid, and the translator’s own Termination.</p>
+<p>There is a subtle difference from lesson 2. There, fairness covered a worker’s work and never its crash. <code>fair process</code> covers the whole process, crash branch included. Here that is harmless, because a crash can happen once and nothing ever waits for one, and TLC agrees. When it isn’t harmless, PlusCal lets you adjust per label: a label written <code>name:-</code> is left out of its process’s fairness, and <code>name:+</code> gets strong fairness of its own. The crash would need a label to itself for that.</p>
+<h3>When weak is not enough</h3>
+<p>Lesson 2 promised that the payout desk didn’t need strong fairness, and so far it hasn’t. Here is a desk that does.</p>
+<p>The bank allows Linden one open connection at a time. Each transfer needs it for an instant, and so does the reconciliation job, which runs in a loop: take the line, fetch the statement, give the line back. In PlusCal that is a second kind of process, with a single name instead of a set:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code>  variables status = <span class="c-string">&quot;approved&quot;</span>, transfers = <span class="c-number">0</span>, line = <span class="c-string">&quot;free&quot;</span>;
+
+  fair process (w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers) {
+    claim: await status = <span class="c-string">&quot;approved&quot;</span>;
+           status := <span class="c-string">&quot;claimed&quot;</span>;
+    send:  await line = <span class="c-string">&quot;free&quot;</span>;
+           transfers := transfers + <span class="c-number">1</span>;
+    mark:  status := <span class="c-string">&quot;paid&quot;</span>
+  }
+
+  fair process (r = <span class="c-string">&quot;recon&quot;</span>) {
+    take: while (<span class="c-keyword">TRUE</span>) {
+            await line = <span class="c-string">&quot;free&quot;</span>;
+            line := <span class="c-string">&quot;busy&quot;</span>;
+    give:   line := <span class="c-string">&quot;free&quot;</span>
+          }
+  }</code></pre></div>
+<p><code>process (r = "recon")</code> is a single process named recon. <code>while (TRUE)</code> loops forever, and it starts at a label, as the translator requires. Read it aloud: <strong>each worker claims the loan, waits for a free line to send, and marks the loan paid; meanwhile the reconciliation job takes the line and gives it back, forever.</strong></p>
+<p>Predict: with every process fair, does the bakery always get paid?</p>
+<p>TLC says no. Here is its lasso, trimmed:</p>
+<pre class="code" data-lang="text"><code>
+Error: Temporal properties were violated.
+
+State <span class="c-number">2</span>: &lt;claim ...&gt;   pc A = &quot;send&quot;   line = &quot;free&quot;
+
+State <span class="c-number">3</span>: &lt;take ...&gt;    recon = &quot;give&quot;  line = &quot;busy&quot;
+
+State <span class="c-number">4</span>: &lt;give ...&gt;    recon = &quot;take&quot;  line = &quot;free&quot;
+
+Back <span class="c-keyword">to</span> state <span class="c-number">3</span>: &lt;take ...&gt;</code></pre>
+<p>“pc A” is worker A’s label and “recon” is the job’s. A has claimed and is waiting to send. The job takes the line, gives it back, takes it again, and “Back to state 3” closes the loop: forever. Half the states of that loop have a free line, so A’s send is enabled half the time. And A never sends.</p>
+<p>Lesson 2 drew this picture: an action that flickers. Weak fairness only promises something about an action that is enabled from some point on <em>forever</em>, and A’s send keeps switching off whenever the job holds the line. So weak fairness makes no promise, and the scheduler may hand the free line to the job every single time.</p>
+<pre class="code" data-lang="python"><code>loop = [<span class="c-string">&quot;free&quot;</span>, <span class="c-string">&quot;busy&quot;</span>]
+enabled = [line == <span class="c-string">&quot;free&quot;</span> <span class="c-keyword">for</span> line <span class="c-keyword">in</span> loop]
+<span class="c-builtin">print</span>(<span class="c-string">&quot;send enabled in the loop:&quot;</span>, enabled)
+<span class="c-builtin">print</span>(<span class="c-string">&quot;weak fairness applies:&quot;</span>, <span class="c-builtin">all</span>(enabled))
+<span class="c-builtin">print</span>(<span class="c-string">&quot;strong fairness applies:&quot;</span>, <span class="c-builtin">any</span>(enabled))</code></pre>
+<pre class="code" data-lang="text"><code>send enabled <span class="c-keyword">in</span> the loop: [True, False]
+weak fairness applies: False
+strong fairness applies: True</code></pre>
+<p><strong>Strong fairness</strong>, lesson 2’s bigger promise, is about actions enabled again and again, even with gaps. In PlusCal it is a plus sign: <code>fair+ process (w \in Workers)</code>. The translator then writes SF_vars, strong fairness, where it wrote WF_vars before:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code>        <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∀</span><span class="tla-a">\A</span></span> self <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers : SF_vars(w(self))</code></pre></div>
+<p><strong>For every worker, if that worker can take a step again and again, even with gaps, it eventually takes one.</strong> TLC on that version: no error, all 14 states, the same 14 the weak version explored before it printed its lasso. Strong fairness doesn’t change which states exist. It changes which infinite behaviors count.</p>
+<p class="pending">[diagram:flicker: built on the lesson page]</p>
+<p>And now lesson 2’s warning, louder. A fairness keyword is a promise about the world, and <code>fair+</code> is a bigger promise. It says that whatever hands out the line will not skip a waiting worker forever. A connection pool that queues waiters and serves them in order keeps that promise. A pool where every free moment goes to whoever asks fastest doesn’t, and with it, the honest spec is the one that fails. Typing a plus sign doesn’t make your pool fair.</p>
+</section>
+
+<section id="fix-the-bug">
+<h2>Fix the bug</h2>
+<p>In the lab below you get both halves of Noor’s change: the TypeScript on the left and the PlusCal on the right. The code panel has two versions of the claim: the data layer’s <code>find</code> and <code>save</code>, or the conditional update. The spec panel has the three cut lines from the first lab. Run the checker with two workers or three.</p>
+<p>The desk counts as fixed when the spec is honest, meaning one label for every real interaction in the code you chose, and the checker passes with two workers and again with three. A passing spec that doesn’t match the code is not a fix; it is how this lesson started.</p>
+<p class="pending">[lab-act2: built on the lesson page]</p>
+</section>
+
+<section id="what-people-get-wrong">
+<h2>What people get wrong</h2>
+<p><strong>“More labels is always safer.”</strong> Cutting the conditional update into a check label and a claim label gives you a counterexample, paid twice in six steps, for a race the code doesn’t have. A spec with too many labels is as false as one with too few; it just fails loudly instead of quietly. Aim for honest, not for small.</p>
+<p><strong>“The checker passed, so the code is safe.”</strong> The checker checked the spec. Whether the spec’s labels match the code’s calls is a claim no tool made for you; Noor’s spec passed because it described a desk she no longer ran. Lesson 7 asks how to tie the two together more tightly.</p>
+<p><strong>“PlusCal is a different language with different meanings.”</strong> It is a way to write TLA+. Every PlusCal program becomes an ordinary Init, a set of actions and a Spec, which you can read, and TLC checks only that. When PlusCal confuses you, read the translation.</p>
+</section>
+
+<section id="recap-and-the-next-bug">
+<h2>Recap and the next bug</h2>
+<p><strong>PlusCal</strong> lets you write a worker as a program: an <strong>algorithm</strong> with <strong>variables</strong>, one <strong>process</strong> per worker, assignments, ifs, <strong>await</strong> for guards, <strong>either</strong> and <strong>with</strong> for choices, and <strong>goto</strong> for jumps. The <strong>translator</strong> turns it into TLA+: one action per <strong>label</strong>, a <code>pc</code> variable whose values are the labels, a Terminating step for the end, and a free <strong>Termination</strong> property. <strong>Labels set atomicity</strong>: everything between two labels is one step. <code>fair process</code> adds weak fairness for each process, and <code>fair+ process</code> adds strong fairness, a bigger promise you must make true. And the rule that would have saved Noor’s week: <strong>one label per real interaction with shared state.</strong></p>
+<p>Finance’s refused requests went back to zero the day the claim went back to one statement. Noor wrote a comment next to every label, and the next change to the data layer came with a change to the spec.</p>
+<p>Then finance came back with a different request. When a loan is paid, the €50,000 must leave Linden’s funding account and appear on the loan ledger. Two ledgers, in two different systems. Noor writes it the honest way: a <code>debit</code> label that takes €50,000 from the funding account, then a <code>credit</code> label that adds it to the loan ledger, and an invariant that says the two together always hold €50,000. TLC breaks it in one step. Between debit and credit, the money exists nowhere.</p>
+<p>Merging the two labels would make TLC pass. You know now what that would be. And the order doesn’t save you either: credit first, and for a moment the money exists twice. Next lesson: moving money between two ledgers so that neither ever shows it twice or not at all.</p>
+</section>
+
+<section id="concept-check">
+<h2>Concept check</h2>
+<p>Write your answers down before you move on.</p>
+<ol><li>A teammate writes the end of the worker as one label, <code>send: transfers := transfers + 1; status := "paid"</code>, for code that calls <code>bank.transfer</code> and then <code>db.setStatus</code>. TLC passes with 8 states. Is the spec honest? Name one thing that could go wrong in production that this spec can never show.</li><li>The translator refuses <code>claim: status := "claimed"; transfers := transfers + 1; status := "paid"</code> with “Missing label”. Explain why in terms of what one step is. Where would you put labels so it translates, and does the right answer depend on the code?</li><li>In the connection-line desk, the line is free in half the states of the loop TLC printed. Why doesn’t weak fairness make the waiting worker send? What would have to be true of the real connection pool before you write <code>fair+</code>?</li></ol>
+</section>
+
+</div>
+</html>

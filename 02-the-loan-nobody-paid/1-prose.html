@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson text (draft): The Loan Nobody Paid</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../lesson.css">
+<link rel="stylesheet" href="../katex/katex.min.css">
+<style>
+[hidden] { display: none !important; }
+pre.code { margin: 0; max-width: 100%; color: var(--code-text); background: var(--code-bg); border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-code); line-height: var(--leading-code); }
+.display-math { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: var(--space-1) 0; }
+.katex { font-size: var(--text-math); color: var(--ink); }
+.display-math .katex-display { margin: 0; }
+.display-math .katex-display > .katex { font-size: var(--text-math-display); }
+:not(.katex-mathml) > math { font-family: var(--font-math); font-size: var(--text-math); }
+.rule-box { max-width: 100%; }
+table.worked { font-family: var(--font-mono); font-size: var(--text-table); font-variant-numeric: tabular-nums; }
+table.worked td { white-space: nowrap; }
+table.worked th { white-space: normal; vertical-align: bottom; line-height: var(--leading-heading); }
+table.worked td:first-child, table.worked th:first-child { font-family: var(--font-ui); white-space: normal; color: var(--ink-soft); width: 1%; }
+
+.lab h3 { font-size: var(--text-h3); }
+.lab .readout { min-height: 5em; align-content: start; }
+.lab .note { font-size: var(--text-caption); color: var(--ink-soft); }
+.k-ask { display: grid; gap: var(--space-2); }
+.k-ask + .k-ask { margin-top: var(--space-3); }
+.k-ask .k-q { font-weight: var(--weight-bold); }
+.k-ask button.k-wrong { text-decoration: line-through; border-color: var(--rule); color: var(--ink-soft); }
+.k-ask button.k-right { background: var(--input-soft); border-color: var(--input); opacity: 1; }
+.k-ask .k-feedback { min-height: 1.6em; }
+.k-ask .k-feedback.k-bad { color: var(--accent-ink); }
+.k-ask .k-feedback:focus { outline: none; }
+.k-meter { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-1) var(--space-3); align-items: center; font-size: var(--text-caption); }
+.k-meter .bar { height: var(--space-3); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); overflow: hidden; background: var(--paper-2); }
+.k-meter .fill { height: 100%; width: 0; background: var(--accent); }
+.k-meter output { font-family: var(--font-mono); text-align: right; min-width: 5.5em; padding-right: var(--space-1); }
+.k-meter .scale { grid-column: 2; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--text-fig); color: var(--ink-soft); }
+.k-now { font-size: var(--text-caption); color: var(--ink-soft); }
+button.k-toggle[aria-pressed="true"]::before { content: "\2713\00a0"; }
+.k-working, .k-more { border-left: var(--line-mark) solid var(--rule); padding-left: var(--space-4); }
+.k-working { display: grid; gap: var(--space-2); }
+.k-working-note { color: var(--ink-soft); font-size: var(--text-ui); }
+.k-working-open { justify-self: start; }
+.k-working-body, .k-more-body { display: grid; gap: var(--space-block); }
+.k-working > *, .k-working-body > *, .k-more-body > * { min-width: 0; }
+.k-more-body { margin-top: var(--space-block); }
+.k-working-body:focus { outline: none; }
+.k-more > summary { cursor: pointer; font-family: var(--font-ui); font-weight: var(--weight-medium); color: var(--input); width: fit-content; }
+.k-still-text { display: none; }
+@media (prefers-reduced-motion: reduce) { .k-motion-text { display: none; } .k-still-text { display: inline; } }
+@media (max-width: 520px) { .k-meter { grid-template-columns: 1fr auto; } .k-meter > span:first-child { grid-column: 1 / -1; } .k-meter .bar { grid-column: 1; grid-row: 2; } .k-meter output { grid-column: 2; grid-row: 2; } .k-meter .scale { grid-column: 1; grid-row: 3; } }
+p .katex, li .katex, td .katex { white-space: normal; }
+p .katex-display, li .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+pre.code .c-keyword { color: var(--code-keyword); font-weight: var(--weight-medium); }
+pre.code .c-string { color: var(--code-string); }
+pre.code .c-number { color: var(--code-number); }
+pre.code .c-function { color: var(--code-function); font-weight: var(--weight-medium); }
+pre.code .c-call { color: var(--code-call); }
+pre.code .c-builtin { color: var(--code-builtin); }
+pre.code .c-comment { color: var(--code-comment); font-style: italic; }
+.tla-block { position: relative; }
+.tla-switch { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); font-family: var(--font-ui); font-size: var(--text-small); color: var(--ink-soft); margin-bottom: var(--space-1); cursor: pointer; }
+.tla-switch input { accent-color: var(--input); }
+pre.code .tla-sym { display: inline-block; width: calc(var(--w) * 1ch); text-align: center; color: var(--code-keyword); }
+pre.code .tla-sym[data-align="end"] { text-align: end; }
+pre.code .tla-sym[data-align="start"] { text-align: start; }
+pre.code .tla-prime { color: var(--accent); font-weight: var(--weight-medium); }
+pre.code .tla-a { display: none; }
+pre.code .c-rule { color: var(--code-comment); }
+.tla-sub sub, .prose sub { font-size: var(--text-micro); }
+.tla-block:has(.tla-switch input:checked) .tla-sym { width: auto; }
+.tla-block:has(.tla-switch input:checked) .tla-g { display: none; }
+.tla-block:has(.tla-switch input:checked) .tla-a { display: inline; }
+pre.code .tla-rule .tla-g { display: inline-flex; width: 100%; }
+pre.code .tla-module { display: flex; align-items: center; gap: var(--space-2); width: 100%; }
+pre.code .tla-module::before, pre.code .tla-module::after { content: ""; flex: 1; border-top: var(--line-hair) solid var(--code-comment); }
+pre.code .tla-end { display: block; width: 100%; height: var(--space-1); border-top: var(--line-hair) solid var(--code-comment); border-bottom: var(--line-hair) solid var(--code-comment); }
+.tla-block:has(.tla-switch input:checked) .tla-rule .tla-g { display: none; }
+.table { color: var(--ink); background: linear-gradient(to right, var(--paper) 30%, transparent) left / var(--space-8) 100% no-repeat local, linear-gradient(to left, var(--paper) 30%, transparent) right / var(--space-8) 100% no-repeat local, radial-gradient(farthest-side at 0 50%, var(--rule), transparent) left / var(--space-3) 100% no-repeat scroll, radial-gradient(farthest-side at 100% 50%, var(--rule), transparent) right / var(--space-3) 100% no-repeat scroll; }
+table.worked.k-symbols td { white-space: normal; }
+table.worked.k-symbols td code { white-space: nowrap; }
+table.worked.k-symbols td:first-child { font-family: var(--font-mono); font-size: var(--text-h3); color: var(--code-keyword); }
+@media (max-width: 520px) { table.worked.k-symbols td code { white-space: normal; } }
+
+.pending { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }
+</style>
+<div class="wrap">
+<nav class="crumbs" aria-label="Course"><a href="../index.html">The Payout Desk</a><span aria-hidden="true">/</span><span>Lesson 2</span><span aria-hidden="true">/</span><span>Lesson text (draft)</span></nav>
+<header><h1>The Loan Nobody Paid</h1><p class="links">Lesson text (draft) · <a href="1-sheet.html">Teacher&#x27;s sheet</a></p></header>
+<section id="a-loan-stuck-at-claimed">
+<h2>A loan stuck at “claimed”</h2>
+<p>The bakery sent back the extra €50,000. Finance reversed the payout, and loan 4471 went back into the queue as approved, to be paid properly this time by the desk you fixed in lesson 1. Workers now claim a loan with one atomic conditional update, and the checker found no double payout in any reachable state.</p>
+<p>Thursday, at 14:02, worker A claimed loan 4471. A few seconds later, a routine deploy restarted the machine worker A runs on.</p>
+<p>On Monday the bakery called again. Not about too much money this time. About none.</p>
+<p>You open the loans table. Loan 4471 says “claimed”, and it has said so since Thursday. Worker A’s log ends with “claimed loan 4471”, and then the deploy. When worker A came back up, it started fresh, the way every process does after a restart: it asked the table for approved loans and got on with them. The claim lived in the table, but the memory of <em>why</em> lived in a process that no longer exists. Worker B saw “claimed” and politely left it alone, which is exactly what you taught it to do.</p>
+<p class="pending">[diagram:stranded: built on the lesson page]</p>
+<p>Here is the part that should bother you. Lesson 1 ended on this exact scene. It sketched one more action, Crash, for a worker restarted between claiming and sending, and told you the checker would still pass. We never wrote Crash down. This lesson does, and the checker really does pass: no state breaks NoDoublePayout, because the bakery has received at most one transfer in every reachable state.</p>
+<p>It has received zero. Zero is at most one.</p>
+<p>So the checker is right, and the desk is broken. This lesson lives in the gap between those two sentences. By the end you will be able to say “and the money eventually arrives” in TLA+, watch the checker reject a desk that can stall, break two tempting fixes with it, and build one that survives the deploy.</p>
+</section>
+
+<section id="a-behavior-that-never-does-anything-wrong">
+<h2>A behavior that never does anything wrong</h2>
+<p>Let’s replay Thursday as a behavior, the way we did in lesson 1. Writing Crash down costs the desk one new variable, crashed, which records whether the deploy has happened. We allow one crash per run: one deploy, one restart. A worker that could crash again after every restart, forever, could never promise anything, and that isn’t the question we are asking.</p>
+<p>One small change from lesson 1 first. There, a worker that found the loan taken would Skip it and finish. A real worker keeps polling the table instead. So from now on a worker skips only a loan that is paid, and leaves a claimed loan alone for now.</p>
+<p>Here is Thursday. Before you look at the last rows, ask yourself: after the crash, which step can happen next?</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th><th scope="col">crashed</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>approved</td><td>idle</td><td>idle</td><td>0</td><td>no</td></tr><tr><td>1</td><td>Claim(A)</td><td>claimed</td><td>claimed</td><td>idle</td><td>0</td><td>no</td></tr><tr><td>2</td><td>Crash(A)</td><td>claimed</td><td>idle</td><td>idle</td><td>0</td><td>yes</td></tr><tr><td>3</td><td>(nothing)</td><td>claimed</td><td>idle</td><td>idle</td><td>0</td><td>yes</td></tr><tr><td>4</td><td>(nothing)</td><td>claimed</td><td>idle</td><td>idle</td><td>0</td><td>yes</td></tr><tr><td>…</td><td>(nothing, forever)</td><td>claimed</td><td>idle</td><td>idle</td><td>0</td><td>yes</td></tr></tbody></table></div>
+<p>None. Claim needs an approved loan, and it is claimed. Skip needs a paid one. Send and Mark need a worker holding the loan, and neither worker remembers holding it. The desk has nothing left to do, so it does nothing, forever.</p>
+<p>Now check every row against NoDoublePayout. Zero transfers, zero, zero, zero. Every state is fine. Can you point at one row and say “there, that’s the bug”?</p>
+<p>Try row 2: claimed, both workers idle. Is that state bad? Imagine a desk where a restarted worker looks for loans it had claimed and carries on with them. That desk passes through exactly this row on its way to paying the bakery. The row isn’t the problem. The problem is that row 2 is followed by row 3, and row 4, and so on without end. The bug lives in the word “forever”, and no single state can contain that word.</p>
+</section>
+
+<section id="the-desk-that-just-stops">
+<h2>The desk that just stops</h2>
+<p>Here is a stranger case. Take the crash out. Go back to lesson 1’s fixed desk, with the new Skip: Claim, Send, Mark and Skip, two workers, nothing else. Surely every behavior of <em>that</em> desk pays the bakery?</p>
+<p>Decide what you expect before you read on. Here is a behavior the spec allows:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>approved</td><td>idle</td><td>idle</td><td>0</td></tr><tr><td>1</td><td>Claim(B)</td><td>claimed</td><td>idle</td><td>claimed</td><td>0</td></tr><tr><td>2</td><td>Send(B)</td><td>claimed</td><td>idle</td><td>sent</td><td>1</td></tr><tr><td>3</td><td>(nothing)</td><td>claimed</td><td>idle</td><td>sent</td><td>1</td></tr><tr><td>…</td><td>(nothing, forever)</td><td>claimed</td><td>idle</td><td>sent</td><td>1</td></tr></tbody></table></div>
+<p>Worker B has sent the money and is one step from marking the loan paid. Mark is right there, allowed, waiting. And B never takes it.</p>
+<p>Why is that allowed? Look back at the last line of lesson 1’s spec: every step is either a Next step or a step where nothing changes. Those do-nothing steps are <strong>stuttering steps</strong>: a stuttering step leaves every variable exactly as it was. Lesson 1 asked you to ignore them. Now they matter. In TLA+ every behavior goes on forever, and a desk that has stopped is a desk taking stuttering steps forever. Nothing in lesson 1’s spec says the stuttering has to end.</p>
+<p class="pending">[diagram:stuttering: built on the lesson page]</p>
+<p>TLA+ isn’t being sloppy here. It’s being literal. The spec said which steps <em>may</em> happen and never that any of them <em>must</em>. A machine that is allowed to stop is allowed to stop before paying, and a machine that stops never pays twice.</p>
+<p class="pending">[lab: built on the lesson page]</p>
+</section>
+
+<section id="two-kinds-of-promises">
+<h2>Two kinds of promises</h2>
+<p>You have now felt the difference between two kinds of property, so let’s name them.</p>
+<p>A <strong>safety property</strong> says that nothing bad ever happens. NoDoublePayout is one: the bad thing is a second transfer. When a safety property fails, it fails at a moment, and the model checker can show you a finite behavior leading to that moment. In lesson 1 that was four steps. Every invariant is a safety property.</p>
+<p>A <strong>liveness property</strong> says that something good eventually happens. “The bakery is eventually paid” is one. No finite behavior can break it, because whatever has happened so far, the payment might still come in the next step. Only a behavior that goes on forever without the good thing breaks it: Thursday, or the desk that just stops.</p>
+<p class="pending">[diagram:safety-liveness: built on the lesson page]</p>
+<p>A quick test for any requirement: if it is violated, can you point at the moment it went wrong? If yes, it’s safety. If the only honest answer is “it never happened, and it never will”, it’s liveness. You need both, because each is easy to satisfy alone. A desk that does nothing is perfectly safe. A desk that pays every loan as often as it likes is perfectly live.</p>
+<h3>Always, eventually, leads to</h3>
+<p>To write a liveness property, TLA+ has words about whole behaviors, not single states. You have met one already.</p>
+<p><strong>Always</strong>: “always P” is true of a behavior when P is true in every state of it, from now on. Lesson 1’s spec used it, written as a box.</p>
+<p><strong>Eventually</strong>: “eventually P” is true of a behavior when P is true in some state of it, now or later. It is written as a diamond.</p>
+<p><strong>Leads to</strong>: “P leads to Q” is true of a behavior when, every time P is true, Q is true then or at some later state. It means “always, if P then eventually Q”, so it is built from the other two. It is written as a squiggly arrow.</p>
+<p>Here are those, plus two more symbols coming up later in this lesson, with what you type, how you say it, and the closest Python. The Python column cheats a little: it treats a behavior as a list of states, and a real behavior never ends. Read those cells as a way to think, not as code you could run.</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col">typeset</th><th scope="col">you type</th><th scope="col">say it</th><th scope="col">in Python</th></tr></thead><tbody><tr><td>□</td><td><code>[]</code></td><td>“always”</td><td><code>all</code> over the rest of the list</td></tr><tr><td>◇</td><td><code>&lt;&gt;</code></td><td>“eventually”</td><td><code>any</code> over the rest of the list</td></tr><tr><td>↝</td><td><code>~&gt;</code></td><td>“leads to”</td><td>(no equivalent)</td></tr><tr><td>∀ x ∈ S :</td><td><code>\A x \in S :</code></td><td>“for every x in S”</td><td><code>all(... for x in S)</code></td></tr><tr><td>WF_vars(A)</td><td><code>WF_vars(A)</code></td><td>“weak fairness of A”</td><td>(no equivalent)</td></tr></tbody></table></div>
+<p>Here is the bakery’s promise:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">EventuallyPaid</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">◇</span><span class="tla-a">&lt;&gt;</span></span>(status = <span class="c-string">&quot;paid&quot;</span>)</code></pre></div>
+<p>The diamond is “eventually”, and the inside is a plain statement about one state. <strong>EventuallyPaid is true of a behavior when, at some state in it, the loan’s status is paid.</strong> Try it on Thursday: approved, claimed, then claimed forever. No state says paid, so Thursday breaks EventuallyPaid. The desk that just stops breaks it too.</p>
+<p>On a real desk, loans keep arriving, and you want a promise about every one of them. That is what leads to is for:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">ClaimLeadsToPaid</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> (status = <span class="c-string">&quot;claimed&quot;</span>) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">↝</span><span class="tla-a">~&gt;</span></span> (status = <span class="c-string">&quot;paid&quot;</span>)</code></pre></div>
+<p>On the left, a statement about one state: the loan is claimed. On the right, another: it is paid. The squiggly arrow between them is “leads to”. <strong>Whenever the loan is claimed, it is paid then or at some later state.</strong> That is Thursday’s bug in one line: a claim that leads nowhere. For our single loan the two properties fail and pass together, and every TLC run below checks both.</p>
+<h3>The shape of a liveness counterexample</h3>
+<p>When a safety property fails, the counterexample is a path that ends in a bad state. When a liveness property fails, the counterexample has to show something infinite, and a program can only print something finite. How?</p>
+<p>It prints a path and a loop. The behavior goes from the start to some state and then repeats a cycle of states forever, never reaching the good thing. Drawn on paper it looks like a rope with a noose at the end, so it is called a <strong>lasso</strong>. On the payout desk the loop is the smallest possible one: a single state, repeated by stuttering, which TLC prints as one line, “Stuttering”. On a system with real cycles, TLC prints “Back to state” and the number where the loop starts.</p>
+<p class="pending">[diagram:lasso: built on the lesson page]</p>
+<p>Here is TLC on lesson 1’s fixed desk, with the new Skip and EventuallyPaid added, trimmed, with each state’s pc pulled up beside its step:</p>
+<pre class="code" data-lang="text"><code>
+Error: Temporal properties were violated.
+
+State <span class="c-number">1</span>: &lt;Initial predicate&gt;
+
+State <span class="c-number">2</span>: &lt;Claim ...&gt;   pc = [A |-&gt; &quot;idle&quot;, B |-&gt; &quot;claimed&quot;]
+
+State <span class="c-number">3</span>: &lt;Send ...&gt;    pc = [A |-&gt; &quot;idle&quot;, B |-&gt; &quot;sent&quot;]
+
+State <span class="c-number">4</span>: Stuttering</code></pre>
+<p>This is the first TLC output in the course, so let’s learn to read it. Each <code>State N:</code> line numbers one state of the counterexample, from 1. The label in angle brackets says how TLC got there. <code>&lt;Initial predicate&gt;</code> marks a start state: one that Init allows (TLC calls Init the initial predicate). Every later label names the action whose step produced the state. In full it reads <code>&lt;Claim line ..., col ... of module ...&gt;</code>, with numbers and the module’s name where the dots are: the action’s name, then where its definition sits in the file, by line and column, so you can jump straight to it. We trimmed that tail to <code>...</code>. And <code>Stuttering</code>, as you saw above, is the loop: from here on, nothing changes, forever.</p>
+<p>That is the table from “The desk that just stops”, row for row. TLC explored all 8 reachable states, found this lasso, and printed it.</p>
+<p>Eight is small enough to count by hand. There is the start. The loan can be claimed by A or by B: two states. Whoever claimed it can send: two more. Whoever sent can mark it paid while the other worker is still idle: two more. Then the idle worker skips the paid loan, and both paths land in the same final state, paid with both workers done: one. That makes 1 + 2 + 2 + 2 + 1 = 8.</p>
+<h3>Fairness: the promise that the desk keeps moving</h3>
+<p>So the spec needs one more ingredient: a way to say that a worker who can work, does. First a word. An action is <strong>enabled</strong> in a state when some step of that action can be taken from that state. In row 2 of the stopped desk, Mark(B) is enabled: B has sent, and nothing prevents it from marking. Enabled is not the same as taken. A state can have several enabled steps, and the behavior takes at most one of them next; the rest stay enabled, not taken.</p>
+<p class="pending">[diagram:enabled: built on the lesson page]</p>
+<p><strong>Weak fairness</strong> of an action is the promise that if the action stays enabled, it eventually happens. Not “right away”: it may wait as long as it likes, just not forever. If it is enabled from some point on, forever, then a step of it happens. In the stuttering loop above, Mark(B) is enabled in every state and never taken, so weak fairness forbids that behavior.</p>
+<p class="pending">[diagram:fairness: built on the lesson page]</p>
+<p>TLC knows weak fairness already, so you never type its definition. But the definition uses only the words you just learned, and reading it once is worth it:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">WF_vars</span>(A) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">◇</span><span class="tla-a">&lt;&gt;</span></span><span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">□</span><span class="tla-a">[]</span></span>(<span class="c-keyword">ENABLED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>A<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>_vars) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">⇒</span><span class="tla-a">=&gt;</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">□</span><span class="tla-a">[]</span></span><span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">◇</span><span class="tla-a">&lt;&gt;</span></span><span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>A<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span>_vars</code></pre></div>
+<p>ENABLED in front of an action means “the action can happen in this state”. Then ⟨A⟩_vars, typed <code>&lt;&lt;A&gt;&gt;_vars</code>: A inside angle brackets with vars as a subscript. It means “an A step that changes vars”. Lesson 1’s [Next]_vars used square brackets, which also let vars stay the same; angle brackets rule that out, so a stuttering step never counts as doing A. A diamond then a box reads “eventually always”: from some point on, forever. A box then a diamond reads “always eventually”: again and again, without end. The double arrow is “implies”. <strong>If, from some point on, A is enabled forever, then A steps keep happening.</strong> You will rarely need the definition. You will often need that sentence.</p>
+<p>The two pairs, eventually-always and always-eventually, are easy to mix up, so here they are as strips of states, each lit where P holds:</p>
+<p class="pending">[diagram:eventually-always: built on the lesson page]</p>
+<p>Eventually-always is a strip that may flicker for a while and then stays lit for good. Always-eventually is a strip that never stays dark for good: it may blink on and off forever, as long as it keeps coming back. The first is the stronger one: a strip that stays lit from some point on certainly keeps coming back.</p>
+<p>Why “weak”? Picture an action that flickers: enabled, then disabled, then enabled again, forever. Is it ever enabled from some point on, forever? No, it keeps switching off. So weak fairness makes no promise about it, and the scheduler may skip it every single time. <strong>Strong fairness</strong> is the bigger promise: if an action is enabled again and again, even with gaps, it eventually happens.</p>
+<p class="pending">[diagram:weak-strong: built on the lesson page]</p>
+<p>The payout desk doesn’t need strong fairness. Every fix later in this lesson that rescues Thursday does it with weak fairness alone, as TLC will confirm.</p>
+<p>Here is the part people miss. <strong>Fairness is not a fix you write in code. It is an assumption about the world, and you must make it true.</strong> Weak fairness for a worker says: its process keeps getting scheduled, its poll loop keeps running, and if the machine dies, something restarts it. If your platform doesn’t do that, the spec describes a system you don’t run. So we promise fairness for the work a worker does, and never for crashes. A crash is allowed to happen; nobody waits for one.</p>
+</section>
+
+<section id="the-spec-piece-by-piece">
+<h2>The spec, piece by piece</h2>
+<p>Here is the desk from lesson 1 with the crash added and the promise written down. The variables are lesson 1’s three, plus crashed:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-keyword">VARIABLES</span> status, pc, transfers, crashed
+<span class="c-function">vars</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>status, pc, transfers, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Init also sets crashed to FALSE. TLA+ has exactly two boolean values, written TRUE and FALSE, the same two as Python’s True and False; crashed is always one of them. Claim, Send and Mark are lesson 1’s, with crashed listed as unchanged, and Skip now asks for a paid loan. The new action is the crash:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Crash</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:1"><span class="tla-g">¬</span><span class="tla-a">~</span></span>crashed
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> {<span class="c-string">&quot;claimed&quot;</span>, <span class="c-string">&quot;sent&quot;</span>}
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;idle&quot;</span>]
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> crashed<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = <span class="c-keyword">TRUE</span>
+            <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>status, transfers<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Line by line, with ¬ (typed ~) read as “not”: before the step, there has been no crash yet; worker w holds the loan, claimed or already sent; after the step, w is idle, as if it had just started; the deploy has happened; the status and the transfers stay as they were. <strong>Crash(w) is a step in which a worker holding the loan forgets everything about it, while the table and the bank remember.</strong> That asymmetry is the whole bug: the process forgets, the world doesn’t.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Work</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Claim(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Skip(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Send(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Mark(w)
+
+<span class="c-function">Next</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∃</span><span class="tla-a">\E</span></span> w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers : Work(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∨</span><span class="tla-a">\/</span></span> Crash(w)</code></pre></div>
+<p><strong>Work(w) is any ordinary step of worker w, and a step of the desk is some worker’s work or some worker’s crash.</strong> Splitting them lets us promise fairness for the first and not the second.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Fairness</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∀</span><span class="tla-a">\A</span></span> w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers : WF_vars(Work(w))
+
+<span class="c-function">Spec</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Init <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">□</span><span class="tla-a">[]</span></span>[Next]<span class="tla-sub"><span class="tla-g"><sub>vars</sub></span><span class="tla-a">_vars</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> Fairness</code></pre></div>
+<p>The upside-down A is “for every”. <strong>For every worker, if that worker can keep doing some work, it eventually does.</strong> Spec is lesson 1’s two pieces with Fairness joined on by one more “and”: <strong>a behavior is allowed when it starts in Init, every step is a Next step or a stuttering step, and no worker stays able to work forever without working.</strong></p>
+<p>The configuration file gains a PROPERTY line, which asks TLC to check properties of whole behaviors:</p>
+<pre class="code" data-lang="text"><code><span class="c-keyword">SPECIFICATION</span> Spec
+<span class="c-keyword">INVARIANT</span> NoDoublePayout
+<span class="c-keyword">PROPERTY</span> EventuallyPaid ClaimLeadsToPaid</code></pre>
+<p>Three runs, with the same command as lesson 1:</p>
+<ol><li>Lesson 1’s fixed desk, no crash, no fairness: the lasso you saw above, out of 8 states.</li><li>The same desk with Fairness: no error. All 8 states, and every fair behavior pays.</li><li>With Crash and Fairness: the invariant holds in all 10 reachable states, and EventuallyPaid fails.</li></ol>
+<p>Here is the third counterexample, as TLC prints it:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th><th scope="col">crashed</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>approved</td><td>idle</td><td>idle</td><td>0</td><td>no</td></tr><tr><td>1</td><td>Claim(A)</td><td>claimed</td><td>claimed</td><td>idle</td><td>0</td><td>no</td></tr><tr><td>2</td><td>Send(A)</td><td>claimed</td><td>sent</td><td>idle</td><td>1</td><td>no</td></tr><tr><td>3</td><td>Crash(A)</td><td>claimed</td><td>idle</td><td>idle</td><td>1</td><td>yes</td></tr><tr><td>4</td><td>Stuttering</td><td>claimed</td><td>idle</td><td>idle</td><td>1</td><td>yes</td></tr></tbody></table></div>
+<p>Wait, that isn’t quite Thursday. Worker A crashed <em>after</em> sending. The bakery has its money, and the books say “claimed” forever: Thursday has a quieter twin, and the checker found it first. TLC prints one counterexample, not all of them. Thursday itself, the crash before Send, is another lasso, and the next section finds both.</p>
+<p>Side by side, the twins differ in one step: where the crash lands.</p>
+<p class="pending">[diagram:quiet-twin: built on the lesson page]</p>
+<p>Thursday crashes between Claim and Send, so the bank never hears a thing and the bakery calls on Monday. The twin crashes between Send and Mark, so the bakery is happy and nobody calls, while finance stares at a loan marked claimed with €50,000 gone out against it. One is loud and one is quiet, and they are the same bug: a claim nobody will ever finish.</p>
+<p>Notice why fairness can’t save either one: after the crash, no worker has any work enabled. Weak fairness only pushes actions that are enabled. A desk with nothing it is allowed to do is, as far as fairness cares, finished.</p>
+</section>
+
+<section id="the-model-checker-as-code">
+<h2>The model checker as code</h2>
+<p>How does a checker find a lasso? In lesson 1 it looked at one state at a time and asked whether it was bad. A lasso isn’t one state; it is a path into a reachable loop. So the question becomes: is there a reachable state from which the desk may loop forever without paying?</p>
+<p>On the payout desk every step moves forward. Claims, sends and marks never undo themselves, and the one crash happens at most once. So the only loop a behavior can end in is stuttering in a single state, and the question shrinks: find a reachable state where the loan isn’t paid and the desk may stutter forever. Without fairness, it may stutter anywhere. With fairness, only where no worker has any work enabled.</p>
+<p>First the crash desk in Python. It is lesson 1’s next_states with four changes: the state carries crashed, Check has become the atomic Claim, each step is tagged “work” or “crash” instead of named, and the last rule is new. To keep every rule on one line, move now builds the whole state after the step and takes keyword arguments for whatever else changes.</p>
+<pre class="code" data-lang="python"><code>WORKERS = <span class="c-string">&quot;AB&quot;</span>
+
+<span class="c-keyword">def</span> <span class="c-function">next_steps</span>(state):
+    status, pc, transfers, crashed = state
+    <span class="c-keyword">for</span> i, w <span class="c-keyword">in</span> <span class="c-builtin">enumerate</span>(WORKERS):
+        <span class="c-keyword">def</span> <span class="c-function">move</span>(to, s=status, t=transfers, c=crashed):
+            <span class="c-keyword">return</span> s, pc[:i] + (to,) + pc[i + <span class="c-number">1</span>:], t, c
+        <span class="c-keyword">if</span> pc[i] == <span class="c-string">&quot;idle&quot;</span> <span class="c-keyword">and</span> status == <span class="c-string">&quot;approved&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">&quot;work&quot;</span>, <span class="c-call">move</span>(<span class="c-string">&quot;claimed&quot;</span>, s=<span class="c-string">&quot;claimed&quot;</span>)
+        <span class="c-keyword">if</span> pc[i] == <span class="c-string">&quot;idle&quot;</span> <span class="c-keyword">and</span> status == <span class="c-string">&quot;paid&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">&quot;work&quot;</span>, <span class="c-call">move</span>(<span class="c-string">&quot;done&quot;</span>)
+        <span class="c-keyword">if</span> pc[i] == <span class="c-string">&quot;claimed&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">&quot;work&quot;</span>, <span class="c-call">move</span>(<span class="c-string">&quot;sent&quot;</span>, t=transfers + <span class="c-number">1</span>)
+        <span class="c-keyword">if</span> pc[i] == <span class="c-string">&quot;sent&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">&quot;work&quot;</span>, <span class="c-call">move</span>(<span class="c-string">&quot;done&quot;</span>, s=<span class="c-string">&quot;paid&quot;</span>)
+        <span class="c-keyword">if</span> pc[i] <span class="c-keyword">in</span> (<span class="c-string">&quot;claimed&quot;</span>, <span class="c-string">&quot;sent&quot;</span>) <span class="c-keyword">and</span> <span class="c-keyword">not</span> crashed:
+            <span class="c-keyword">yield</span> <span class="c-string">&quot;crash&quot;</span>, <span class="c-call">move</span>(<span class="c-string">&quot;idle&quot;</span>, c=<span class="c-keyword">True</span>)</code></pre>
+<p>Then the search: collect every reachable state, and keep the unpaid ones where the desk may stop.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">reachable</span>(init):
+    seen, todo = {init}, [init]
+    <span class="c-keyword">while</span> todo:
+        <span class="c-keyword">for</span> _, after <span class="c-keyword">in</span> <span class="c-call">next_steps</span>(todo.<span class="c-call">pop</span>()):
+            <span class="c-keyword">if</span> after <span class="c-keyword">not</span> <span class="c-keyword">in</span> seen:
+                seen.<span class="c-call">add</span>(after)
+                todo.<span class="c-call">append</span>(after)
+    <span class="c-keyword">return</span> seen
+
+<span class="c-keyword">def</span> <span class="c-function">may_stop</span>(state, fair):
+    kinds = {kind <span class="c-keyword">for</span> kind, _ <span class="c-keyword">in</span> <span class="c-call">next_steps</span>(state)}
+    <span class="c-keyword">return</span> <span class="c-keyword">not</span> (fair <span class="c-keyword">and</span> <span class="c-string">&quot;work&quot;</span> <span class="c-keyword">in</span> kinds)
+
+init = (<span class="c-string">&quot;approved&quot;</span>, (<span class="c-string">&quot;idle&quot;</span>, <span class="c-string">&quot;idle&quot;</span>), <span class="c-number">0</span>, <span class="c-keyword">False</span>)
+states = <span class="c-call">reachable</span>(init)
+<span class="c-keyword">for</span> fair <span class="c-keyword">in</span> (<span class="c-keyword">False</span>, <span class="c-keyword">True</span>):
+    stuck = [s <span class="c-keyword">for</span> s <span class="c-keyword">in</span> <span class="c-builtin">sorted</span>(states)
+             <span class="c-keyword">if</span> s[<span class="c-number">0</span>] != <span class="c-string">&quot;paid&quot;</span> <span class="c-keyword">and</span> <span class="c-call">may_stop</span>(s, fair)]
+    <span class="c-builtin">print</span>(<span class="c-string">f&quot;</span><span class="c-string">fair=</span>{fair}<span class="c-string">: </span>{<span class="c-builtin">len</span>(stuck)}<span class="c-string"> of </span>{<span class="c-builtin">len</span>(states)}<span class="c-string"> states</span><span class="c-string">&quot;</span>)
+<span class="c-builtin">print</span>(*stuck, sep=<span class="c-string">&quot;\n&quot;</span>)</code></pre>
+<pre class="code" data-lang="text"><code>fair=False: <span class="c-number">7</span> of <span class="c-number">10</span> states
+fair=True: <span class="c-number">2</span> of <span class="c-number">10</span> states
+(&#x27;claimed&#x27;, (&#x27;idle&#x27;, &#x27;idle&#x27;), <span class="c-number">0</span>, True)
+(&#x27;claimed&#x27;, (&#x27;idle&#x27;, &#x27;idle&#x27;), <span class="c-number">1</span>, True)</code></pre>
+<p>Ten reachable states, the same 10 TLC reports. Without fairness, all 7 unpaid states can end a lasso. Fairness removes the five where some worker could still move. It can’t remove the last two, because after the crash nobody can. The first, with no transfer, is Thursday. The second, with one, is the quiet twin TLC printed.</p>
+<p>TLC handles loops of any size. It takes the graph of reachable states and cuts it into <strong>strongly connected components</strong>: groups in which every state can reach every other state of the group and get back. Say a light switch has two states, on and off, with a step each way. On and off form one component, because you can go round and round between them. Add a third state, broken, that you can enter but never leave: broken is a component of its own, with only its stuttering loop. A behavior that goes on forever must, from some point on, circle inside one component, because once it leaves a component it can never come back. So TLC asks of each component: is the good thing missing from every state in it, and does fairness allow a behavior to circle there forever? On our desk every component is one state and its stuttering loop, so the little search above gives the same answer. It also explains why, in every run in this lesson, TLC checks temporal properties only once it has the complete state space: it needs the graph before it can look for loops.</p>
+</section>
+
+<section id="two-fixes-that-make-it-worse">
+<h2>Two fixes that make it worse</h2>
+<p>The loan is stranded because nobody will ever pick it up again. There are two obvious ways to hand it back to somebody. Both are used in real systems, and both are wrong on their own.</p>
+<h3>Fix one: a lease</h3>
+<p>Put a time limit on every claim. If the worker hasn’t marked the loan paid within, say, five minutes, the claim expires and any worker may claim the loan again. A claim with a time limit is called a lease, and a dead worker’s lease frees itself.</p>
+<p>The spec has no clock, as lesson 1 showed, so five minutes is just “at some point”. The expiry is a step that may happen whenever the loan is claimed:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Expire</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status = <span class="c-string">&quot;claimed&quot;</span>
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = <span class="c-string">&quot;approved&quot;</span>
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>pc, transfers, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p><strong>Expire is a step in which a claimed loan goes back to approved, and nothing else changes.</strong> It belongs to no worker; the lease runs out on the table’s clock. Look at what stays unchanged: the program counters. Whoever held the loan still holds it, as far as that worker knows. Expire joins Next and gets weak fairness too, because time does pass.</p>
+<p>Predict before reading on: will both properties hold?</p>
+<p>TLC stops at the first broken invariant, so a run that trips NoDoublePayout never gets as far as the liveness check. To ask the two questions separately, keep a second configuration file that drops the INVARIANT line and keeps only PROPERTY EventuallyPaid ClaimLeadsToPaid. With that file, TLC explores all 76 reachable states and both liveness properties hold: Thursday is rescued. But with the full configuration, NoDoublePayout fails after 27 states:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>approved</td><td>idle</td><td>idle</td><td>0</td></tr><tr><td>1</td><td>Claim(A)</td><td>claimed</td><td>claimed</td><td>idle</td><td>0</td></tr><tr><td>2</td><td>Expire</td><td>approved</td><td>claimed</td><td>idle</td><td>0</td></tr><tr><td>3</td><td>Send(A)</td><td>approved</td><td>sent</td><td>idle</td><td>1</td></tr><tr><td>4</td><td>Claim(B)</td><td>claimed</td><td>sent</td><td>claimed</td><td>1</td></tr><tr><td>5</td><td>Send(B)</td><td>claimed</td><td>sent</td><td>sent</td><td>2</td></tr></tbody></table></div>
+<p class="pending">[diagram:lease-race: built on the lesson page]</p>
+<p>Worker A didn’t crash. It was slow: a garbage-collection pause, a slow network call, anything that held it past the lease. The lease expired under A, B took the loan, and A carried on, still believing the claim was its own. From the outside, a slow worker and a dead one look the same. <strong>An expired lease lets someone else in. It does not stop the old holder.</strong> The bakery gets €100,000 again.</p>
+<h3>Fix two: resume your own claims</h3>
+<p>So never take a loan away from anyone. Record who claimed it, and make a restarted worker look for its own claims and finish them. Nobody else touches a claimed loan, so nobody else can pay it twice.</p>
+<p>The spec gains a variable, owner, which Claim sets to the claiming worker, and one action:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Resume</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;idle&quot;</span>
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status = <span class="c-string">&quot;claimed&quot;</span>
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> owner = w
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;claimed&quot;</span>]
+             <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>status, owner, transfers, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p><strong>Resume(w) is a step in which an idle worker finds a loan claimed in its own name and picks it up again, as if it had just claimed it.</strong> Resume is part of Work(w), so fairness covers it: a restarted worker will get to it.</p>
+<p>Predict again. Is this one safe?</p>
+<p>Thursday is rescued again: with the liveness-only configuration, both liveness properties hold in all 29 reachable states. And with the full one, NoDoublePayout fails after 20:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">step</th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th><th scope="col">crashed</th></tr></thead><tbody><tr><td>0</td><td>(start)</td><td>approved</td><td>idle</td><td>idle</td><td>0</td><td>no</td></tr><tr><td>1</td><td>Claim(A)</td><td>claimed</td><td>claimed</td><td>idle</td><td>0</td><td>no</td></tr><tr><td>2</td><td>Send(A)</td><td>claimed</td><td>sent</td><td>idle</td><td>1</td><td>no</td></tr><tr><td>3</td><td>Crash(A)</td><td>claimed</td><td>idle</td><td>idle</td><td>1</td><td>yes</td></tr><tr><td>4</td><td>Resume(A)</td><td>claimed</td><td>claimed</td><td>idle</td><td>1</td><td>yes</td></tr><tr><td>5</td><td>Send(A)</td><td>claimed</td><td>sent</td><td>idle</td><td>2</td><td>yes</td></tr></tbody></table></div>
+<p class="pending">[diagram:resend: built on the lesson page]</p>
+<p>That is the quiet twin from the crash desk, woken up. Worker A sent the money, crashed before it could write “paid”, came back, saw its own claim, and did the one thing a claim tells it to do: send. The fact “I already sent this” lived in A’s memory, and the crash erased it.</p>
+<p>Both failures come down to one sentence. <strong>The worker is the wrong place to remember whether money moved, because the worker is exactly the thing that crashes.</strong></p>
+</section>
+
+<section id="the-fix-let-the-bank-remember">
+<h2>The fix: let the bank remember</h2>
+<p>Who knows for certain whether the transfer for loan 4471 happened? Not the worker. Not the loans table, which is written only after the transfer returns. The bank does. So let the bank answer.</p>
+<p>Most payment APIs accept an <strong>idempotency key</strong> with a request: a value that names the request, so that the receiver performs it at most once. When a second request arrives with a key the bank has already paid, the bank moves no money and answers as it did the first time. Use the loan’s id as the key, and “pay loan 4471” becomes a request you can repeat as often as crashes force you to.</p>
+<p>In the code it is one extra argument, plus the restart path from fix two:</p>
+<pre class="code" data-lang="ts"><code>async function payOut(loan: Loan) {
+  await bank.transfer(loan.account, loan.amount, {
+    idempotencyKey: loan.id,
+  });
+  await db.setStatus(loan.id, &quot;paid&quot;);
+}
+
+async function onStart(me: WorkerName) {
+  <span class="c-keyword">for</span> (const loan of await db.claimedBy(me)) await payOut(loan);
+}</code></pre>
+<p>One requirement hides in onStart: the worker’s name must survive the restart. A name each new process invents for itself would never find the old claims, and Thursday would be back.</p>
+<p>In the spec, the bank gets a variable: keys, the set of idempotency keys it has paid, empty at the start. Send becomes:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Send</span>(w) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc[w] = <span class="c-string">&quot;claimed&quot;</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> transfers<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = <span class="c-keyword">IF</span> Loan <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> keys <span class="c-keyword">THEN</span> transfers
+                                            <span class="c-keyword">ELSE</span> transfers + <span class="c-number">1</span>
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> keys<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = keys <span class="tla-sym tla-op" data-align="center" style="--w:6"><span class="tla-g">∪</span><span class="tla-a">\union</span></span> {Loan}
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span> = [pc <span class="c-keyword">EXCEPT</span> ![w] = <span class="c-string">&quot;sent&quot;</span>]
+           <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="c-keyword">UNCHANGED</span> <span class="tla-sym tla-op" data-align="end" style="--w:2"><span class="tla-g">⟨</span><span class="tla-a">&lt;&lt;</span></span>status, owner, crashed<span class="tla-sym tla-op" data-align="start" style="--w:2"><span class="tla-g">⟩</span><span class="tla-a">&gt;&gt;</span></span></code></pre></div>
+<p>Loan is defined as 4471. One new piece of syntax first. <code>IF c THEN a ELSE b</code> is an expression: it picks one of two values, a when c is true and b when it is false, like Python’s <code>a if c else b</code>. Didn’t lesson 1 say there is no “if” in TLA+? It said a condition for a <em>step</em> is just one more line of the “and”, and that is still true: the first line here is such a condition. IF does a different job. It doesn’t decide whether the step happens; it picks a value inside a formula, here the new value of transfers. In Python:</p>
+<pre class="code" data-lang="python"><code>keys, transfers = {<span class="c-number">4471</span>}, <span class="c-number">1</span>
+<span class="c-builtin">print</span>(transfers <span class="c-keyword">if</span> <span class="c-number">4471</span> <span class="c-keyword">in</span> keys <span class="c-keyword">else</span> transfers + <span class="c-number">1</span>)</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">1</span></code></pre>
+<p>Line by line: worker w holds the loan; afterwards, if the bank already has key 4471, the transfers are unchanged, and otherwise there is one more; afterwards the bank has key 4471, whether or not it had it before (the union adds it to the set, and adding a key twice changes nothing); w has sent; nothing else changes. <strong>A Send moves money only the first time the bank sees the loan’s key; every later Send for that loan is a request the bank answers without paying.</strong></p>
+<p>NoDoublePayout keeps its formula, transfers at most one, and now it means exactly what the bakery cares about: the bakery received at most one transfer, however many requests the workers sent.</p>
+<p>The desk is now lesson 1’s atomic Claim, plus Resume, plus the key, with Crash in and Fairness on. Before you look, ask which of the two counterexamples above could still happen.</p>
+<pre class="code" data-lang="text"><code>Model checking completed. No error has been found.
+<span class="c-number">25</span> states generated, <span class="c-number">23</span> distinct states found, ...</code></pre>
+<p>The second line is TLC’s bookkeeping. States generated counts every successor state TLC computed, repeats included: whenever two paths lead to the same state, it is generated twice. Distinct states counts the different ones, and that is the number that matters, the size of the state space. We trimmed the end of the line, which reads “0 states left on queue”: the states TLC has found but not yet explored. Zero means the search finished.</p>
+<p>All 23 reachable states have at most one transfer, and every fair behavior pays the loan, Thursday’s included. With three workers: 46 states, no error. The resend from fix two still happens, step for step. It just costs nothing now, because the second Send lands on a key the bank already has.</p>
+<p class="pending">[diagram:idempotency-key: built on the lesson page]</p>
+<p>Notice who did what. Resume gave us liveness: a stranded claim always gets picked up. The key gave us safety: picking it up twice is harmless. You have seen each half fail alone.</p>
+<p><strong>Build it.</strong> Extend next_steps with an owner and a set of keys in the state, a step for Resume, and the key check in Send. Start from approved, owner “nobody”, both idle, zero transfers, no keys, no crash. With stuck as the list of unpaid states that may stop under fairness, and transfers at position 3 of your state:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">assert</span> <span class="c-builtin">len</span>(states) == <span class="c-number">23</span> <span class="c-keyword">and</span> <span class="c-keyword">not</span> stuck
+<span class="c-keyword">assert</span> <span class="c-builtin">max</span>(s[<span class="c-number">3</span>] <span class="c-keyword">for</span> s <span class="c-keyword">in</span> states) == <span class="c-number">1</span></code></pre>
+</section>
+
+<section id="fix-the-bug">
+<h2>Fix the bug</h2>
+<p>In the lab below, the desk has Crash in it, and the deploy will happen. Your panel: fairness on or off, a lease, workers that resume their own claims, and the loan id as an idempotency key. Run the checker after each change. It shows two lamps, one for NoDoublePayout and one for EventuallyPaid, labelled “Loan marked paid?” as in the first lab, and draws whatever counterexample it finds: a path for the first, a lasso for the second.</p>
+<p>The desk is fixed when both lamps are green with two workers, and stay green with three. Turning the crash off is not an answer: Thursday’s deploy happens whether you model it or not.</p>
+<p class="pending">[lab-act2: built on the lesson page]</p>
+</section>
+
+<section id="what-people-get-wrong">
+<h2>What people get wrong</h2>
+<p><strong>“Eventually means soon.”</strong> EventuallyPaid is satisfied if the bakery is paid next year. Eventually has no deadline, which is why it can be checked without a clock. If finance needs the money within an hour, that is a different property, and it needs time in the spec.</p>
+<p><strong>“One eventually covers every loan.”</strong> On a desk with many loans, “eventually some loan is paid” comes true the moment any loan is paid, the florist’s, say, and says nothing about the bakery’s. A promise about every loan needs leads to, or a for-every in front, so that each claim on its own must end in paid.</p>
+<p><strong>“Fairness is free, so add plenty.”</strong> Every fairness condition is a promise about your platform. Promise more than the platform delivers, say fairness for a worker your autoscaler might remove for good, and the checker will happily prove things about a system you don’t run.</p>
+</section>
+
+<section id="recap-and-the-next-bug">
+<h2>Recap and the next bug</h2>
+<p>A <strong>safety property</strong> says nothing bad ever happens; a violation is a finite behavior ending in a bad state. A <strong>liveness property</strong> says something good eventually happens; a violation goes on forever without it. <strong>Eventually</strong>, <strong>always</strong> and <strong>leads to</strong> let you say that about whole behaviors. <strong>Stuttering steps</strong> change nothing, and every spec allows them, so without fairness a desk may stop at any moment. <strong>Weak fairness</strong> promises that an action that stays <strong>enabled</strong> eventually happens. A liveness counterexample is a <strong>lasso</strong>: a path into a loop that repeats forever. And an <strong>idempotency key</strong> lets the bank, the one party that cannot forget, turn a repeated transfer into a harmless one.</p>
+<p>The bakery waited because a claim outlived the memory of the worker that made it. You fixed it in two halves: workers resume their own claims, so every claim gets finished, and every transfer carries the loan’s id as its key, so finishing twice costs nothing.</p>
+<p>Now read the bank’s documentation once more. Near the bottom, in small print: “Idempotency keys are kept for 24 hours.”</p>
+<p>Friday, 17:00. Worker A sends the transfer for loan 4471 and crashes before marking the loan paid. Its machine doesn’t come back until Monday morning. Worker A starts, finds its claim, and sends again, with key 4471, to a bank that forgot the key on Saturday. Add one step to the spec in which the bank forgets its keys, and the checker finds the double payout again, in six steps.</p>
+<p>The spec has no way to say “24 hours”, or “down for the weekend”. It needs something it has never had: time. And once time is in, a request can be slow enough to look lost, and a reply can vanish on its way back, so a worker can’t even tell whether the bank heard it. Next lesson, the network stops being polite.</p>
+</section>
+
+<section id="concept-check">
+<h2>Concept check</h2>
+<p>Write your answers down before you move on.</p>
+<ol><li>Sort these into safety and liveness: (a) no loan is ever paid twice; (b) every approved loan is eventually paid; (c) every claimed loan is paid within one hour of being claimed. For each, say what a violation looks like.</li><li>The lasso search found two states where the crash desk can stop without paying, and in one of them transfers is 1. Write a property in TLA+ that says only “the bakery eventually receives a transfer”. Does the crash desk, without Resume or the key, satisfy it? Which state decides?</li><li>Keep the idempotency key, and swap Resume for the lease from fix one. Does the checker pass both properties? Whatever it says, give one reason you might still prefer Resume, and one reason you might prefer the lease.</li></ol>
+</section>
+
+</div>
+</html>

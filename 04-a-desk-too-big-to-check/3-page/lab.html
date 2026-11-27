@@ -1,0 +1,124 @@
+<style>
+.lab > * { min-width: 0; }
+.lab .k-ask { padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); background: var(--paper-2); }
+.lab .k-controls { display: grid; gap: var(--space-3); }
+.lab .k-group { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.lab .k-group-label { font-family: var(--font-ui); font-weight: var(--weight-bold); min-width: calc(var(--space-20) + var(--space-4)); }
+.lab .k-group button { min-height: calc(var(--space-10) + var(--space-1)); min-width: calc(var(--space-10) + var(--space-1)); }
+.lab .k-group button[aria-pressed="true"], .lab button.k-toggle[aria-pressed="true"] { background: var(--input-soft); border-color: var(--input); color: var(--ink); }
+.lab .k-slider { display: flex; align-items: center; gap: var(--space-3); flex: 1 1 auto; min-width: 0; }
+.lab .k-slider input { flex: 1 1 auto; min-width: 0; max-width: calc(var(--space-20) * 3); accent-color: var(--input); min-height: calc(var(--space-10) + var(--space-1)); }
+.lab .k-slider output { font-family: var(--font-mono); font-variant-numeric: tabular-nums; min-width: 1ch; }
+.lab canvas.stage { width: 100%; display: block; }
+.lab .k-cap { font-size: var(--text-small); line-height: var(--leading-caption); color: var(--ink-soft); }
+.lab .k-status { font-family: var(--font-mono); font-size: var(--text-ui); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.lab .k-status .changed { color: var(--accent-ink); font-weight: var(--weight-medium); }
+.lab .k-tally { font-family: var(--font-mono); font-size: var(--text-caption); font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+.lab pre.k-spec { white-space: pre; }
+.lab pre.k-spec .k-line { display: block; min-height: 1em; }
+.lab pre.k-spec .k-line.k-changed { background: var(--input-soft); margin-inline: calc(-1 * var(--space-2)); padding-inline: var(--space-2); border-radius: var(--radius-sm); }
+.lab .k-files { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-3); }
+.lab .k-file { display: grid; gap: var(--space-1); min-width: 0; align-content: start; }
+.lab .k-file-name { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--ink-soft); }
+.lab pre.k-tlc { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); background: var(--code-bg); color: var(--code-text); font-family: var(--font-mono); font-size: var(--text-code); line-height: var(--leading-code); }
+.lab .k-signs { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.lab .k-signs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-1) var(--space-3); padding: var(--space-2) var(--space-3); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); }
+.lab .k-signs .k-sign-val { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--ink-soft); text-align: right; }
+.lab .k-signs li.k-signed { border-color: var(--ok); }
+.lab .k-signs li.k-signed .k-sign-val { color: var(--ok); font-weight: var(--weight-medium); }
+.lab .k-signs li.k-signed .k-sign-val::before { content: "\2713\00a0"; }
+.lab .readout p.k-good { color: var(--ok); }
+.lab button.k-primary, .act2 button.k-primary { background: var(--input); border-color: var(--input); color: var(--paper); font-weight: var(--weight-bold); }
+.lab button.k-primary:hover, .act2 button.k-primary:hover { background: var(--ink); border-color: var(--ink); }
+.lab button.k-primary:disabled:hover { background: var(--input); border-color: var(--input); }
+.act2 { display: grid; }
+.act2 button.k-primary { justify-self: start; padding: var(--space-4) var(--space-6); font-size: var(--text-h3); line-height: var(--leading-heading); text-align: left; }
+.lab .k-win { display: grid; gap: var(--space-2); border: var(--line-strong) solid var(--ok); border-radius: var(--radius); background: var(--ok-soft); padding: var(--space-4); }
+.lab .k-win:focus { outline: none; }
+.lab .k-win p { margin: 0; }
+.lab .k-win .k-win-head { font-family: var(--font-title); font-weight: var(--weight-bold); font-size: var(--text-h3); line-height: var(--leading-heading); }
+.lab .k-win b { color: var(--ok); font-family: var(--font-mono); font-weight: var(--weight-medium); font-variant-numeric: tabular-nums; }
+.lab .story { font-weight: var(--weight-medium); }
+@media (max-width: 520px) {
+  .lab .k-files { grid-template-columns: minmax(0, 1fr); }
+  .lab .k-group-label { min-width: 0; width: 100%; }
+  .lab .k-signs li { grid-template-columns: minmax(0, 1fr); }
+  .lab .k-signs .k-sign-val { text-align: left; }
+  .act2 button.k-primary { font-size: var(--text-ui); padding: var(--space-3) var(--space-4); }
+}
+</style>
+<template id="big-desk-lab">
+  <div class="task" data-only="act2"><p class="story">Finance wants two runs it can sign. NoDoublePayout on the real desk, three workers and three loans. ClaimLeadsToPaid on at least two workers and two loans, with no symmetry. Both must finish because the spec is finite, not because TLC was told where to stop.</p></div>
+  <div data-k="ask"></div>
+  <div class="k-controls" data-k="controls">
+    <div class="k-group" role="group" aria-label="Workers">
+      <span class="k-group-label">Workers</span>
+      <button type="button" data-workers="1">1</button>
+      <button type="button" data-workers="2">2</button>
+      <button type="button" data-workers="3">3</button>
+    </div>
+    <div class="k-group" role="group" aria-label="Loans">
+      <span class="k-group-label">Loans</span>
+      <button type="button" data-loans="1">1</button>
+      <button type="button" data-loans="2">2</button>
+      <button type="button" data-loans="3">3</button>
+    </div>
+    <div class="k-group" data-only="act1">
+      <label class="k-group-label" for="lost-range">Lost replies per run</label>
+      <span class="k-slider"><input type="range" data-k="lost-range" min="0" max="2" step="1" value="1"><output data-k="lost-out">1</output></span>
+      <button type="button" class="k-toggle" data-k="forever" aria-pressed="false">Count retries forever</button>
+    </div>
+    <div class="k-group" role="group" aria-label="The retries counter" data-only="act2">
+      <span class="k-group-label">Counter</span>
+      <button type="button" data-mode="unbounded">Unbounded</button>
+      <button type="button" data-mode="bound">Bound in the spec</button>
+      <button type="button" data-mode="nocount">Delete it</button>
+      <button type="button" data-mode="constraint">CONSTRAINT retries ≤ 1</button>
+    </div>
+    <div class="k-group" role="group" aria-label="MaxRetries" data-k="caps" data-only="act2">
+      <span class="k-group-label">MaxRetries</span>
+      <button type="button" data-cap="0">0</button>
+      <button type="button" data-cap="1">1</button>
+      <button type="button" data-cap="2">2</button>
+    </div>
+    <div class="k-group" role="group" aria-label="Promise to check" data-only="act2">
+      <span class="k-group-label">Promise</span>
+      <button type="button" data-promise="safety">NoDoublePayout</button>
+      <button type="button" data-promise="live">ClaimLeadsToPaid</button>
+    </div>
+    <div class="k-group" data-only="act2">
+      <span class="k-group-label">Symmetry</span>
+      <button type="button" class="k-toggle" data-k="symmetry" aria-pressed="false">SYMMETRY Perms</button>
+    </div>
+  </div>
+  <div class="k-files" data-only="act2">
+    <div class="k-file"><span class="k-file-name">Desk.tla, the lost reply</span><pre class="code k-spec" data-k="spec"></pre></div>
+    <div class="k-file"><span class="k-file-name">Desk.cfg</span><pre class="code k-spec" data-k="cfg"></pre></div>
+  </div>
+  <canvas data-k="levels" class="stage" role="img"></canvas>
+  <p class="k-cap">One column per depth: column 1 is the start state, column n holds the distinct states the breadth-first search found n − 1 steps from the start, so the last column’s number is the depth TLC prints. Solid is explored; the amber outline on top is still on the queue. A column with no number has nothing explored yet, and TLC’s depth does not count it. The vertical scale is logarithmic: each gridline is ten times the one below.</p>
+  <p class="k-cap" data-k="pin-note" data-only="act1" aria-live="polite"></p>
+  <pre class="k-tlc" data-k="tlc" data-only="act2" aria-live="polite" hidden></pre>
+  <div class="readout" aria-live="polite">
+    <div class="k-status" data-k="status"></div>
+    <p data-k="why"></p>
+  </div>
+  <p class="k-tally" data-k="tally" data-only="act1"></p>
+  <ol class="k-signs" aria-label="Runs finance will sign" data-only="act2">
+    <li data-k="sign-safety"><span>NoDoublePayout, 3 workers × 3 loans</span><span class="k-sign-val">not yet</span></li>
+    <li data-k="sign-live"><span>ClaimLeadsToPaid, at least 2 × 2, no symmetry</span><span class="k-sign-val">not yet</span></li>
+  </ol>
+  <div data-k="why-ask" data-only="act2" hidden></div>
+  <div class="row">
+    <button type="button" class="k-primary" data-k="run" data-only="act2">Run the checker</button>
+    <button type="button" data-k="stop" hidden>Stop</button>
+    <button type="button" data-k="pin" data-only="act1">Pin this run</button>
+    <button type="button" class="quiet" data-k="reset" data-only="act2">Reset</button>
+  </div>
+  <div class="k-win" data-k="win" tabindex="-1" hidden>
+    <p class="k-win-head">Fixed: both runs finish because the spec is finite</p>
+    <p>NoDoublePayout: <b data-k="win-safety"></b>. ClaimLeadsToPaid: <b data-k="win-live"></b>. Both end with 0 states left on queue, and neither needed TLC to stop looking.</p>
+    <p data-k="win-story"></p>
+  </div>
+</template>
+<div class="lab" id="lab"></div>

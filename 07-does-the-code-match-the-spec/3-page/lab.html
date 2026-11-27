@@ -1,0 +1,75 @@
+<template id="pair-lab">
+  <div class="task" data-k="task"><p class="story">Tuesday’s pilot marks the loan paid and deletes the message before it calls the bank. You have read every piece of the fix in this lesson; here you put them together and let the check confirm it. Change the design, check it against PayOnce through PaidAtBank, and ship only when both lamps are green with two workers and still with three.</p></div>
+  <div data-k="ask"></div>
+  <div class="k-controls">
+    <div class="k-group" data-k="translate" role="group" aria-label="What PayOnce sees, read through">
+      <span class="k-group-label">PayOnce sees, read through</span>
+      <div class="row">
+        <button type="button" data-map="bank" aria-pressed="true">the bank</button>
+        <button type="button" data-map="table" aria-pressed="false">the table</button>
+        <button type="button" data-map="send" aria-pressed="false">the send</button>
+      </div>
+      <p class="note">The bank: paid once the bank has made a transfer. The table: the loans table’s own status. The send: paid as soon as some worker has sent a request. Each keeps the bank’s transfers.</p>
+    </div>
+    <div class="k-panel" data-k="panel">
+      <div class="k-group" role="group" aria-label="Order of Mark and Send">
+        <span class="k-group-label">Order</span>
+        <div class="row"><button type="button" data-order="mark" aria-pressed="true">Mark first</button><button type="button" data-order="send" aria-pressed="false">Send first</button></div>
+      </div>
+      <div class="k-group" role="group" aria-label="Idempotency key">
+        <span class="k-group-label">Idempotency key</span>
+        <div class="row"><button type="button" data-key="on" aria-pressed="true">on</button><button type="button" data-key="off" aria-pressed="false">off</button></div>
+      </div>
+      <div class="k-group" role="group" aria-label="The lease runs out">
+        <span class="k-group-label">The lease runs out</span>
+        <div class="row"><button type="button" data-lease="on" aria-pressed="true">promised</button><button type="button" data-lease="off" aria-pressed="false">not promised</button></div>
+      </div>
+    </div>
+    <div class="k-group" role="group" aria-label="Workers">
+      <span class="k-group-label">Workers</span>
+      <div class="row"><button type="button" data-workers="2" aria-pressed="true">2</button><button type="button" data-workers="3" aria-pressed="false">3</button></div>
+    </div>
+  </div>
+  <p class="note" data-k="spec-note">The design right now; tinted lines differ from the pilot. The mapping is fixed at PaidAtBank: PayOnce’s status means the bank has made a transfer. Crash stays on, one per run, because the deploy happens whether you model it or not.</p>
+  <pre class="code k-spec" data-k="spec"></pre>
+  <div class="k-lanes" data-k="lanes" role="group" aria-label="Scheduler: the steps the design may take now"></div>
+  <canvas data-k="pair" class="stage" role="img"></canvas>
+  <p class="k-cap" data-k="pair-cap"></p>
+  <ol class="k-strip" data-k="strip" aria-label="The behavior so far, step by step, with what PayOnce sees"></ol>
+  <p class="k-tally" data-k="tally"></p>
+  <div class="k-lamps" data-k="lamps">
+    <p class="k-lamp" data-k="lamp-steps" data-state="none"><span class="k-lamp-dot" aria-hidden="true"></span><span class="k-lamp-text"></span><span class="k-lamp-word"></span></p>
+    <p class="k-lamp" data-k="lamp-pay" data-state="none"><span class="k-lamp-dot" aria-hidden="true"></span><span class="k-lamp-text"></span><span class="k-lamp-word"></span></p>
+  </div>
+  <div class="readout" aria-live="polite">
+    <div class="result" data-k="result"></div>
+    <p data-k="why"></p>
+  </div>
+  <div class="row">
+    <button type="button" class="k-primary" data-k="run">Try every behavior</button>
+    <button type="button" data-k="play">Play the unlucky behavior</button>
+    <button type="button" data-k="reset">Reset</button>
+  </div>
+  <div class="k-search" data-k="search" hidden>
+    <p class="k-search-note" data-k="search-note" aria-live="polite"></p>
+    <div class="k-trace" data-k="trace-block">
+      <p class="k-head-title" data-k="trace-title"></p>
+      <canvas data-k="trace" class="stage" role="img"></canvas>
+    </div>
+    <div class="k-trace" data-k="lasso-block">
+      <p class="k-head-title" data-k="lasso-title"></p>
+      <canvas data-k="lasso" class="stage" role="img"></canvas>
+    </div>
+    <p class="k-cap" data-k="trace-key" hidden>Short forms: vis visible, hid hidden, del deleted, appr approved, claim claimed, conf confirmed, mark marked; Rcv Receive, Snd Send, Cnf Confirm, Mrk Mark, Crs Crash, Exp Expire.</p>
+  </div>
+  <div class="k-win" data-k="win" tabindex="-1" hidden>
+    <p class="k-win-head">Fixed: the money moves before the books say paid</p>
+    <p>Both lamps green through PaidAtBank: <b data-k="win-two">99</b> states with 2 workers, <b data-k="win-three">431</b> with 3. Send, confirm, then mark, with the key kept and a lease that really runs out.</p>
+    <p>States where the money can stay put forever: <span class="k-was" data-k="win-was">1</span> in the pilot, <b data-k="win-now">0</b> now.</p>
+    <p data-k="win-guess"></p>
+    <canvas data-k="recon" role="img" aria-label="Friday’s reconciliation: the loans table says 4471 paid and the bank statement shows €50,000 for 4471. The row matches."></canvas>
+    <p class="k-cap">Friday’s reconciliation, next week: loan 4471 is paid in the table and €50,000 is on the bank statement. The row matches, and the bakery has its money.</p>
+  </div>
+  <p class="jump" data-k="jump"><a href="#fix-the-bug">Ready to fix the pilot? Jump to the challenge.</a></p>
+</template>
+<div class="lab" id="lab"></div>

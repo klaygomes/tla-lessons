@@ -1,0 +1,44 @@
+{
+  "two-ledgers": {
+    "title": "A debit with no credit",
+    "caption": "Time runs down the page. The debit was written; the deploy landed before the credit, so €50,000 left the treasury ledger and reached no other.",
+    "animated": true,
+    "phone": true
+  },
+  "sum-over": {
+    "title": "SumOver, unwound",
+    "caption": "Each call takes one loan out and calls itself on the rest, until the set is empty. Then the sums come back up: 0, then 30,000, then 80,000.",
+    "animated": true,
+    "phone": true
+  },
+  "conservation": {
+    "title": "Where the money is, row by row",
+    "caption": "The same two tables as bars. A dip that the next write fills is normal; after the crash, €50,000 stays missing in every row, and the run ends €50,000 short.",
+    "animated": false,
+    "phone": true
+  },
+  "crash-window": {
+    "title": "Two orders, two wrong totals",
+    "caption": "The crash lands in the gap between two writes either way. Debit first leaves the books €50,000 short; credit first leaves them €50,000 over, and the bakery’s account at €100,000.",
+    "animated": false,
+    "phone": true
+  },
+  "two-phase": {
+    "title": "Prepared, then stranded",
+    "caption": "Two-phase commit, if the loan ledger could take part (it cannot: its HTTP API does not speak the protocol). After both say yes, neither may decide alone. If the coordinator crashes before commit, both wait with their locks held.",
+    "animated": true,
+    "phone": true
+  },
+  "outbox": {
+    "title": "The debit and the debt, together",
+    "caption": "One transaction writes the debit and the outbox row together. The relay then does three things in order: read the row, credit the loan ledger, delete the row.",
+    "animated": false,
+    "phone": true
+  },
+  "at-least-once": {
+    "title": "Delivered twice, credited once",
+    "caption": "The same steps and the same crash, twice. The relay delivers row 4471 twice either way; only the key decides whether the bakery’s account shows it twice.",
+    "animated": true,
+    "phone": true
+  }
+}

@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson text (draft): When Checking Is Not Enough</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../lesson.css">
+<link rel="stylesheet" href="../katex/katex.min.css">
+<style>
+[hidden] { display: none !important; }
+pre.code { margin: 0; max-width: 100%; color: var(--code-text); background: var(--code-bg); border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-code); line-height: var(--leading-code); }
+.display-math { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: var(--space-1) 0; }
+.katex { font-size: var(--text-math); color: var(--ink); }
+.display-math .katex-display { margin: 0; }
+.display-math .katex-display > .katex { font-size: var(--text-math-display); }
+:not(.katex-mathml) > math { font-family: var(--font-math); font-size: var(--text-math); }
+.rule-box { max-width: 100%; }
+table.worked { font-family: var(--font-mono); font-size: var(--text-table); font-variant-numeric: tabular-nums; }
+table.worked td { white-space: nowrap; }
+table.worked th { white-space: normal; vertical-align: bottom; line-height: var(--leading-heading); }
+table.worked td:first-child, table.worked th:first-child { font-family: var(--font-ui); white-space: normal; color: var(--ink-soft); width: 1%; }
+
+.lab h3 { font-size: var(--text-h3); }
+.lab .readout { min-height: 5em; align-content: start; }
+.lab .note { font-size: var(--text-caption); color: var(--ink-soft); }
+.k-ask { display: grid; gap: var(--space-2); }
+.k-ask + .k-ask { margin-top: var(--space-3); }
+.k-ask .k-q { font-weight: var(--weight-bold); }
+.k-ask button.k-wrong { text-decoration: line-through; border-color: var(--rule); color: var(--ink-soft); }
+.k-ask button.k-right { background: var(--input-soft); border-color: var(--input); opacity: 1; }
+.k-ask .k-feedback { min-height: 1.6em; }
+.k-ask .k-feedback.k-bad { color: var(--accent-ink); }
+.k-ask .k-feedback:focus { outline: none; }
+.k-meter { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-1) var(--space-3); align-items: center; font-size: var(--text-caption); }
+.k-meter .bar { height: var(--space-3); border: var(--line-hair) solid var(--rule); border-radius: var(--radius-sm); overflow: hidden; background: var(--paper-2); }
+.k-meter .fill { height: 100%; width: 0; background: var(--accent); }
+.k-meter output { font-family: var(--font-mono); text-align: right; min-width: 5.5em; padding-right: var(--space-1); }
+.k-meter .scale { grid-column: 2; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--text-fig); color: var(--ink-soft); }
+.k-now { font-size: var(--text-caption); color: var(--ink-soft); }
+button.k-toggle[aria-pressed="true"]::before { content: "\2713\00a0"; }
+.k-working, .k-more { border-left: var(--line-mark) solid var(--rule); padding-left: var(--space-4); }
+.k-working { display: grid; gap: var(--space-2); }
+.k-working-note { color: var(--ink-soft); font-size: var(--text-ui); }
+.k-working-open { justify-self: start; }
+.k-working-body, .k-more-body { display: grid; gap: var(--space-block); }
+.k-working > *, .k-working-body > *, .k-more-body > * { min-width: 0; }
+.k-more-body { margin-top: var(--space-block); }
+.k-working-body:focus { outline: none; }
+.k-more > summary { cursor: pointer; font-family: var(--font-ui); font-weight: var(--weight-medium); color: var(--input); width: fit-content; }
+.k-still-text { display: none; }
+@media (prefers-reduced-motion: reduce) { .k-motion-text { display: none; } .k-still-text { display: inline; } }
+@media (max-width: 520px) { .k-meter { grid-template-columns: 1fr auto; } .k-meter > span:first-child { grid-column: 1 / -1; } .k-meter .bar { grid-column: 1; grid-row: 2; } .k-meter output { grid-column: 2; grid-row: 2; } .k-meter .scale { grid-column: 1; grid-row: 3; } }
+p .katex, li .katex, td .katex { white-space: normal; }
+p .katex-display, li .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+pre.code .c-keyword { color: var(--code-keyword); font-weight: var(--weight-medium); }
+pre.code .c-string { color: var(--code-string); }
+pre.code .c-number { color: var(--code-number); }
+pre.code .c-function { color: var(--code-function); font-weight: var(--weight-medium); }
+pre.code .c-call { color: var(--code-call); }
+pre.code .c-builtin { color: var(--code-builtin); }
+pre.code .c-comment { color: var(--code-comment); font-style: italic; }
+.tla-block { position: relative; }
+.tla-switch { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); font-family: var(--font-ui); font-size: var(--text-small); color: var(--ink-soft); margin-bottom: var(--space-1); cursor: pointer; }
+.tla-switch input { accent-color: var(--input); }
+pre.code .tla-sym { display: inline-block; width: calc(var(--w) * 1ch); text-align: center; color: var(--code-keyword); }
+pre.code .tla-sym[data-align="end"] { text-align: end; }
+pre.code .tla-sym[data-align="start"] { text-align: start; }
+pre.code .tla-prime { color: var(--accent); font-weight: var(--weight-medium); }
+pre.code .tla-a { display: none; }
+pre.code .c-rule { color: var(--code-comment); }
+.tla-sub sub, .prose sub { font-size: var(--text-micro); }
+.tla-block:has(.tla-switch input:checked) .tla-sym { width: auto; }
+.tla-block:has(.tla-switch input:checked) .tla-g { display: none; }
+.tla-block:has(.tla-switch input:checked) .tla-a { display: inline; }
+pre.code .tla-rule .tla-g { display: inline-flex; width: 100%; }
+pre.code .tla-module { display: flex; align-items: center; gap: var(--space-2); width: 100%; }
+pre.code .tla-module::before, pre.code .tla-module::after { content: ""; flex: 1; border-top: var(--line-hair) solid var(--code-comment); }
+pre.code .tla-end { display: block; width: 100%; height: var(--space-1); border-top: var(--line-hair) solid var(--code-comment); border-bottom: var(--line-hair) solid var(--code-comment); }
+.tla-block:has(.tla-switch input:checked) .tla-rule .tla-g { display: none; }
+.table { color: var(--ink); background: linear-gradient(to right, var(--paper) 30%, transparent) left / var(--space-8) 100% no-repeat local, linear-gradient(to left, var(--paper) 30%, transparent) right / var(--space-8) 100% no-repeat local, radial-gradient(farthest-side at 0 50%, var(--rule), transparent) left / var(--space-3) 100% no-repeat scroll, radial-gradient(farthest-side at 100% 50%, var(--rule), transparent) right / var(--space-3) 100% no-repeat scroll; }
+table.worked.k-symbols td { white-space: normal; }
+table.worked.k-symbols td code { white-space: nowrap; }
+table.worked.k-symbols td:first-child { font-family: var(--font-mono); font-size: var(--text-h3); color: var(--code-keyword); }
+@media (max-width: 520px) { table.worked.k-symbols td code { white-space: normal; } }
+
+.pending { color: var(--ink-soft); font-family: var(--font-ui); font-size: var(--text-small); }
+</style>
+<div class="wrap">
+<nav class="crumbs" aria-label="Course"><a href="../index.html">The Payout Desk</a><span aria-hidden="true">/</span><span>Lesson 8</span><span aria-hidden="true">/</span><span>Lesson text (draft)</span></nav>
+<header><h1>When Checking Is Not Enough</h1><p class="links">Lesson text (draft) · <a href="1-sheet.html">Teacher&#x27;s sheet</a></p></header>
+<section id="three-hundred-workers">
+<h2>Three hundred workers</h2>
+<p>The rollout went ahead. It is the busiest month Linden has ever had: a partnership with a chain of hardware stores sends a flood of small loans to the desk, and the platform team does what platform teams do: they turn the autoscaler up. On Monday morning the payout desk runs three hundred workers, just as the capacity line in the rollout plan said.</p>
+<p>Nothing goes wrong. The bakery on the harbour, loan 4471, €50,000, was paid long ago, exactly once. The queue drains. But Maren’s question from the design review is still open, and on Monday she sends it again, in writing:</p>
+<p class="rule-box">Your notes say the model checker found no double payout “with 2 and 3 workers”. We now run 300. Did anyone check 300?</p>
+<p>You open your configuration files. <code>Workers = {"A", "B", "C"}</code>, and one run with a fourth. Nobody checked three hundred.</p>
+<p>This is a strange kind of bug. No customer has been paid twice, and maybe nobody ever will be. The bug is in your evidence: the thing you are sure of and the thing you run have drifted apart. Remember lesson 1’s warning, under “What people get wrong”: the checker passed for the spec, with two and three workers, and it can’t tell you whether three hundred workers behave like three. That was a promissory note. This lesson pays it.</p>
+<p>By the end you will have an argument that NoDoublePayout holds for <em>any</em> number of workers, you will have used TLC to find that argument instead of to enumerate states, and you will know exactly which part of it TLC checked and which part rests on reasoning.</p>
+</section>
+
+<section id="how-fast-does-the-desk-grow">
+<h2>How fast does the desk grow?</h2>
+<p>The obvious move is to just give TLC more workers. Let’s see how far that goes.</p>
+<p>We will use the heart of the desk, lesson 1’s fix, with nothing else in the way: a worker can <strong>Claim</strong> an approved loan in one atomic step, <strong>Send</strong> the transfer, <strong>Mark</strong> the loan paid, or <strong>Skip</strong> a loan that is already paid. Three variables, as in lesson 1: <code>status</code>, <code>pc</code>, <code>transfers</code>.</p>
+<p>Before you look at any number, count one case by hand. With three workers, how many reachable states are there?</p>
+<p>Walk through it. At the start everybody is idle and the loan is approved: 1 state. Then one worker claims, and the others can’t, because the loan is no longer approved. That worker is either claimed or sent, and it could be any of the three: 3 × 2 = 6 states. Then it marks the loan paid, and from here every other worker either still sits idle or has seen “paid” and skipped. Each worker is done or idle, independently, except that the all-idle pattern can’t happen because the marking worker is done. That is 2 × 2 × 2 − 1 = 7 states. Total: 1 + 6 + 7 = 14.</p>
+<p>The same count for N workers is 1 + 2N + (2^N − 1), which is 2N + 2^N. Here is what TLC says when you run the desk with 2 to 6 workers, and once more with 12. The depth column is lesson 7’s depth: the number of states on the shortest route to the state farthest from the start, counting the first (for two workers, start, Claim, Send, Mark, Skip: five).</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col">workers</th><th scope="col">distinct states (TLC)</th><th scope="col">depth</th></tr></thead><tbody><tr><td>2</td><td>8</td><td>5</td></tr><tr><td>3</td><td>14</td><td>6</td></tr><tr><td>4</td><td>24</td><td>7</td></tr><tr><td>5</td><td>42</td><td>8</td></tr><tr><td>6</td><td>76</td><td>9</td></tr><tr><td>12</td><td>4,120</td><td>15</td></tr></tbody></table></div>
+<p>Every row agrees with the formula. And the formula has a 2^N in it: every extra worker roughly doubles the state count, because every worker that is not the payer adds its own little coin, idle or done.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">for</span> n <span class="c-keyword">in</span> (<span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>, <span class="c-number">6</span>, <span class="c-number">12</span>):
+    <span class="c-builtin">print</span>(n, <span class="c-string">&quot;workers:&quot;</span>, <span class="c-number">2</span> * n + <span class="c-number">2</span> ** n, <span class="c-string">&quot;states&quot;</span>)
+<span class="c-builtin">print</span>(<span class="c-builtin">len</span>(<span class="c-builtin">str</span>(<span class="c-number">2</span> * <span class="c-number">300</span> + <span class="c-number">2</span> ** <span class="c-number">300</span>)), <span class="c-string">&quot;digits at 300 workers&quot;</span>)</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">2</span> workers: <span class="c-number">8</span> states
+<span class="c-number">3</span> workers: <span class="c-number">14</span> states
+<span class="c-number">4</span> workers: <span class="c-number">24</span> states
+<span class="c-number">5</span> workers: <span class="c-number">42</span> states
+<span class="c-number">6</span> workers: <span class="c-number">76</span> states
+<span class="c-number">12</span> workers: <span class="c-number">4120</span> states
+<span class="c-number">91</span> digits at <span class="c-number">300</span> workers</code></pre>
+<p>A number with 91 digits. There are not that many atoms in a cup of coffee; there aren’t that many in the observable universe either. And this is the <em>smallest</em> desk in the course: one loan, no crashes, no clock. Lesson 4 taught you to keep TLC finishing with symmetry, bounds and constraints, and those work for finding bugs. None of them gets you to three hundred.</p>
+<p class="pending">[diagram:growth: built on the lesson page]</p>
+</section>
+
+<section id="is-small-enough">
+<h2>Is small enough?</h2>
+<p>Here is the honest case for checking small models, lesson 4’s small-scope hypothesis: most bugs fit in a small model. Every bug in this course showed up with one or two workers. The naive desk of lesson 1 passes with one worker and pays twice with two. Lesson 2’s lease paid twice with two workers; add a crash and it pays twice with a <em>single</em> worker, in six steps: it claims, its lease expires, it sends, it crashes, it claims again, it sends again. Lesson 2’s “resume your own claims” without a key paid twice with worker B idle throughout, so one worker is enough. Bugs in concurrent systems usually need only a couple of actors to bump into each other, and a model checker is superb at finding those.</p>
+<p>But “usually” is not what Maren asked. Imagine a desk with a pool of six database connections, where a seventh busy worker falls back to some older code path. A bug on that path needs seven workers to show up, and every model with six or fewer would pass. Our desk has no pool, but how would you <em>know</em> it has nothing like one, short of checking every size? The checker can’t see a bug that needs more workers than you gave it, and it can’t tell you that such a bug is impossible either.</p>
+<p>So we need a different kind of evidence: something that doesn’t walk through states one at a time.</p>
+</section>
+
+<section id="dominoes">
+<h2>Dominoes</h2>
+<p>Think of a long row of dominoes, three hundred of them, or three thousand. How do you know they will all fall, without watching each one? You check two things. The first domino gets pushed. And every domino, <em>whichever one it is</em>, is close enough to knock over the next. Those two facts together cover the whole row, however long it is.</p>
+<p>Now translate. The dominoes are the states of a behavior: the first state, then the next, then the next. Suppose we had a property of a single state, call it <strong>Inv</strong>, with two features:</p>
+<ol><li>Every initial state satisfies it. (The first domino falls.)</li><li>From <em>any</em> state that satisfies it, every step leads to a state that also satisfies it. (Each domino knocks over the next.)</li></ol>
+<p>Then every reachable state satisfies Inv, by the same argument as the dominoes: the first state of any behavior has it, and each step passes it on. A property with these two features is called an <strong>inductive invariant</strong>. If, on top of that,</p>
+<ol start="3"><li>every state that satisfies Inv also satisfies NoDoublePayout,</li></ol>
+<p>then NoDoublePayout holds in every reachable state too.</p>
+<p>Read the second condition again, slowly, because it is the whole trick. It says “from <em>any</em> state that satisfies Inv”, not “from any reachable state”. To check it, you never have to find out which states are reachable. You don’t follow behaviors at all. You take one state, take one step, and look. And one step of the desk is always one worker doing one thing.</p>
+<p class="pending">[diagram:dominoes: built on the lesson page]</p>
+<p>In TLA+ the three conditions are three formulas, one per line. They live in a module of their own, Proof, whose first line after the header is <code>EXTENDS Desk</code>. EXTENDS means “start with every definition of these modules”: lesson 1’s <code>EXTENDS Naturals</code> brought in numbers and <code>+</code>, and here Desk, this lesson’s copy of the desk spec, brings in Init, Next, NoDoublePayout and the variables.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">InitHolds</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Init <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">⇒</span><span class="tla-a">=&gt;</span></span> Inv
+<span class="c-function">StepKeeps</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Inv <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> Next <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">⇒</span><span class="tla-a">=&gt;</span></span> Inv<span class="tla-sym tla-prime" data-align="center" style="--w:1"><span class="tla-g">′</span><span class="tla-a">&#x27;</span></span>
+<span class="c-function">InvEnough</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Inv <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">⇒</span><span class="tla-a">=&gt;</span></span> NoDoublePayout</code></pre></div>
+<p>Two symbols you know, and one new use of an old one. The double arrow <code>=&gt;</code>, typeset ⇒, is lesson 6’s “implies”: A ⇒ B is false only when A is true and B is false. <code>/\</code> is “and”, as in lesson 1, and it binds tighter than <code>=&gt;</code>, so StepKeeps reads (Inv ∧ Next) ⇒ Inv′. And <code>Inv'</code>, “Inv prime”, is Inv evaluated in the state <em>after</em> the step, exactly the way <code>pc'</code> meant pc after the step in lesson 1; TLA+ lets you prime a whole formula, and it means “prime every variable in it”.</p>
+<p>Read each line from the left. InitHolds: if a state satisfies Init, it satisfies Inv. StepKeeps: if a state satisfies Inv, and a Next step is taken from it, the state after satisfies Inv. InvEnough: if a state satisfies Inv, the bank has made at most one transfer. <strong>Inv is an inductive invariant when the first two lines are true for every state and every step, and it proves NoDoublePayout when the third is true as well.</strong></p>
+<p>Push the desk’s start through them, with NoDoublePayout itself standing in for Inv. Init is approved, everyone idle, 0 transfers, and 0 ≤ 1, so InitHolds is true there. From that state the only steps are Claims, which leave transfers at 0, so StepKeeps is true for those steps. Whether it is true for <em>every</em> state with at most one transfer is the question the code below asks.</p>
+<p>The Python mirror needs the desk as a function, like lesson 1’s <code>next_states</code>, plus a list of candidate states to try. Which states? Every state whose variables have sensible values: a status from the three statuses, a pc for each worker from the four pcs, and a transfer count from 0 to 2. Then the three conditions become three checks.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">from</span> itertools <span class="c-keyword">import</span> product
+
+<span class="c-keyword">def</span> <span class="c-function">steps</span>(state):
+    status, pc, t = state
+    <span class="c-keyword">for</span> w, p <span class="c-keyword">in</span> <span class="c-builtin">enumerate</span>(pc):
+        <span class="c-keyword">def</span> <span class="c-function">put</span>(v):
+            <span class="c-keyword">return</span> pc[:w] + (v,) + pc[w + <span class="c-number">1</span>:]
+        <span class="c-keyword">if</span> p == <span class="c-string">&quot;idle&quot;</span> <span class="c-keyword">and</span> status == <span class="c-string">&quot;approved&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">&quot;claimed&quot;</span>, <span class="c-call">put</span>(<span class="c-string">&quot;claimed&quot;</span>), t
+        <span class="c-keyword">if</span> p == <span class="c-string">&quot;claimed&quot;</span>:
+            <span class="c-keyword">yield</span> status, <span class="c-call">put</span>(<span class="c-string">&quot;sent&quot;</span>), t + <span class="c-number">1</span>
+        <span class="c-keyword">if</span> p == <span class="c-string">&quot;sent&quot;</span>:
+            <span class="c-keyword">yield</span> <span class="c-string">&quot;paid&quot;</span>, <span class="c-call">put</span>(<span class="c-string">&quot;done&quot;</span>), t
+        <span class="c-keyword">if</span> p == <span class="c-string">&quot;idle&quot;</span> <span class="c-keyword">and</span> status == <span class="c-string">&quot;paid&quot;</span>:
+            <span class="c-keyword">yield</span> status, <span class="c-call">put</span>(<span class="c-string">&quot;done&quot;</span>), t
+
+<span class="c-keyword">def</span> <span class="c-function">type_ok</span>(n):
+    pcs = (<span class="c-string">&quot;idle&quot;</span>, <span class="c-string">&quot;claimed&quot;</span>, <span class="c-string">&quot;sent&quot;</span>, <span class="c-string">&quot;done&quot;</span>)
+    <span class="c-keyword">return</span> [(s, pc, t)
+            <span class="c-keyword">for</span> s <span class="c-keyword">in</span> (<span class="c-string">&quot;approved&quot;</span>, <span class="c-string">&quot;claimed&quot;</span>, <span class="c-string">&quot;paid&quot;</span>)
+            <span class="c-keyword">for</span> pc <span class="c-keyword">in</span> <span class="c-call">product</span>(pcs, repeat=n)
+            <span class="c-keyword">for</span> t <span class="c-keyword">in</span> <span class="c-builtin">range</span>(<span class="c-number">3</span>)]
+
+<span class="c-keyword">def</span> <span class="c-function">obligations</span>(inv, n):
+    init = (<span class="c-string">&quot;approved&quot;</span>, (<span class="c-string">&quot;idle&quot;</span>,) * n, <span class="c-number">0</span>)
+    good = [s <span class="c-keyword">for</span> s <span class="c-keyword">in</span> <span class="c-call">type_ok</span>(n) <span class="c-keyword">if</span> <span class="c-call">inv</span>(s)]
+    keeps = <span class="c-builtin">all</span>(<span class="c-call">inv</span>(a) <span class="c-keyword">for</span> s <span class="c-keyword">in</span> good <span class="c-keyword">for</span> a <span class="c-keyword">in</span> <span class="c-call">steps</span>(s))
+    enough = <span class="c-builtin">all</span>(s[<span class="c-number">2</span>] &lt;= <span class="c-number">1</span> <span class="c-keyword">for</span> s <span class="c-keyword">in</span> good)
+    <span class="c-keyword">return</span> <span class="c-call">inv</span>(init), keeps, enough
+
+no_double = <span class="c-keyword">lambda</span> s: s[<span class="c-number">2</span>] &lt;= <span class="c-number">1</span>
+<span class="c-builtin">print</span>(<span class="c-call">obligations</span>(no_double, <span class="c-number">2</span>))</code></pre>
+<pre class="code" data-lang="text"><code>(True, False, True)</code></pre>
+<p>We tried the most obvious candidate first: NoDoublePayout itself. It holds initially, and it trivially implies itself. But the middle answer is False. NoDoublePayout is an invariant of the desk, TLC told us so for every size we tried, and yet it is <em>not</em> inductive. How can both be true?</p>
+</section>
+
+<section id="a-state-nobody-reaches">
+<h2>A state nobody reaches</h2>
+<p>Before you read on, try to find it yourself. You are looking for a state, with two workers, where at most one transfer has been made, and from which one step makes a second transfer.</p>
+<p>Here is a search that finds one. What it prints first is folded below, so you can make your own try before you look:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">first_cti</span>(inv, n):
+    <span class="c-keyword">for</span> s <span class="c-keyword">in</span> <span class="c-call">type_ok</span>(n):
+        <span class="c-keyword">for</span> after <span class="c-keyword">in</span> <span class="c-call">steps</span>(s):
+            <span class="c-keyword">if</span> <span class="c-call">inv</span>(s) <span class="c-keyword">and</span> <span class="c-keyword">not</span> <span class="c-call">inv</span>(after):
+                <span class="c-keyword">return</span> s, after
+
+<span class="c-builtin">print</span>(*<span class="c-call">first_cti</span>(no_double, <span class="c-number">2</span>), sep=<span class="c-string">&quot;\n&quot;</span>)</code></pre>
+<pre class="code" data-lang="text"><code>(&#x27;approved&#x27;, (&#x27;idle&#x27;, &#x27;claimed&#x27;), <span class="c-number">1</span>)
+(&#x27;approved&#x27;, (&#x27;idle&#x27;, &#x27;sent&#x27;), <span class="c-number">2</span>)</code></pre>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>before</td><td>approved</td><td>idle</td><td>claimed</td><td>1</td></tr><tr><td>after Send(B)</td><td>approved</td><td>idle</td><td>sent</td><td>2</td></tr></tbody></table></div>
+<p>Look at the “before” row. The loan is approved, yet worker B holds a claim on it. And the bank has already made one transfer, with nobody having sent anything. Could the desk ever be in this state? No. A claim turns the loan from approved to claimed in the same step, so “approved and claimed by B” never happens, and a transfer happens only at Send. This state satisfies NoDoublePayout, it is not reachable, and from it one step pays twice.</p>
+<p>That is the whole explanation. NoDoublePayout is true of every reachable state, but it is also true of some unreachable states, and from those the desk can step to a double payout. Since the dominoes argument looks at <em>every</em> state satisfying the candidate, it trips over these.</p>
+<p>A state that satisfies a candidate invariant, together with a step from it to a state that does not, is called a <strong>counterexample to inductiveness</strong>, or CTI for short. It is not a bug report. A counterexample, in lesson 1’s sense, is a behavior from the start. A CTI starts wherever it likes. It says: “your candidate allows this state, and from here the candidate breaks”. There are two ways to respond, and choosing between them is the skill of this lesson:</p>
+<ul><li>if the CTI’s first state is unreachable, the candidate is <strong>too weak</strong>: it lets in states the desk never visits. You <strong>strengthen</strong> it, by adding a conjunct that rules that state out;</li><li>if the CTI’s first state is reachable, the desk itself breaks the candidate, and you have found a real counterexample.</li></ul>
+<p class="pending">[diagram:cti: built on the lesson page]</p>
+<p class="pending">[lab: built on the lesson page]</p>
+</section>
+
+<section id="asking-tlc">
+<h2>Asking TLC</h2>
+<p>You can ask TLC for CTIs instead of writing your own search, and it is worth knowing how, because your real specs will be far bigger than this one.</p>
+<p>The trick is to lie to TLC about where behaviors start. Normally the configuration says <code>SPECIFICATION Spec</code>, and TLC starts from Init. Instead, we tell it to start from <em>every</em> state that satisfies the candidate, take the desk’s Next steps from there, and check the candidate in every state it meets. If some step leaves the candidate, TLC reports it as an invariant violation, one step from a starting state. That is a CTI.</p>
+<p>There is one catch. To start “from every state satisfying the candidate”, TLC has to list those states, and it can only list states drawn from finite sets of values. NoDoublePayout says <code>transfers &lt;= 1</code>, which doesn’t tell TLC what <code>status</code> or <code>pc</code> could be. So we give it the sensible values, in a formula known as the <strong>type invariant</strong>, written TypeOK by convention:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Pcs</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> {<span class="c-string">&quot;idle&quot;</span>, <span class="c-string">&quot;claimed&quot;</span>, <span class="c-string">&quot;sent&quot;</span>, <span class="c-string">&quot;done&quot;</span>}
+
+<span class="c-function">TypeOK</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> status <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> {<span class="c-string">&quot;approved&quot;</span>, <span class="c-string">&quot;claimed&quot;</span>, <span class="c-string">&quot;paid&quot;</span>}
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> pc <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> [Workers <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">→</span><span class="tla-a">-&gt;</span></span> Pcs]
+          <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> transfers <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> <span class="c-number">0</span>..<span class="c-number">2</span></code></pre></div>
+<p>The new piece is <code>[Workers -&gt; Pcs]</code>, read “the set of functions from Workers to Pcs”: every way of giving each worker one of the four pcs. With two workers that is 4 × 4 = 16 functions. The <code>\in</code>, typeset ∈, is “is an element of”, and <code>0..2</code> is the set {0, 1, 2}. <strong>TypeOK is true of a state when the status is one of the three statuses, each worker’s pc is one of the four pcs, and the bank has made 0, 1 or 2 transfers.</strong> With two workers that is 3 × 16 × 3 = 144 states, of which 96 also satisfy NoDoublePayout:</p>
+<pre class="code" data-lang="python"><code><span class="c-builtin">print</span>(<span class="c-builtin">len</span>(<span class="c-call">type_ok</span>(<span class="c-number">2</span>)), <span class="c-builtin">sum</span>(<span class="c-builtin">map</span>(no_double, <span class="c-call">type_ok</span>(<span class="c-number">2</span>))))</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">144</span> <span class="c-number">96</span></code></pre>
+<p>TypeOK is the list of states our Python <code>type_ok</code> builds. It is not a claim about the desk. It is the edge of the board we play on.</p>
+<p>Now the candidate, written for TLC, and its configuration file <code>Ind0.cfg</code>:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Ind0</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> TypeOK <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> NoDoublePayout</code></pre></div>
+<pre class="code" data-lang="text"><code><span class="c-keyword">CONSTANT</span> Workers = {&quot;A&quot;, &quot;B&quot;}
+<span class="c-keyword">INIT</span> Ind0
+<span class="c-keyword">NEXT</span> Next
+<span class="c-keyword">INVARIANT</span> Ind0</code></pre>
+<p><strong>Ind0 is true of a state when its variables have sensible values and the bank has made at most one transfer.</strong> With two workers it is true of the 96 states counted above. The configuration is new in one way. Until now it said <code>SPECIFICATION Spec</code>; here that one line is split into its two halves. <code>INIT Ind0</code> names the formula a first state must satisfy, in place of Init, and <code>NEXT Next</code> names the formula every step must satisfy. <code>CONSTANT</code> fills in the set of workers, as in lessons 3 and 4, and <code>INVARIANT</code> is the property checked in every state, as always. So it says: start from every Ind0 state, take Next steps, and check Ind0 everywhere. (Python: <code>first_cti(no_double, 2)</code> above, since <code>type_ok</code> already supplies the TypeOK part.)</p>
+<p>TLC answers, with the lines that matter:</p>
+<pre class="code" data-lang="text"><code>Finished computing initial states: <span class="c-number">96</span> distinct states generated
+
+Error: Invariant Ind0 <span class="c-keyword">is</span> violated.
+
+Error: The behavior up <span class="c-keyword">to</span> this point <span class="c-keyword">is</span>:
+
+State <span class="c-number">1</span>: &lt;Initial predicate&gt;
+/\ status = &quot;approved&quot;
+/\ pc = [A |-&gt; &quot;idle&quot;, B |-&gt; &quot;claimed&quot;]
+/\ transfers = <span class="c-number">1</span>
+
+State <span class="c-number">2</span>: &lt;Send line <span class="c-number">18</span>, col <span class="c-number">12</span> <span class="c-keyword">to</span> line <span class="c-number">21</span>, col <span class="c-number">30</span> of module Desk&gt;
+/\ status = &quot;approved&quot;
+/\ pc = [A |-&gt; &quot;idle&quot;, B |-&gt; &quot;sent&quot;]
+/\ transfers = <span class="c-number">2</span>
+<span class="c-number">104</span> states generated,
+  <span class="c-number">97</span> distinct states found, <span class="c-number">92</span> states left on queue.
+The depth of the complete state graph search <span class="c-keyword">is</span> <span class="c-number">2</span>.</code></pre>
+<p>Read it line by line.</p>
+<ul><li>“96 distinct states generated” as <em>initial</em> states. In a normal run this number was 1. Here it is every Ind0 state, the 96 we just counted.</li><li>“Invariant Ind0 is violated.” Ind0 is the candidate, so this means a step left it.</li><li>“State 1: &lt;Initial predicate&gt;”. Careful: this does not mean the desk’s Init. It means “one of the states the INIT line allowed”, and this one is our old friend: approved, B claimed, one transfer.</li><li>“State 2: &lt;Send line 18, col 12 to line 21, col 30 of module Desk&gt;”: as in earlier traces, the name in angle brackets is the action that produced the state, here followed by where that action is written: lines 18 to 21 of Desk.tla. B sends, and the bank has made two transfers. Below each header, <code>pc = [A |-&gt; "idle", B |-&gt; "sent"]</code> is the function from lesson 1’s <code>|-&gt;</code> table: A maps to idle, B to sent.</li><li>“104 states generated, 97 distinct states found, 92 states left on queue”: as in lesson 7, generated counts every state TLC produced, starting states and steps alike, and distinct counts the different ones; the queue, from lesson 4, holds states found but not yet explored. TLC stopped at the first violation, with 92 starting states still waiting.</li><li>“depth … is 2”: the trace is two states long. A CTI is always one step.</li></ul>
+<p>Same state, same step as the Python search. TLC found it without any idea which states are reachable, which is exactly the point.</p>
+</section>
+
+<section id="strengthening-round-by-round">
+<h2>Strengthening, round by round</h2>
+<p>The CTI shows a state where the bank has already transferred once and a worker still holds a claim, a claim that will turn into a second transfer. On the real desk, money sent and claims in hand never add up to more than one. Think of it as a budget of one payout per loan: a claim is a payout promised, a transfer is a payout made, and you can’t have both outstanding at once.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Claimed</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> {w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers : pc[w] = <span class="c-string">&quot;claimed&quot;</span>}
+
+<span class="c-function">Owed</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> transfers + Cardinality(Claimed) <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≤</span><span class="tla-a">&lt;=</span></span> <span class="c-number">1</span></code></pre></div>
+<p>The braces with a colon build a set: <code>{w \in Workers : pc[w] = "claimed"}</code> reads “the set of workers w such that w’s pc is claimed”. <code>Cardinality</code>, from the standard module FiniteSets (Desk’s first line is <code>EXTENDS Naturals, FiniteSets</code>), is “how many elements”, Python’s <code>len</code>. <strong>Owed is true of a state when the number of transfers made plus the number of workers holding a claim is at most one.</strong> In the CTI, that is 1 + 1 = 2, so Owed rules it out. Since a count of claims is never negative, Owed also implies NoDoublePayout, so we can drop NoDoublePayout from the candidate.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">owed</span>(s):
+    <span class="c-keyword">return</span> s[<span class="c-number">2</span>] + s[<span class="c-number">1</span>].<span class="c-call">count</span>(<span class="c-string">&quot;claimed&quot;</span>) &lt;= <span class="c-number">1</span>
+
+<span class="c-builtin">print</span>(<span class="c-builtin">sum</span>(<span class="c-builtin">map</span>(owed, <span class="c-call">type_ok</span>(<span class="c-number">2</span>))))
+<span class="c-builtin">print</span>(*<span class="c-call">first_cti</span>(owed, <span class="c-number">2</span>), sep=<span class="c-string">&quot;\n&quot;</span>)</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">72</span>
+(&#x27;approved&#x27;, (&#x27;idle&#x27;, &#x27;idle&#x27;), <span class="c-number">1</span>)
+(&#x27;claimed&#x27;, (&#x27;claimed&#x27;, &#x27;idle&#x27;), <span class="c-number">1</span>)</code></pre>
+<p>Fewer states pass (72 instead of 96), and there is a new CTI. TLC, running <code>Ind1 == TypeOK /\ Owed</code> from <code>Ind1.cfg</code>, starts from 72 states and prints the same one:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col"></th><th scope="col">status</th><th scope="col">pc of A</th><th scope="col">pc of B</th><th scope="col">transfers</th></tr></thead><tbody><tr><td>before</td><td>approved</td><td>idle</td><td>idle</td><td>1</td></tr><tr><td>after Claim(A)</td><td>claimed</td><td>claimed</td><td>idle</td><td>1</td></tr></tbody></table></div>
+<p>Is the “before” row reachable? The loan is still approved, nobody has done anything, and the bank has already made a transfer. No: money leaves the bank only at Send, and only after a Claim has turned the loan away from approved. So again the candidate is too weak. What does the real desk know here that Owed doesn’t? That while the loan is approved, nothing has happened yet.</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-function">Unclaimed</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> status = <span class="c-string">&quot;approved&quot;</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">⇒</span><span class="tla-a">=&gt;</span></span>
+               <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> transfers = <span class="c-number">0</span>
+               <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∀</span><span class="tla-a">\A</span></span> w <span class="tla-sym tla-op" data-align="center" style="--w:3"><span class="tla-g">∈</span><span class="tla-a">\in</span></span> Workers : pc[w] = <span class="c-string">&quot;idle&quot;</span>
+
+<span class="c-function">Inv</span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> TypeOK <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> Owed <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">∧</span><span class="tla-a">/\</span></span> Unclaimed</code></pre></div>
+<p>The <code>\A w \in Workers :</code>, typeset ∀, is lesson 2’s “for every worker w in Workers”, and the <code>=&gt;</code> makes the rest a promise only about approved loans: when the status is claimed or paid, Unclaimed is true whatever the workers are doing. <strong>Unclaimed is true of a state when, if the loan is still approved, the bank has made no transfer and every worker is idle; and Inv is true of a state when its values are sensible, the payout budget holds, and an approved loan has nobody working on it.</strong> In the new CTI the loan is approved and the bank has made 1 transfer, so Unclaimed is false there and Inv rules it out.</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">def</span> <span class="c-function">unclaimed</span>(s):
+    status, pc, t = s
+    <span class="c-keyword">return</span> status != <span class="c-string">&quot;approved&quot;</span> <span class="c-keyword">or</span> (
+        t == <span class="c-number">0</span> <span class="c-keyword">and</span> <span class="c-builtin">set</span>(pc) == {<span class="c-string">&quot;idle&quot;</span>})
+
+inv = <span class="c-keyword">lambda</span> s: <span class="c-call">owed</span>(s) <span class="c-keyword">and</span> <span class="c-call">unclaimed</span>(s)
+<span class="c-keyword">for</span> n <span class="c-keyword">in</span> (<span class="c-number">2</span>, <span class="c-number">3</span>, <span class="c-number">4</span>, <span class="c-number">5</span>):
+    <span class="c-builtin">print</span>(n, <span class="c-builtin">sum</span>(<span class="c-builtin">map</span>(inv, <span class="c-call">type_ok</span>(n))), <span class="c-call">first_cti</span>(inv, n))
+<span class="c-builtin">print</span>(<span class="c-call">obligations</span>(inv, <span class="c-number">2</span>))</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">2</span> <span class="c-number">49</span> None
+<span class="c-number">3</span> <span class="c-number">163</span> None
+<span class="c-number">4</span> <span class="c-number">541</span> None
+<span class="c-number">5</span> <span class="c-number">1783</span> None
+(True, True, True)</code></pre>
+<p>No CTI, with two, three, four or five workers. TLC agrees. Here is its run with two workers (<code>Inductive2.cfg</code>, which says <code>INIT Inv</code>, <code>NEXT Next</code>, <code>INVARIANT Inv</code>):</p>
+<pre class="code" data-lang="text"><code>Finished computing initial states: <span class="c-number">49</span> distinct states generated
+Model checking completed. No error has been found.
+<span class="c-number">105</span> states generated,
+  <span class="c-number">49</span> distinct states found, <span class="c-number">0</span> states left on queue.
+The depth of the complete state graph search <span class="c-keyword">is</span> <span class="c-number">1</span>.</code></pre>
+<p>The last line is the one to savour. Depth 1 means TLC never found a state it hadn’t started from: every step from an Inv state landed on another Inv state, which was already in its starting set. That is condition 2, seen from TLC’s side. The 105 generated states are the 49 starting states plus the 56 steps taken from them. With three, four and five workers TLC starts from 163, 541 and 1,783 states, finds no error, and reports depth 1 every time.</p>
+<p>Two more checks finish the job. Condition 1, InitHolds, passes in TLC with three workers: an ordinary run from Init with <code>INVARIANT InitHolds</code> checks the formula in all 14 reachable states, and only the start state matters: there it says “this state satisfies Inv”, and everywhere else Init is false, so the implication holds for free. Condition 3 holds because Owed implies <code>transfers &lt;= 1</code>.</p>
+<p>Condition 2 can also be checked as written. <code>Obligations.cfg</code> checks StepKeeps as a property of every step: Proof defines <code>StepProp == [][StepKeeps]_vars</code>, “always, every step is a StepKeeps step or leaves vars unchanged”, read like lesson 1’s Spec. As in lesson 1, <code>vars</code> is the tuple of all the variables, <code>&lt;&lt;status, pc, transfers&gt;&gt;</code>. The configuration names StepProp on a <code>PROPERTY</code> line, as in lesson 2. Starting from the 163 Inv states for three workers: no error. As a sanity check, the same property written for the weaker candidate, <code>Ind1</code>, fails there on the Claim step we saw.</p>
+<p class="pending">[diagram:strengthen: built on the lesson page]</p>
+</section>
+
+<section id="why-this-holds-for-three-hundred">
+<h2>Why this holds for three hundred</h2>
+<p>So far TLC checked the inductive step for up to five workers. That is still five, not three hundred. What makes this better than the 76-state run from the start of the lesson?</p>
+<p>The answer is that the inductive step is now small enough to check <em>by hand</em>, for every number of workers at once. Take any Inv state, with any number of workers, and any worker w. One step is one of four actions, and each one leaves the budget intact:</p>
+<div class="table"><table class="alt worked"><thead><tr><th scope="col">step</th><th scope="col">what it needs before</th><th scope="col">what changes</th><th scope="col">why Inv still holds</th></tr></thead><tbody><tr><td>Claim(w)</td><td>loan approved</td><td>status claimed, one claim more</td><td>Unclaimed said: no transfer, nobody claimed; now 0 + 1 = 1</td></tr><tr><td>Send(w)</td><td>w claimed</td><td>one claim less, one transfer more</td><td>the sum is unchanged; the loan isn’t approved, or Unclaimed would say w is idle</td></tr><tr><td>Mark(w)</td><td>w sent</td><td>status paid, w done</td><td>transfers and claims unchanged; not approved</td></tr><tr><td>Skip(w)</td><td>loan paid</td><td>w done</td><td>transfers and claims unchanged; still paid</td></tr></tbody></table></div>
+<p>TypeOK survives too: every step sets a pc to one of the four and the status to one of the three, and Send runs only when w holds a claim, which leaves the budget no room for an earlier transfer, so transfers goes from 0 to 1 and so never exceeds 1, well inside 0..2.</p>
+<p>Read down the “why” column. Not one line mentions how many workers there are. Each step moves one worker, changes the number of claims by at most one and the number of transfers by at most one, and the argument only ever looks at those counts and at the status. Three workers, three hundred, three million: the same four lines. Combine that with condition 1 (the start state is approved, all idle, no transfers) and condition 3, and the dominoes do the rest. <strong>NoDoublePayout holds in every reachable state of the desk, for every number of workers.</strong></p>
+<p class="pending">[diagram:one-worker: built on the lesson page]</p>
+<p>There is also a way to let a script check the counts at three hundred workers. Every worker runs the same code, and Inv only asks how many workers are in each pc, never which ones. So a state can be summarised by counts: the status, the transfers, and how many workers are idle, claimed, sent and done. That summary is small enough to check at three hundred workers in a moment:</p>
+<pre class="code" data-lang="python"><code><span class="c-keyword">from</span> itertools <span class="c-keyword">import</span> product
+
+<span class="c-keyword">def</span> <span class="c-function">count_inv</span>(st, t, i, c, s, d):
+    <span class="c-keyword">if</span> st == <span class="c-string">&quot;approved&quot;</span> <span class="c-keyword">and</span> (t <span class="c-keyword">or</span> c <span class="c-keyword">or</span> s <span class="c-keyword">or</span> d):
+        <span class="c-keyword">return</span> <span class="c-keyword">False</span>
+    <span class="c-keyword">return</span> t + c &lt;= <span class="c-number">1</span>
+
+<span class="c-keyword">def</span> <span class="c-function">count_steps</span>(st, t, i, c, s, d):
+    <span class="c-keyword">if</span> i <span class="c-keyword">and</span> st == <span class="c-string">&quot;approved&quot;</span>:
+        <span class="c-keyword">yield</span> <span class="c-string">&quot;claimed&quot;</span>, t, i - <span class="c-number">1</span>, c + <span class="c-number">1</span>, s, d
+    <span class="c-keyword">if</span> c:
+        <span class="c-keyword">yield</span> st, t + <span class="c-number">1</span>, i, c - <span class="c-number">1</span>, s + <span class="c-number">1</span>, d
+    <span class="c-keyword">if</span> s:
+        <span class="c-keyword">yield</span> <span class="c-string">&quot;paid&quot;</span>, t, i, c, s - <span class="c-number">1</span>, d + <span class="c-number">1</span>
+    <span class="c-keyword">if</span> i <span class="c-keyword">and</span> st == <span class="c-string">&quot;paid&quot;</span>:
+        <span class="c-keyword">yield</span> st, t, i - <span class="c-number">1</span>, c, s, d + <span class="c-number">1</span>
+
+<span class="c-keyword">for</span> n <span class="c-keyword">in</span> (<span class="c-number">3</span>, <span class="c-number">30</span>, <span class="c-number">300</span>):
+    seen = bad = <span class="c-number">0</span>
+    <span class="c-keyword">for</span> st <span class="c-keyword">in</span> (<span class="c-string">&quot;approved&quot;</span>, <span class="c-string">&quot;claimed&quot;</span>, <span class="c-string">&quot;paid&quot;</span>):
+        <span class="c-keyword">for</span> t, c, s <span class="c-keyword">in</span> <span class="c-call">product</span>(<span class="c-builtin">range</span>(<span class="c-number">3</span>), <span class="c-builtin">range</span>(<span class="c-number">2</span>), <span class="c-builtin">range</span>(n + <span class="c-number">1</span>)):
+            <span class="c-keyword">for</span> d <span class="c-keyword">in</span> <span class="c-builtin">range</span>(n + <span class="c-number">1</span> - c - s):
+                x = (st, t, n - c - s - d, c, s, d)
+                <span class="c-keyword">if</span> <span class="c-call">count_inv</span>(*x):
+                    seen += <span class="c-number">1</span>
+                    ys = <span class="c-call">count_steps</span>(*x)
+                    bad += <span class="c-builtin">sum</span>(<span class="c-keyword">not</span> <span class="c-call">count_inv</span>(*y) <span class="c-keyword">for</span> y <span class="c-keyword">in</span> ys)
+    <span class="c-builtin">print</span>(n, <span class="c-string">&quot;workers:&quot;</span>, seen, <span class="c-string">&quot;count-states,&quot;</span>, bad, <span class="c-string">&quot;CTIs&quot;</span>)</code></pre>
+<pre class="code" data-lang="text"><code><span class="c-number">3</span> workers: <span class="c-number">53</span> count-states, <span class="c-number">0</span> CTIs
+<span class="c-number">30</span> workers: <span class="c-number">2915</span> count-states, <span class="c-number">0</span> CTIs
+<span class="c-number">300</span> workers: <span class="c-number">272105</span> count-states, <span class="c-number">0</span> CTIs</code></pre>
+<p>Here <code>count_inv</code> is Inv on the counts (an approved loan passes only when no transfer has been made and every worker is idle, and transfers plus claims is at most one), and <code>count_steps</code> is the desk on the counts: a Claim moves one idle worker to claimed, and so on. The loop only tries one or zero claims, because a state with two claims already breaks <code>t + c &lt;= 1</code>. Three hundred workers, no CTI. But notice what this is: a check for three numbers, 3, 30 and 300. Only the per-action argument, one case for each of Claim, Send, Mark and Skip, covers <em>every</em> number. The script is a second pair of eyes on it, not a replacement.</p>
+<p>TLA+ has a way to state the conclusion as a formula:</p>
+<div class="tla-block"><label class="tla-switch"><input type="checkbox"> Show ASCII</label><pre class="code" data-lang="tla"><code><span class="c-keyword">THEOREM</span> Safe <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">≜</span><span class="tla-a">==</span></span> Spec <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">⇒</span><span class="tla-a">=&gt;</span></span> <span class="tla-sym tla-op" data-align="center" style="--w:2"><span class="tla-g">□</span><span class="tla-a">[]</span></span>NoDoublePayout</code></pre></div>
+<p><code>THEOREM</code>, as in lesson 7, announces a claim and gives it a name, Safe; <code>Spec</code> is the desk’s Init and Next as one formula, as in lesson 1; and <code>[]</code>, typeset □, is lesson 1’s “always”. <strong>Every behavior of the desk satisfies NoDoublePayout in every state.</strong> TLC parses this line happily, and ignores it: a model checker checks models, it doesn’t prove theorems. In Python, the best we can do is the same claim for some sizes, with <code>obligations</code> and the two-worker style <code>inv</code> from before:</p>
+<pre class="code" data-lang="python"><code><span class="c-builtin">print</span>(<span class="c-builtin">all</span>(<span class="c-builtin">all</span>(<span class="c-call">obligations</span>(inv, n)) <span class="c-keyword">for</span> n <span class="c-keyword">in</span> <span class="c-builtin">range</span>(<span class="c-number">1</span>, <span class="c-number">6</span>)))</code></pre>
+<pre class="code" data-lang="text"><code>True</code></pre>
+<p>To have a machine check the hand argument for every number of workers, you would write it as a proof and give it to the TLA+ proof system, TLAPS. The proof would have one case per action: Claim, Send, Mark and Skip. This lesson does not run TLAPS, so take that as a pointer for later, not as something you have seen work.</p>
+</section>
+
+<section id="strengthenings-that-cheat">
+<h2>Strengthenings that cheat</h2>
+<p>Strengthening is powerful, and it is easy to strengthen your way into nonsense. Two traps.</p>
+<p><strong>The empty invariant.</strong> Here is the strongest candidate imaginable: FALSE, the TLA+ constant for false (Python’s <code>False</code>). No state satisfies it, so no step can leave it. TLC, run with <code>Vacuous == TypeOK /\ FALSE</code> on the INIT and INVARIANT lines:</p>
+<pre class="code" data-lang="text"><code>Finished computing initial states: <span class="c-number">0</span> distinct states generated
+Model checking completed. No error has been found.
+<span class="c-number">0</span> states generated,
+  <span class="c-number">0</span> distinct states found, <span class="c-number">0</span> states left on queue.</code></pre>
+<p>“No error has been found”, from zero states. The inductive check alone is happy with anything that excludes everything. What catches it is condition 1: the start state doesn’t satisfy FALSE.</p>
+<pre class="code" data-lang="python"><code><span class="c-builtin">print</span>(<span class="c-call">obligations</span>(<span class="c-keyword">lambda</span> s: <span class="c-keyword">False</span>, <span class="c-number">2</span>))</code></pre>
+<pre class="code" data-lang="text"><code>(False, True, True)</code></pre>
+<p>That is why InitHolds is a separate check, and why “zero initial states” in a TLC inductive run should make you sit up.</p>
+<p><strong>The strengthening that isn’t true.</strong> Suppose you try to be clever: “only one worker is ever busy”, where busy means not idle. It sounds right, since only one worker ever claims. Add it to Inv and run TLC from the 25 states that satisfy both: it reports a CTI, from a paid loan with A idle, B claimed and no transfer, where A skips and two workers are busy. That first state is unreachable (B’s claim would have been sent before anyone could mark the loan paid), so it looks like the “too weak” case. It isn’t. Run the candidate the ordinary way, from Init, and TLC finds a real counterexample in four steps: A claims, sends and marks, then B skips. Now A and B are both done, and done isn’t idle. The candidate is false on a reachable state. No amount of further strengthening rescues a conjunct that the real desk breaks. Everything you add to Inv has to be true of every reachable state; it can only exclude states the desk never visits.</p>
+<p>So a CTI always leaves you two questions, in this order. Does the candidate hold on every reachable state (an ordinary TLC run from Init)? If not, your candidate is wrong, or your desk is. If it does, the CTI’s first state is one the desk never visits: strengthen.</p>
+</section>
+
+<section id="the-checker-as-code">
+<h2>The checker as code</h2>
+<p><strong>Build it.</strong> Using <code>steps</code>, <code>type_ok</code>, <code>first_cti</code>, <code>owed</code>, <code>unclaimed</code> and <code>inv</code> from the snippets above (not the counting ones), write two functions. <code>reachable(n)</code> returns the set of reachable states of the n-worker desk, breadth first from the start state, as in lesson 1. <code>diagnose(candidate, n)</code> returns <code>"not an invariant"</code> if some reachable state breaks the candidate, otherwise <code>"too weak"</code> if it has a CTI, otherwise <code>"inductive"</code>.</p>
+<pre class="code" data-lang="text"><code>assert len(reachable(<span class="c-number">2</span>)) == <span class="c-number">8</span> <span class="c-keyword">and</span> len(reachable(<span class="c-number">6</span>)) == <span class="c-number">76</span>
+assert diagnose(no_double, <span class="c-number">2</span>) == &quot;too weak&quot;
+assert diagnose(owed, <span class="c-number">2</span>) == &quot;too weak&quot;
+both = lambda s: no_double(s) <span class="c-keyword">and</span> unclaimed(s)
+assert diagnose(both, <span class="c-number">3</span>) == &quot;too weak&quot;
+assert all(diagnose(inv, n) == &quot;inductive&quot; <span class="c-keyword">for</span> n <span class="c-keyword">in</span> range(<span class="c-number">1</span>, <span class="c-number">6</span>))
+busy = lambda s: inv(s) <span class="c-keyword">and</span> sum(p != &quot;idle&quot; <span class="c-keyword">for</span> p <span class="c-keyword">in</span> s[<span class="c-number">1</span>]) &lt;= <span class="c-number">1</span>
+assert diagnose(busy, <span class="c-number">2</span>) == &quot;<span class="c-keyword">not</span> an invariant&quot;
+assert diagnose(lambda s: False, <span class="c-number">2</span>) == &quot;<span class="c-keyword">not</span> an invariant&quot;</code></pre>
+<p>Notice the order inside <code>diagnose</code>. Reachability comes first, because a candidate that the desk breaks is not “too weak”, it is wrong, and the FALSE candidate is wrong in the most basic way: the very first state breaks it.</p>
+</section>
+
+<section id="fix-the-bug">
+<h2>Fix the bug</h2>
+<p>The bug in this lesson is the gap in your evidence, so the fix is evidence that has no gap. In the lab below you start with NoDoublePayout as your candidate and a panel of conjuncts you can add: the budget (Owed), “approved means untouched” (Unclaimed), and “only one worker busy”. Run the inductive check with two workers, then three. The lab shows any CTI as a before-and-after pair of states, and asks you whether that first state is reachable.</p>
+<p>You are done when three things are true at once: the start state satisfies your candidate, the inductive check finds no CTI with two and with three workers, and your candidate holds on every reachable state. Then the lab asks you for the last piece, the one TLC can’t give you: for each of Claim, Send, Mark and Skip, pick the reason the candidate survives the step, and confirm that none of your reasons mentions the number of workers.</p>
+<p class="pending">[lab-act2: built on the lesson page]</p>
+</section>
+
+<section id="what-people-get-wrong">
+<h2>What people get wrong</h2>
+<p><strong>“It’s an invariant, so it’s inductive.”</strong> NoDoublePayout is true of every reachable state and still fails the inductive step, because unreachable states satisfy it too. Most invariants worth stating are not inductive. You usually have to strengthen them.</p>
+<p><strong>“TLC passed the inductive check, so it holds for any number of workers.”</strong> TLC checked the inductive step for the worker counts you gave it, two to five here. What carries the result to three hundred is the per-action argument, which never mentions how many workers there are. TLC finds that argument quickly; it doesn’t replace it.</p>
+<p><strong>“A CTI is a bug.”</strong> Usually it is a state the desk never visits, and the fix is to strengthen the candidate, not to change the desk. Only when the CTI’s first state is reachable is the desk at fault. Check before you rewrite code.</p>
+<p><strong>“Stronger is always safer.”</strong> FALSE is the strongest candidate there is, and it proves nothing. A conjunct like “only one worker is busy” is false on the real desk. Strengthen only with facts the desk keeps.</p>
+</section>
+
+<section id="recap-and-where-to-go-from-here">
+<h2>Recap, and where to go from here</h2>
+<p>TLC checks every reachable state of the model you give it, and the number of states doubles with every worker: 76 at six workers, 4,120 at twelve, 91 digits at three hundred. An <strong>inductive invariant</strong> escapes that: if it holds initially and every step from any state satisfying it leads to a state satisfying it, it holds in every reachable state, however many there are. NoDoublePayout alone isn’t inductive; its <strong>counterexamples to inductiveness</strong> start from states nobody reaches. You <strong>strengthened</strong> it twice, with the payout budget and with “approved means untouched”, until TLC found no CTI, and then the argument per action showed why that holds for any number of workers.</p>
+<p>That is the answer for Maren: not “we checked three hundred”, but “we checked that every single step keeps the budget, and a step only ever involves one worker”.</p>
+<p>This is the last lesson of the payout desk. The bakery was paid twice, then not at all, then twice again after a long weekend; you modelled time, shrank a desk too big to check until TLC finished, wrote the worker as code, balanced two ledgers, showed the queue design does what the one-line spec promises, and now you have a reason, not a sample, for believing it at any size. Where could you go next? Three directions, none of which this course has run for you:</p>
+<ul><li><strong>TLAPS, the TLA+ proof system</strong>, to have a machine check the per-action argument for every number of workers instead of trusting your table.</li><li><strong>Apalache</strong>, a symbolic model checker for TLA+, which can check an inductive step without listing every starting state one by one.</li><li><strong>Checking production logs against the spec</strong>, sometimes called trace validation: replay what your three hundred workers actually did through the spec, and see whether every logged step is one the spec allows.</li></ul>
+</section>
+
+<section id="concept-check">
+<h2>Concept check</h2>
+<p>Write your answers down before you move on.</p>
+<ol><li>A teammate proposes the candidate <code>TypeOK /\ (transfers = 0)</code>. Which of the three conditions (InitHolds, StepKeeps, InvEnough) does it satisfy, and which does it fail? Is its CTI’s first state reachable?</li><li>Another teammate proposes <code>status \in {"approved", "claimed", "paid"}</code> and shows you that it passes both InitHolds and the inductive check. Why isn’t that a proof of NoDoublePayout?</li><li>TLC’s inductive check passes for two, three, four and five workers. In one or two sentences, explain what extra reasoning lets you conclude it holds for three hundred, and point at the line of the argument that would break if a single step could move two workers at once.</li></ol>
+</section>
+
+</div>
+</html>

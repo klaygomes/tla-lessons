@@ -1,0 +1,44 @@
+{
+  "pilot": {
+    "title": "Tuesday at 10:14",
+    "caption": "Time runs down the page. Worker B marks the loan paid and deletes its message, then a deploy restarts it before it calls the bank. The books say paid; the bank never hears about loan 4471.",
+    "animated": true,
+    "phone": true
+  },
+  "two-levels": {
+    "title": "Nine steps, one Pay",
+    "caption": "Nine steps of the design, one step of PayOnce. Every design state on the left translates to a PayOnce state on the right; only Confirm(A) changes it.",
+    "animated": true,
+    "phone": true
+  },
+  "implication": {
+    "title": "Every translated behavior lands inside",
+    "caption": "Spec ⇒ Abstract!Spec: every behavior of the design, translated through the mapping, lands inside the behaviors PayOnce allows. A behavior outside it is a refinement failure.",
+    "animated": false,
+    "phone": true
+  },
+  "mapping-choices": {
+    "title": "Three mappings, one happy behavior",
+    "caption": "The same five states, three translations. Only “the bank” puts the status change and the money in the same step, so only it turns Confirm(A) into a Pay.",
+    "animated": false,
+    "phone": true
+  },
+  "stutter": {
+    "title": "The work happens inside a stutter",
+    "caption": "The self-loop is where the design does its work. Receive, Expire, Send and Crash change the design but leave PayOnce’s two variables alone, so PayOnce sees a stutter.",
+    "animated": false,
+    "phone": true
+  },
+  "failure-step": {
+    "title": "Paid, 1 becomes paid, 2",
+    "caption": "A safety failure of refinement: the PayOnce column reads like a real PayOnce behavior until the last step, which PayOnce forbids.",
+    "animated": true,
+    "phone": true
+  },
+  "liveness-carried": {
+    "title": "Pay enabled, never taken",
+    "caption": "Every step of the pilot is a stutter of PayOnce, yet the behavior breaks PayOnce’s weak fairness. Drop the fairness (RefinesSafety) and both broken designs pass.",
+    "animated": false,
+    "phone": true
+  }
+}

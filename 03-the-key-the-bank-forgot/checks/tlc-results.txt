@@ -1,0 +1,881 @@
+===== ForgetKey.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 16, col 13 to line 21, col 53 of module ForgetKey>
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 36, col 12 to line 41, col 50 of module ForgetKey>
+/\ status = "claimed"
+/\ keys = {4471}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Forget line 54, col 11 to line 56, col 64 of module ForgetKey>
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 5: <Crash line 48, col 13 to line 52, col 59 of module ForgetKey>
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+State 6: <Resume line 23, col 14 to line 28, col 44 of module ForgetKey>
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+State 7: <Send line 36, col 12 to line 41, col 50 of module ForgetKey>
+/\ status = "claimed"
+/\ keys = {4471}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 2
+44 states generated, 34 distinct states found, 6 states left on queue.
+The depth of the complete state graph search is 7.
+===== Clock.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 25, col 13 to line 30, col 58 of module Clock>
+/\ now = 0
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 45, col 12 to line 51, col 55 of module Clock>
+/\ now = 0
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Tick line 18, col 9 to line 21, col 32 of module Clock>
+/\ now = 1
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 5: <Tick line 18, col 9 to line 21, col 32 of module Clock>
+/\ now = 2
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 6: <Next line 72, col 12 to line 72, col 36 of module Clock>
+/\ now = 2
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 7: <Crash line 58, col 13 to line 62, col 64 of module Clock>
+/\ now = 2
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+State 8: <Resume line 32, col 14 to line 37, col 44 of module Clock>
+/\ now = 2
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+State 9: <Send line 45, col 12 to line 51, col 55 of module Clock>
+/\ now = 2
+/\ status = "claimed"
+/\ keys = {<<4471, 2>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 2
+332 states generated, 201 distinct states found, 28 states left on queue.
+The depth of the complete state graph search is 9.
+===== -continue Clock.tla
+408 states generated, 238 distinct states found, 0 states left on queue.
+Error: Invariant NoDoublePayout is violated.
+Model checking completed. No error has been found.
+===== -config ClockShort.cfg Clock.tla
+Model checking completed. No error has been found.
+86 states generated, 62 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 8.
+===== -config ClockTTL6.cfg Clock.tla
+Model checking completed. No error has been found.
+298 states generated, 188 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config ClockTTL6Long.cfg Clock.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 25, col 13 to line 30, col 58 of module Clock>
+/\ now = 0
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 45, col 12 to line 51, col 55 of module Clock>
+/\ now = 0
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 4: <Tick line 18, col 9 to line 21, col 32 of module Clock>
+/\ now = 1
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 5: <Tick line 18, col 9 to line 21, col 32 of module Clock>
+/\ now = 2
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 6: <Tick line 18, col 9 to line 21, col 32 of module Clock>
+/\ now = 3
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 7: <Tick line 18, col 9 to line 21, col 32 of module Clock>
+/\ now = 4
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 8: <Tick line 18, col 9 to line 21, col 32 of module Clock>
+/\ now = 5
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 9: <Tick line 18, col 9 to line 21, col 32 of module Clock>
+/\ now = 6
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 10: <Next line 72, col 12 to line 72, col 36 of module Clock>
+/\ now = 6
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 1
+State 11: <Crash line 58, col 13 to line 62, col 64 of module Clock>
+/\ now = 6
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 1
+State 12: <Resume line 32, col 14 to line 37, col 44 of module Clock>
+/\ now = 6
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+State 13: <Send line 45, col 12 to line 51, col 55 of module Clock>
+/\ now = 6
+/\ status = "claimed"
+/\ keys = {<<4471, 6>>}
+/\ pc = [A |-> "sent", B |-> "idle"]
+/\ transfers = 2
+858 states generated, 508 distinct states found, 20 states left on queue.
+The depth of the complete state graph search is 13.
+===== ClockAsk.tla
+Model checking completed. No error has been found.
+404 states generated, 228 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 12.
+===== -config ClockAsk6.cfg ClockAsk.tla
+Model checking completed. No error has been found.
+1241 states generated, 591 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 15.
+===== -config LossyKeep.cfg Lossy.tla
+Model checking completed. No error has been found.
+24904 states generated, 4496 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 20.
+===== Lossy.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ net = {}
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 26, col 13 to line 31, col 63 of module Lossy>
+/\ now = 0
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 46, col 12 to line 50, col 36 of module Lossy>
+/\ now = 0
+/\ net = {[kind |-> "pay", sent |-> 0]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 0
+State 4: <Next line 100, col 12 to line 100, col 47 of module Lossy>
+/\ now = 0
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+State 5: <Tick line 19, col 9 to line 22, col 32 of module Lossy>
+/\ now = 1
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+State 6: <Tick line 19, col 9 to line 22, col 32 of module Lossy>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+State 7: <Next line 99, col 12 to line 99, col 36 of module Lossy>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+State 8: <Retry line 52, col 13 to line 55, col 43 of module Lossy>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+State 9: <Send line 46, col 12 to line 50, col 36 of module Lossy>
+/\ now = 2
+/\ net = {[kind |-> "ok"], [kind |-> "pay", sent |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+State 10: <Next line 100, col 12 to line 100, col 47 of module Lossy>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 2>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 2
+2822 states generated, 1076 distinct states found, 407 states left on queue.
+The depth of the complete state graph search is 10.
+===== -continue Lossy.tla
+42318 states generated, 7252 distinct states found, 0 states left on queue.
+Error: Invariant NoDoublePayout is violated.
+Model checking completed. No error has been found.
+===== Ask.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ net = {}
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+State 2: <Claim line 26, col 13 to line 31, col 63 of module Ask>
+/\ now = 0
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+State 3: <Send line 46, col 12 to line 50, col 36 of module Ask>
+/\ now = 0
+/\ net = {[kind |-> "pay", sent |-> 0]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 0
+State 4: <AskBank line 52, col 15 to line 56, col 39 of module Ask>
+/\ now = 0
+/\ net = {[kind |-> "ask"], [kind |-> "pay", sent |-> 0]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 0
+State 5: <Next line 117, col 12 to line 117, col 60 of module Ask>
+/\ now = 0
+/\ net = {[kind |-> "absent"], [kind |-> "pay", sent |-> 0]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 0
+State 6: <Next line 117, col 12 to line 117, col 60 of module Ask>
+/\ now = 0
+/\ net = {[kind |-> "ok"], [kind |-> "absent"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 1
+State 7: <Tick line 19, col 9 to line 22, col 32 of module Ask>
+/\ now = 1
+/\ net = {[kind |-> "ok"], [kind |-> "absent"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 1
+State 8: <Tick line 19, col 9 to line 22, col 32 of module Ask>
+/\ now = 2
+/\ net = {[kind |-> "ok"], [kind |-> "absent"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 1
+State 9: <Next line 116, col 12 to line 116, col 36 of module Ask>
+/\ now = 2
+/\ net = {[kind |-> "ok"], [kind |-> "absent"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 1
+State 10: <GotAbsent line 67, col 17 to line 73, col 47 of module Ask>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+State 11: <Send line 46, col 12 to line 50, col 36 of module Ask>
+/\ now = 2
+/\ net = {[kind |-> "ok"], [kind |-> "pay", sent |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+State 12: <Next line 117, col 12 to line 117, col 60 of module Ask>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 2>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 2
+13425 states generated, 4006 distinct states found, 1285 states left on queue.
+The depth of the complete state graph search is 12.
+===== -continue Ask.tla
+314542 states generated, 43176 distinct states found, 0 states left on queue.
+Error: Invariant NoDoublePayout is violated.
+Model checking completed. No error has been found.
+===== DeadlineOnly.tla
+Error: Invariant NoDeadEnd is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ net = {}
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 0
+State 2: <Claim line 29, col 13 to line 35, col 63 of module DeadlineOnly>
+/\ now = 0
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 3: <Tick line 22, col 9 to line 25, col 49 of module DeadlineOnly>
+/\ now = 1
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 4: <Tick line 22, col 9 to line 25, col 49 of module DeadlineOnly>
+/\ now = 2
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+23 states generated, 23 distinct states found, 14 states left on queue.
+The depth of the complete state graph search is 4.
+===== Fix.tla
+Model checking completed. No error has been found.
+163549 states generated, 28021 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 28.
+===== -config growth/Fix3.cfg Fix.tla
+Model checking completed. No error has been found.
+41214 states generated, 8288 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 23.
+===== Fix3.tla
+Model checking completed. No error has been found.
+316511 states generated, 54305 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 29.
+===== -config FixLongWindow.cfg Fix.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ net = {}
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 0
+State 2: <Claim line 29, col 13 to line 35, col 63 of module Fix>
+/\ now = 0
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 2
+State 3: <Send line 50, col 12 to line 56, col 53 of module Fix>
+/\ now = 0
+/\ net = {[kind |-> "pay", by |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 2
+State 4: <Next line 141, col 12 to line 141, col 60 of module Fix>
+/\ now = 0
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 2
+State 5: <Tick line 22, col 9 to line 25, col 49 of module Fix>
+/\ now = 1
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 2
+State 6: <Tick line 22, col 9 to line 25, col 49 of module Fix>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 2
+State 7: <Next line 140, col 12 to line 140, col 36 of module Fix>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 2
+State 8: <Retry line 58, col 13 to line 62, col 54 of module Fix>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 2
+State 9: <Send line 50, col 12 to line 56, col 53 of module Fix>
+/\ now = 2
+/\ net = {[kind |-> "ok"], [kind |-> "pay", by |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 2
+State 10: <Next line 141, col 12 to line 141, col 60 of module Fix>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 2>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 2
+/\ deadline = 2
+2837 states generated, 1190 distinct states found, 375 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config FixTTL3Window2.cfg Fix.tla
+Model checking completed. No error has been found.
+146886 states generated, 27390 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 27.
+===== -config FixTTL3Window3.cfg Fix.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ net = {}
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 0
+State 2: <Claim line 29, col 13 to line 35, col 63 of module Fix>
+/\ now = 0
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 3
+State 3: <Send line 50, col 12 to line 56, col 53 of module Fix>
+/\ now = 0
+/\ net = {[kind |-> "pay", by |-> 3]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 3
+State 4: <Next line 141, col 12 to line 141, col 60 of module Fix>
+/\ now = 0
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 5: <Tick line 22, col 9 to line 25, col 49 of module Fix>
+/\ now = 1
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 6: <Tick line 22, col 9 to line 25, col 49 of module Fix>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 7: <Tick line 22, col 9 to line 25, col 49 of module Fix>
+/\ now = 3
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 8: <Next line 140, col 12 to line 140, col 36 of module Fix>
+/\ now = 3
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 9: <Retry line 58, col 13 to line 62, col 54 of module Fix>
+/\ now = 3
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 10: <Send line 50, col 12 to line 56, col 53 of module Fix>
+/\ now = 3
+/\ net = {[kind |-> "ok"], [kind |-> "pay", by |-> 3]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 11: <Next line 141, col 12 to line 141, col 60 of module Fix>
+/\ now = 3
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 3>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 2
+/\ deadline = 3
+6660 states generated, 2721 distinct states found, 911 states left on queue.
+The depth of the complete state graph search is 11.
+===== FixNoRefuse.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ net = {}
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 0
+State 2: <Claim line 29, col 13 to line 35, col 63 of module FixNoRefuse>
+/\ now = 0
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 3: <Send line 50, col 12 to line 56, col 53 of module FixNoRefuse>
+/\ now = 0
+/\ net = {[kind |-> "pay", by |-> 1]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 4: <Next line 136, col 12 to line 136, col 60 of module FixNoRefuse>
+/\ now = 0
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 1
+State 5: <Tick line 22, col 9 to line 25, col 49 of module FixNoRefuse>
+/\ now = 1
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 1
+State 6: <Retry line 58, col 13 to line 62, col 54 of module FixNoRefuse>
+/\ now = 1
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 1
+State 7: <Send line 50, col 12 to line 56, col 53 of module FixNoRefuse>
+/\ now = 1
+/\ net = {[kind |-> "ok"], [kind |-> "pay", by |-> 1]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 1
+State 8: <Tick line 22, col 9 to line 25, col 49 of module FixNoRefuse>
+/\ now = 2
+/\ net = {[kind |-> "ok"], [kind |-> "pay", by |-> 1]}
+/\ status = "claimed"
+/\ keys = {<<4471, 0>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 1
+State 9: <Next line 135, col 12 to line 135, col 36 of module FixNoRefuse>
+/\ now = 2
+/\ net = {[kind |-> "ok"], [kind |-> "pay", by |-> 1]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 1
+State 10: <Next line 136, col 12 to line 136, col 60 of module FixNoRefuse>
+/\ now = 2
+/\ net = {[kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 2>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 2
+/\ deadline = 1
+5648 states generated, 2437 distinct states found, 1035 states left on queue.
+The depth of the complete state graph search is 10.
+===== -config FixStale3.cfg FixStale.tla
+Model checking completed. No error has been found.
+41214 states generated, 8288 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 23.
+===== FixStale.tla
+Error: Invariant NoDoublePayout is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ net = {}
+/\ status = "approved"
+/\ keys = {}
+/\ pc = [A |-> "idle", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 0
+State 2: <Claim line 29, col 13 to line 35, col 63 of module FixStale>
+/\ now = 0
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 3: <Tick line 22, col 9 to line 25, col 49 of module FixStale>
+/\ now = 1
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 4: <Tick line 22, col 9 to line 25, col 49 of module FixStale>
+/\ now = 2
+/\ net = {}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 5: <AskBank line 64, col 15 to line 69, col 56 of module FixStale>
+/\ now = 2
+/\ net = {[kind |-> "ask"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 6: <Next line 140, col 12 to line 140, col 60 of module FixStale>
+/\ now = 2
+/\ net = {[kind |-> "absent", at |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 7: <AskBank line 64, col 15 to line 69, col 56 of module FixStale>
+/\ now = 2
+/\ net = {[kind |-> "ask"], [kind |-> "absent", at |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 1
+State 8: <GotAbsent line 80, col 17 to line 88, col 47 of module FixStale>
+/\ now = 2
+/\ net = {[kind |-> "ask"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 3
+State 9: <Next line 140, col 12 to line 140, col 60 of module FixStale>
+/\ now = 2
+/\ net = {[kind |-> "absent", at |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 3
+State 10: <Send line 50, col 12 to line 56, col 53 of module FixStale>
+/\ now = 2
+/\ net = {[kind |-> "pay", by |-> 3], [kind |-> "absent", at |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 0
+/\ deadline = 3
+State 11: <Next line 140, col 12 to line 140, col 60 of module FixStale>
+/\ now = 2
+/\ net = {[kind |-> "ok"], [kind |-> "absent", at |-> 2]}
+/\ status = "claimed"
+/\ keys = {<<4471, 2>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 12: <Tick line 22, col 9 to line 25, col 49 of module FixStale>
+/\ now = 3
+/\ net = {[kind |-> "ok"], [kind |-> "absent", at |-> 2]}
+/\ status = "claimed"
+/\ keys = {<<4471, 2>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 13: <Tick line 22, col 9 to line 25, col 49 of module FixStale>
+/\ now = 4
+/\ net = {[kind |-> "ok"], [kind |-> "absent", at |-> 2]}
+/\ status = "claimed"
+/\ keys = {<<4471, 2>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 14: <Next line 139, col 12 to line 139, col 36 of module FixStale>
+/\ now = 4
+/\ net = {[kind |-> "ok"], [kind |-> "absent", at |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 15: <AskBank line 64, col 15 to line 69, col 56 of module FixStale>
+/\ now = 4
+/\ net = {[kind |-> "ask"], [kind |-> "ok"], [kind |-> "absent", at |-> 2]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "asking", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 3
+State 16: <GotAbsent line 80, col 17 to line 88, col 47 of module FixStale>
+/\ now = 4
+/\ net = {[kind |-> "ask"], [kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "claimed", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 5
+State 17: <Send line 50, col 12 to line 56, col 53 of module FixStale>
+/\ now = 4
+/\ net = {[kind |-> "ask"], [kind |-> "ok"], [kind |-> "pay", by |-> 5]}
+/\ status = "claimed"
+/\ keys = {}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 1
+/\ deadline = 5
+State 18: <Next line 140, col 12 to line 140, col 60 of module FixStale>
+/\ now = 4
+/\ net = {[kind |-> "ask"], [kind |-> "ok"]}
+/\ status = "claimed"
+/\ keys = {<<4471, 4>>}
+/\ pc = [A |-> "waiting", B |-> "idle"]
+/\ transfers = 2
+/\ deadline = 5
+82404 states generated, 18330 distinct states found, 2844 states left on queue.
+The depth of the complete state graph search is 18.
+===== -continue FixStale.tla
+203257 states generated, 33829 distinct states found, 0 states left on queue.
+Error: Invariant NoDoublePayout is violated.
+Model checking completed. No error has been found.
+===== -continue -config growth/Clock0.cfg Clock.tla
+25 states generated, 23 distinct states found, 0 states left on queue.
+Model checking completed. No error has been found.
+===== -continue -config growth/Clock1.cfg Clock.tla
+86 states generated, 62 distinct states found, 0 states left on queue.
+Model checking completed. No error has been found.
+===== -continue -config growth/Clock2.cfg Clock.tla
+211 states generated, 139 distinct states found, 0 states left on queue.
+Error: Invariant NoDoublePayout is violated.
+Model checking completed. No error has been found.
+===== -continue -config growth/Clock3.cfg Clock.tla
+408 states generated, 238 distinct states found, 0 states left on queue.
+Error: Invariant NoDoublePayout is violated.
+Model checking completed. No error has been found.
+===== -continue -config growth/Clock4.cfg Clock.tla
+671 states generated, 365 distinct states found, 0 states left on queue.
+Error: Invariant NoDoublePayout is violated.
+Model checking completed. No error has been found.
+===== -continue -config growth/Clock5.cfg Clock.tla
+1002 states generated, 514 distinct states found, 0 states left on queue.
+Error: Invariant NoDoublePayout is violated.
+Model checking completed. No error has been found.
+===== -continue -config growth/Clock6.cfg Clock.tla
+1395 states generated, 685 distinct states found, 0 states left on queue.
+Error: Invariant NoDoublePayout is violated.
+Model checking completed. No error has been found.
+===== -config growth/Fix5.cfg Fix.tla
+Model checking completed. No error has been found.
+601694 states generated, 89734 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 31.

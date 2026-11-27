@@ -58,6 +58,7 @@ pre.code .tla-sym[data-align="start"] { text-align: start; }
 pre.code .tla-prime { color: var(--accent); font-weight: var(--weight-medium); }
 pre.code .tla-a { display: none; }
 pre.code .c-rule { color: var(--code-comment); }
+.tla-sub sub, .prose sub { font-size: var(--text-micro); }
 .tla-block:has(.tla-switch input:checked) .tla-sym { width: auto; }
 .tla-block:has(.tla-switch input:checked) .tla-g { display: none; }
 .tla-block:has(.tla-switch input:checked) .tla-a { display: inline; }

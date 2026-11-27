@@ -157,6 +157,7 @@ button.k-toggle[aria-pressed="true"]::before { content: "\2713\00a0"; }
 .k-working-note { color: var(--ink-soft); font-size: var(--text-ui); }
 .k-working-open { justify-self: start; }
 .k-working-body, .k-more-body { display: grid; gap: var(--space-block); }
+.k-working > *, .k-working-body > *, .k-more-body > * { min-width: 0; }
 .k-more-body { margin-top: var(--space-block); }
 .k-working-body:focus { outline: none; }
 .k-more > summary { cursor: pointer; font-family: var(--font-ui); font-weight: var(--weight-medium); color: var(--input); width: fit-content; }

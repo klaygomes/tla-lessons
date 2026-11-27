@@ -26,6 +26,7 @@ Terms:
 
 Misconception: "the tests pass, so the code is correct." Why wrong: tests run one ordering (each worker finishes first), which is one of the only 2 safe behaviors of 20.
 Second misconception: "check again before acting" or "add jitter". Why wrong: a check is its own step and the gap after it stays open; a spec has no clock, so a delay removes no ordering.
+"What people get wrong" on the page: "a model is just the code again"; "a lock around payOut makes it atomic" (a mutex is per process, workers run on separate machines, the shared point is the row); "the checker passed, so the service is correct" (it covers the spec at 2 and 3 workers, not the code or 300 workers; lessons 7 and 8).
 
 Worked examples (all from `check.py`):
 1. Naive desk, 2 workers. Behavior Check(A), Check(B), Send(A), Send(B) ends with transfers 2. Safe behavior Check(A), Send(A), Mark(A), Skip(B) ends with 1. Counts: 17 reachable states, 20 complete behaviors, 18 pay twice; the 2 safe ones are "A finishes, B skips" and its mirror. Breadth-first shortest counterexample: Check(A), Send(A), Check(B), Send(B) (4 steps, 5 states). 3 workers: 75 states, 1,428 behaviors, 1,422 pay twice, shortest counterexample still 4 steps. Under a scheduler choosing uniformly among enabled steps, the chance of paying twice is 3/4 with 2 workers, 8/9 with 3 (not in the prose; for questions).

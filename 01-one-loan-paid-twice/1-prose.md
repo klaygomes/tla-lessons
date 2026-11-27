@@ -4,7 +4,7 @@
 
 Welcome to the payout desk. You work at Linden, a small lender that gives loans to small businesses: bakeries, repair shops, a florist who needs a second van. When a loan is approved, somebody has to actually send the money. That somebody is your code.
 
-The payout service is simple, and it has been running for a year. Approved loans sit in a table. A worker picks a loan, checks that it is still approved, asks the bank to transfer the money, and marks the loan as paid. In TypeScript it is five honest lines:
+The payout service is simple, and it has been running for a year. Approved loans sit in a table. A worker picks a loan, checks that it is still approved, asks the bank to transfer the money, and marks the loan as paid. In TypeScript it is five short lines:
 
 ```ts
 async function payOut(loanId: string) {
@@ -29,7 +29,7 @@ The tests are green. You run the payout test suite ten thousand times in a loop,
 
 So where is the bug? It isn’t in any line. It lives *between* the lines, in the moments where one worker has done part of its job and the other worker gets to move. Your tests can’t see those moments, and neither can your eyes, because there are more of them than you think.
 
-This lesson is about a tool for seeing all of them at once. It is called TLA+, and by the end you will have used its core idea to find this bug in four steps, and then fixed it so that no ordering of the workers, however unlucky, can pay a loan twice.
+This lesson is about a tool for seeing all of them at once. It is called TLA+, and by the end a model checker will have handed you the exact ordering that pays twice (it takes only four steps), and you will have fixed the code so that no ordering of the workers, however unlucky, can pay a loan twice.
 
 ## Your code, as a list of steps
 
@@ -93,9 +93,7 @@ One transfer, everyone is happy. Both tables are behaviors of the same five line
 
 ## How many orderings are there?
 
-Here is a question worth sitting with before you answer it. Two workers, each with three or so steps. Count every behavior from the start to the point where both workers are done. How many are there, and how many of them pay the bakery twice?
-
-Take a guess. Write it down.
+Two workers, each with three or so steps. Count every behavior from the start to the point where both workers are done. How many are there, and how many of them pay the bakery twice? Write your guess down before you read on.
 
 You could enumerate them by hand, but this is exactly the kind of thing a computer is for. Let’s describe the steps in Python: a function that takes a state and lists every state that one step can lead to.
 
@@ -224,7 +222,9 @@ NoDoublePayout == transfers <= 1
 ====
 ```
 
-TLA+ is typed in plain ASCII and usually read typeset, with the symbols a mathematician would write. The block above is the typeset form; flip “Show ASCII” to see exactly what you type into the tools. The thin rule labelled MODULE Payout and the double rule at the bottom are not decoration: they mark where a module begins and ends.
+TLA+ is typed in plain ASCII and usually read typeset, with the symbols a mathematician would write. The lesson page can show the block either way, and its “Show ASCII” switch flips between the two. In both forms, the first and last lines are not decoration. The dashes around MODULE Payout (a thin rule when typeset) mark where the module begins, and the row of equals signs (a double rule) marks where it ends.
+
+What about the line right under the top rule? TLA+ starts out knowing almost nothing, not even what a number is. `EXTENDS Naturals` pulls another module into this one, much as `import` does in Python, and the standard module Naturals supplies the natural numbers 0, 1, 2 and so on, along with `+` and `<=`. Without it, `transfers + 1` would mean nothing.
 
 It looks dense the first time, but it uses only a handful of symbols. Here they all are, with what you type, how you say it, and the closest Python:
 
@@ -236,7 +236,9 @@ It looks dense the first time, but it uses only a handful of symbols. Here they 
 | ∃ x ∈ S : | `\E x \in S :` | “there is an x in S such that” | `any(... for x in S)` |
 | ⟨ a, b ⟩ | `<<a, b>>` | “the tuple a, b” | `(a, b)` |
 | [ w ∈ S ↦ v ] | `[w \in S \|-> v]` | “the function taking each w in S to v” | `{w: v for w in S}` |
+| pc[w] | `pc[w]` | “pc of w”: the value pc gives w | `pc[w]` |
 | x′ | `x'` | “x prime”: x after the step | the new value |
+| ≤ | `<=` | “at most” | `<=` |
 | □ | `[]` | “always” | (no equivalent) |
 
 Now let’s read the spec one piece at a time.
@@ -264,12 +266,30 @@ Check(w) == /\ pc[w] = "idle"
             /\ UNCHANGED <<status, transfers>>
 ```
 
-Here is the one new idea in TLA+ notation: the prime. In a formula that describes a step, a plain variable means its value *before* the step, and the same variable with a prime means its value *after*. So Check is a statement about a pair of states, and it reads line by line:
+First, the `(w)` after the name. Check isn’t one formula but a family of them, one per worker: the definition takes a parameter w, exactly like a function argument, so Check("A") is the formula with "A" put in for every w.
 
-- before the step, worker w is idle;
+Next, the one new idea in TLA+ notation: the prime. In a formula that describes a step, a plain variable means its value *before* the step, and the same variable with a prime means its value *after*. So Check is a statement about a pair of states, and it reads line by line:
+
+- before the step, worker w is idle (`pc[w]` is pc applied to w, the entry pc holds for that worker);
 - before the step, the loan is approved;
-- after the step, the program counters are the same as before, except that w’s entry is now “checked” (EXCEPT is how TLA+ says “this function with one entry changed”);
+- after the step, the program counters are the same as before, except that w’s entry is now “checked”;
 - after the step, the status and the transfers are what they were.
+
+That third line deserves a closer look, because every later lesson leans on it. `[pc EXCEPT ![w] = "checked"]` is a new function: a copy of pc with one entry replaced. Inside it, the `!` is a placeholder for the function being changed, and `[w]` after it picks the entry for worker w, so `![w] = "checked"` reads “except that its entry at w is checked”. In Python it is a dictionary copy with one key overwritten, and the old one is left alone:
+
+```python
+pc = {"A": "idle", "B": "idle"}
+w = "A"
+print({**pc, w: "checked"})
+print(pc)
+```
+
+```text
+{'A': 'checked', 'B': 'idle'}
+{'A': 'idle', 'B': 'idle'}
+```
+
+The last line uses the keyword `UNCHANGED`. `UNCHANGED <<status, transfers>>` says that each variable in the tuple keeps its value: status prime equals status, and transfers prime equals transfers. With only one variable you can drop the angle brackets and write `UNCHANGED status`, as Send does below. Why bother saying it at all? Because a step formula that says nothing about a variable allows it to take *any* value afterwards.
 
 **Check(w) is true of a pair of states exactly when worker w was idle with the loan approved, and afterwards w has checked and nothing else changed.** The first two lines mention no primes, so they only constrain the state before: they say *when* the step is allowed. That is why there is no “if” in TLA+. A condition that must hold for a step to happen is just one more line of the “and”.
 
@@ -286,7 +306,7 @@ Next == \E w \in Workers :
 Spec == Init /\ [][Next]_vars
 ```
 
-This says what a behavior of the whole system is. Read the end of it from the inside out: the brackets with vars underneath mean “a Next step, or a step where vars stays unchanged”, and the box in front means “always”, at every step. **A behavior is allowed when its first state satisfies Init and every step is either a Next step or a step where nothing changes.** Those do-nothing steps, called stuttering steps, look odd now; they become important in the next lesson, when we ask whether anything good is *guaranteed* to happen. For today, ignore them.
+This says what a behavior of the whole system is. Read the end of it from the inside out. First comes Next in square brackets, followed by vars: typed with an underscore, typeset as a small subscript after the closing bracket. Together they mean “a Next step, or a step where vars stays unchanged”. The box in front, typed as two brackets, means “always”, at every step. **A behavior is allowed when its first state satisfies Init and every step is either a Next step or a step where nothing changes.** Those do-nothing steps, called stuttering steps, look odd now; they become important in the next lesson, when we ask whether anything good is *guaranteed* to happen. For today, ignore them.
 
 ```tla
 NoDoublePayout == transfers <= 1
@@ -301,11 +321,15 @@ SPECIFICATION Spec
 INVARIANT NoDoublePayout
 ```
 
-and run it with the `-deadlock` flag, which tells TLC that it is fine for the system to stop once both workers are done:
+Each line is a keyword and a name from the module. `SPECIFICATION Spec` tells TLC which formula describes the behaviors to explore, and `INVARIANT NoDoublePayout` tells it which formula to test in every reachable state. TLC finds the file by its name: it sits next to `Payout.tla`.
+
+Then run TLC itself:
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -deadlock Payout.tla
 ```
+
+TLC is a Java program. `-cp tla2tools.jar` tells Java where to find it: the jar you download from the TLA+ project, which holds TLC and the other TLA+ tools. `tlc2.TLC` names the program inside that jar to start, and `Payout.tla` is the spec to check. The `-deadlock` flag tells TLC that it is fine for the system to stop once both workers are done.
 
 TLC reports that `NoDoublePayout` is violated and prints a counterexample, state by state. It is four steps long: A checks, A sends, B checks, B sends. Notice that this isn’t the behavior from our first table. It is a different one, just as short, and it shows something the first table hid. Worker A has *already sent the money*, and worker B still sees “approved”, because A hasn’t reached its Mark step yet. The dangerous window isn’t just between Check and Send. It is everything between Check and Mark.
 
@@ -348,15 +372,15 @@ for state in check(init, no_double_payout):
 ('approved', ('sent', 'sent'), 2)
 ```
 
-The same four-step counterexample that TLC prints. When the invariant holds everywhere, `check` returns the number of distinct states it visited instead. Like this function, TLC stops at the first bad state it meets: on the payout desk it has seen 13 distinct states by then. Ask it to keep going, with the `-continue` flag, and it finds all 17.
+The same four-step counterexample that TLC prints. When the invariant holds everywhere, `check` returns the number of distinct states it visited instead. Like this function, TLC stops at the first bad state it meets, before it has seen everything. Ask it to keep going, with the `-continue` flag, and it visits all 17 reachable states.
 
 Notice the difference from `behaviors`. That function followed every *path*, and there were 20 of them. This one visits every *state*, and there are only 17 reachable states, because many paths pass through the same state. With two workers the difference is small. With three workers the naive desk has 1,428 behaviors but only 75 states. Counting states instead of paths is what makes model checking practical: the work grows with the number of distinct situations the system can be in, not with the number of ways to get there.
 
 [[diagram:growth]]
 
-The cost is easy to state. If the system has \(S\) reachable states and each state has at most \(b\) possible next steps, breadth-first search does \(O(S \cdot b)\) work and keeps \(O(S)\) states in memory. TLC is this loop, made very fast, with states stored compactly on disk when memory runs out.
+The cost is easy to say in words. Every reachable state is taken off the queue once, and from each one the loop tries every possible next step. So the work is the number of states times the number of next steps per state, and the memory is the set of states seen. On the naive desk that is 17 states with at most 2 next steps each, so at most 34 tries (the real count is 24). Write \(S\) for the number of reachable states and \(b\) for the most next steps any state has. Then the work is \(O(S \cdot b)\), read “order S times b”: it grows at most in proportion to S times b. The memory is \(O(S)\), at most in proportion to S alone. **Breadth-first search costs about one try per state per possible step, and remembers every state once.** TLC is this loop, made very fast, with states stored compactly on disk when memory runs out.
 
-**Build it.** Change `next_states` into the three-worker version by setting `WORKERS = "ABC"` and starting from `("approved", ("idle",) * 3, 0)`. Then:
+**Build it.** Change `next_states` into the three-worker version by setting `WORKERS = "ABC"` and starting from `("approved", ("idle",) * 3, 0)`. Then check the length of the counterexample. Careful: `check` returns the trace, so `len` counts the states along that one behavior, not the states the checker visited.
 
 ```python
 assert len(check(init, no_double_payout)) == 5
@@ -393,11 +417,11 @@ Modelling it takes one more action, `Recheck(w)`, between Check and Send: a work
 
 Still broken. The shortest counterexample grew from four steps to six, and that is all the extra check bought. Across every ordering, 60 of the 70 behaviors still pay twice. The state space grew from 17 states to 26, so there are more places for things to go wrong, not fewer.
 
-Here is why, and it is the most useful sentence in this lesson. **A check and the action it protects are separate steps, so another worker can always act between them.** Adding a second check moves the gap; it doesn’t close it. No number of reads can close it, because the thing that went wrong was never a missing read. It was that “see approved” and “claim the loan” were two steps instead of one.
+So why didn’t the second look help? **A check and the action it protects are separate steps, so another worker can always act between them.** Adding a second check moves the gap; it doesn’t close it. No number of reads can close it, because the thing that went wrong was never a missing read. It was that “see approved” and “claim the loan” were two steps instead of one.
 
 ## Why waiting doesn’t help either
 
-There is one more tempting fix, and it’s worth killing explicitly because it works in testing. Add a random delay before each worker starts, say between zero and two hundred milliseconds, so the workers rarely collide.
+There is one more tempting fix, and it’s a sneaky one, because it works in testing. Add a random delay before each worker starts, say between zero and two hundred milliseconds, so the workers rarely collide.
 
 Look at the spec and ask: where would that delay go? There is no clock in it. A TLA+ spec doesn’t say how long a step takes or how far apart two steps are; it says only which steps are possible and in which orders. A delay changes how *likely* each ordering is. It doesn’t remove any ordering from the set of possible ones. To the model checker, the jittered system has exactly the same 17 states and the same counterexample.
 
@@ -435,27 +459,21 @@ You now have everything you need. Go and fix the desk.
 
 In the lab below, you are given the payout desk with its four actions, and a panel of changes you can make to it: add a recheck, add a random delay, run a single worker, or replace Check with an atomic Claim. Each change rewrites the spec. Press “Run the checker” to explore every reachable state.
 
-The desk counts as fixed when the checker finds no state that breaks `NoDoublePayout`, with at least two workers running, and still finds none when you add a third. The bank and the bakery both need the queue to keep moving, so “only one worker” is not an answer.
+The desk counts as fixed when the checker finds no state that breaks `NoDoublePayout`, with at least two workers running, and still finds none when you add a third. The long queue is why the second worker exists, so “only one worker” is not an answer.
 
 [[lab-act2]]
 
 ## What people get wrong
 
-**“The tests pass, so the code is correct.”** The tests prove that some behaviors are fine. Our tests ran 1 of the 20 behaviors, over and over, and it happened to be one of the only 2 that are safe. A test suite samples orderings; a model checker covers all of them.
-
-**“The bug is rare, so it’s a small bug.”** It was rare in production, but 18 of the 20 orderings pay twice. How often a bug shows up depends on timing, which you don’t control. Whether it *can* show up depends on the design, which you do.
-
-**“Check again right before acting.”** Every check is its own step, and the gap after it is just as wide. Only making the check and the change one atomic step closes the gap.
-
 **“A model is just the code again.”** The model has three variables and four actions. It leaves out the bank’s API, the database driver, retries and logging, on purpose. A spec is useful because it is much smaller than the code: small enough that a machine can examine every state of it.
+
+**“A lock around `payOut` makes it atomic.”** Only if every worker takes the same lock. A mutex lives inside one process, and your workers run on separate machines, so each one would happily lock its own copy. The one place both workers meet is the loan’s row in the database, which is why the atomic step lives there.
+
+**“The checker passed, so the service is correct.”** It passed for the spec, with two and three workers. It can’t tell you whether your TypeScript really sends the conditional update, or whether three hundred workers behave like three. Those are real questions, and later lessons take them on.
 
 ## Recap and the next bug
 
-Let’s put the pieces back together.
-
-A **state** is one assignment of values to the system’s **variables**. A **step** changes one state into the next, and an **action** is a formula describing a kind of step, with primed variables for the values afterwards. A **behavior** is a sequence of states joined by steps. The **initial condition** (`Init`) and the **next-state relation** (`Next`) together describe every behavior the system can have. An **invariant** is a property that must hold in every reachable state, and a **model checker** like TLC visits all of them, breadth first, and returns the shortest **counterexample** if the invariant fails.
-
-The bakery got paid twice because “check” and “act” were two steps. You fixed it by making them one: an atomic claim, which the database really can do.
+The bakery got paid twice because “check” and “act” were two steps, and a test suite only ever tried the one ordering where that didn’t matter. Writing the desk as a state machine let a model checker try all of them. A recheck only moved the gap, and a delay left every ordering possible. Making the check and the change one atomic claim, which the database really can do, closed it.
 
 Now run your fixed desk past one more scenario. Worker A claims loan 4471, and then the machine it runs on is restarted by a routine deploy, before it sends anything. Add an action for that, `Crash(w)`, and run the checker again.
 
